@@ -34,7 +34,6 @@ public class UserService {
 
         User user = User.builder()
                 .username(signupUserReq.getUsername())
-                //.email(signupUserReq.getUsername())
                 .password(passwordEncoder.encode(signupUserReq.getPassword()))
                 .nickname(signupUserReq.getNickname())
                 .authorities(Collections.singleton(authority))

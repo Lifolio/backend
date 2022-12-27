@@ -19,14 +19,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-//    @Column(name = "email", length = 50, unique = true)
-//    private String email;
-
     //username == email
-    //여러가지 시도해보다가 일단은 username상태로 뒀습니다ㅠㅠ!
+    //여러가지 시도해보다가 오류나서 일단은 username상태로 뒀습니다ㅠㅠ
     @Column(name = "username", length = 50, unique = true)
     private String username;
-
 
     @Column(name = "password", length = 100)
     private String password;
@@ -36,6 +32,8 @@ public class User {
 
     @Column(name = "activated")
     private boolean activated;
+
+
 
     @ManyToMany
     @JoinTable(
