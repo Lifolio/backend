@@ -18,9 +18,8 @@ spring:
 
 jwt:
   header: Authorization
-  #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
-  # TODO secret
-  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+  #umc-3rd-team-project-lifolio-umc-3rd-team-project-lifolio-umc-3rd-team-project-lifolio-umc-3rd-team-project-lifolio
+  secret: dW1jLTNyZC10ZWFtLXByb2plY3QtbGlmb2xpby11bWMtM3JkLXRlYW0tcHJvamVjdC1saWZvbGlvLXVtYy0zcmQtdGVhbS1wcm9qZWN0LWxpZm9saW8tdW1jLTNyZC10ZWFtLXByb2plY3QtbGlmb2xpbwo=
   token-validity-in-seconds: 86400
 
 logging:
