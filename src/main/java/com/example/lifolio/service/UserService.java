@@ -1,12 +1,23 @@
 package com.example.lifolio.service;
 
 
+import com.example.lifolio.dto.LoginUserReq;
 import com.example.lifolio.dto.SignupUserReq;
+import com.example.lifolio.dto.TokenRes;
 import com.example.lifolio.entity.Authority;
 import com.example.lifolio.entity.User;
+import com.example.lifolio.jwt.JwtFilter;
+import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.repository.UserRepository;
 import com.example.lifolio.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +31,26 @@ import java.util.Collections;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+
+
+    public TokenRes login(LoginUserReq loginUserReq){
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginUserReq.getUsername(), loginUserReq.getPassword());
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String jwt = tokenProvider.createToken(authentication);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+        return new TokenRes(jwt);
+    }
 
 
     @Transactional
