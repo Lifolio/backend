@@ -8,5 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TokenRes {
+    private Long userId;
     private String accessToken;
 }
