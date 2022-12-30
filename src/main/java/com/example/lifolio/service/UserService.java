@@ -55,14 +55,12 @@ public class UserService {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-
-
         return new TokenRes(userId,jwt);
     }
 
 
     @Transactional
-    public SignupUserReq signup(SignupUserReq signupUserReq) throws BaseException {
+    public TokenRes signup(SignupUserReq signupUserReq) throws BaseException {
 
             Authority authority = Authority.builder()
                     .authorityName("ROLE_USER")
@@ -76,7 +74,11 @@ public class UserService {
                     .activated(true)
                     .build();
 
-            return SignupUserReq.from(userRepository.save(user));
+
+            Long userId=userRepository.save(user).getId();
+            String jwt=tokenProvider.createToken(userId);
+
+            return new TokenRes(userId,jwt);
 
     }
 
