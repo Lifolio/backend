@@ -1,11 +1,16 @@
 package com.example.lifolio.jwt;
 
 import com.example.lifolio.base.BaseException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -14,6 +19,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+
+import static com.example.lifolio.base.BaseResponseStatus.EMPTY_JWT;
 
 public class JwtFilter extends GenericFilterBean {
 
@@ -56,4 +63,5 @@ public class JwtFilter extends GenericFilterBean {
         }
         return bearerToken;
     }
+
 }

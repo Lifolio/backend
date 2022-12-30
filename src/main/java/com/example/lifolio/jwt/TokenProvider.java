@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 
 import static com.example.lifolio.base.BaseResponseStatus.EMPTY_JWT;
 import static com.example.lifolio.base.BaseResponseStatus.INVALID_JWT;
+import static com.example.lifolio.jwt.JwtFilter.AUTHORIZATION_HEADER;
 
 @Component
 public class TokenProvider implements InitializingBean {
@@ -117,6 +118,36 @@ public class TokenProvider implements InitializingBean {
             logger.info("JWT 토큰이 잘못되었습니다.");
         }
         return false;
+    }
+
+    public String getJwt(){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        return request.getHeader(AUTHORIZATION_HEADER);
+    }
+    /*
+    JWT에서 userId 추출
+    @return int
+    @throws BaseException
+     */
+    public Long getUserIdx() throws BaseException{
+        //1. JWT 추출
+        String accessToken = getJwt();
+        if(accessToken == null || accessToken.length() == 0){
+            throw new BaseException(EMPTY_JWT);
+        }
+
+        // 2. JWT parsing
+        Jws<Claims> claims;
+        try{
+            claims = Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(accessToken);
+        } catch (Exception ignored) {
+            throw new BaseException(INVALID_JWT);
+        }
+
+        // 3. userId 추출
+        return claims.getBody().get("userId",Long.class);
     }
 
 
