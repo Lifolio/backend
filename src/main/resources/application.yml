@@ -7,8 +7,10 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
       show-sql: true # DDL ??
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

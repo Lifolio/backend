@@ -3,6 +3,7 @@ package com.example.lifolio.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
@@ -15,11 +16,11 @@ import java.util.Set;
 public class User {
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
 
-    //username == email
+    //username == userId
     //여러가지 시도해보다가 오류나서 일단은 username상태로 뒀습니다ㅠㅠ
     @Column(name = "username", length = 50, unique = true)
     private String username;
@@ -33,12 +34,15 @@ public class User {
     @Column(name = "activated")
     private boolean activated;
 
+    @Column(name="createdDate")
+    private Timestamp createdDate;
+
 
 
     @ManyToMany
     @JoinTable(
             name = "user_authority",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
     private Set<Authority> authorities;
 }
