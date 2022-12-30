@@ -1,5 +1,4 @@
 package com.example.lifolio.service;
-
 import com.example.lifolio.entity.User;
 import com.example.lifolio.repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
@@ -41,4 +40,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 user.getPassword(),
                 grantedAuthorities);
     }
+
 }
+

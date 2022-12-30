@@ -1,8 +1,15 @@
 package com.example.lifolio.jwt;
 
+import com.example.lifolio.base.BaseException;
+import com.example.lifolio.entity.User;
+import com.example.lifolio.repository.UserRepository;
+import com.example.lifolio.service.CustomUserDetailsService;
+import com.example.lifolio.service.UserService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -11,19 +18,31 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.example.lifolio.base.BaseResponseStatus.EMPTY_JWT;
+import static com.example.lifolio.base.BaseResponseStatus.INVALID_JWT;
 
 @Component
 public class TokenProvider implements InitializingBean {
 
     private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
+
+    private CustomUserDetailsService customUserDetailsService;
+
+    private final UserRepository userRepository;
+
 
     private static final String AUTHORITIES_KEY = "auth";
 
@@ -35,9 +54,11 @@ public class TokenProvider implements InitializingBean {
 
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
+            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds,UserRepository userRepository,CustomUserDetailsService customUserDetailsService) {
         this.secret = secret;
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+        this.userRepository = userRepository;
+        this.customUserDetailsService=customUserDetailsService;
     }
 
     @Override
@@ -46,43 +67,45 @@ public class TokenProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(Authentication authentication) {
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+    public String createToken(Long userId) {
+        Date now =new Date();
 
-        long now = (new Date()).getTime();
-        Date validity = new Date(now + this.tokenValidityInMilliseconds);
-
+        System.out.println(System.currentTimeMillis());
         return Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
-                .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(validity)
+                .setHeaderParam("type","jwt")
+                .claim("userId",userId)
+                .setIssuedAt(now)
+                .setExpiration(new Date(System.currentTimeMillis()+1*(1000*60*60*24*365)))
+                .signWith(SignatureAlgorithm.HS256,secret)
                 .compact();
     }
 
-    public Authentication getAuthentication(String token) {
-        Claims claims = Jwts
-                .parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+    public Authentication getAuthentication(String token) throws BaseException {
+        Jws<Claims> claims;
+        System.out.println(token);
 
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+        claims = Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token);
 
-        User principal = new User(claims.getSubject(), "", authorities);
 
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+
+        Long userId=claims.getBody().get("userId",Long.class);
+        Optional<User> users=userRepository.findById(userId);
+        String userName = users.get().getUsername();
+        System.out.println("유저이름:"+userName);
+
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userName);
+        return new UsernamePasswordAuthenticationToken(userDetails,"",userDetails.getAuthorities());
     }
+
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Jws<Claims> claims;
+            claims = Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             logger.info("잘못된 JWT 서명입니다.");
@@ -95,5 +118,6 @@ public class TokenProvider implements InitializingBean {
         }
         return false;
     }
+
 
 }

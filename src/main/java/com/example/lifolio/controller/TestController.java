@@ -11,7 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     @GetMapping("")
-    public BaseResponse<String> test() {
-        return new BaseResponse<>("test");
+    public String test() {
+        return "<h1>test 통과</h1>";
     }
+
+    /*
+    @GetMapping("/jwt")
+    public String getJwt(){
+
+    }
+
+     */
 }
