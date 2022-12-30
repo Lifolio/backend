@@ -37,7 +37,7 @@ public enum BaseResponseStatus {
 
     FAILED_TO_SIGN_UP(false, 2019, "회원가입에 실패하였습니다."),
 
-    USERS_EXISTS_EMAIL(false,2020,"중복된 이메일입니다."),
+    USERS_EXISTS_ID(false,2020,"중복된 아이디입니다."),
 
     USERS_EXISTS_NICKNAME(false,2021,"중복된 닉네임입니다."),
 

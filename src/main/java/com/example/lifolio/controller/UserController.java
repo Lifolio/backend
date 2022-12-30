@@ -1,6 +1,10 @@
 package com.example.lifolio.controller;
 
+import antlr.Token;
+import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
+import com.example.lifolio.base.BaseResponseStatus;
+import com.example.lifolio.dto.LogInTokenReq;
 import com.example.lifolio.dto.LoginUserReq;
 import com.example.lifolio.dto.SignupUserReq;
 import com.example.lifolio.dto.TokenRes;
@@ -8,6 +12,7 @@ import com.example.lifolio.jwt.JwtFilter;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static com.example.lifolio.base.BaseResponseStatus.USERS_EXISTS_ID;
+import static com.example.lifolio.base.BaseResponseStatus.USERS_EXISTS_NICKNAME;
 
 
 @RequiredArgsConstructor
@@ -37,8 +44,18 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public BaseResponse<SignupUserReq> signup(@Valid @RequestBody SignupUserReq signupUserReq) {
-        return new BaseResponse<>(userService.signup(signupUserReq));
+    public BaseResponse<SignupUserReq> signup(@Valid @RequestBody SignupUserReq signupUserReq) throws BaseException {
+        try {
+            if (userService.checkUserId(signupUserReq.getUsername())) {
+                return new BaseResponse<>(USERS_EXISTS_ID);
+            }
+            if (userService.checkNickName(signupUserReq.getNickname())) {
+                return new BaseResponse<>(USERS_EXISTS_NICKNAME);
+            }
+            return new BaseResponse<>(userService.signup(signupUserReq));
+        }catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
     }
 
     @GetMapping("/user")
@@ -52,4 +69,34 @@ public class UserController {
     public BaseResponse<SignupUserReq> getUserInfo(@PathVariable String username) {
         return new BaseResponse<>(userService.getUserWithAuthorities(username));
     }
+
+
+    @GetMapping("/check/nickname")
+    public BaseResponse<String> checkNickName(@Param("nickname") String nickName) {
+        String result="";
+        System.out.println(nickName);
+        if(userService.checkNickName(nickName)){
+            return new BaseResponse<>(USERS_EXISTS_NICKNAME);
+        }
+        else{
+            result="사용 가능합니다.";
+        }
+        return new BaseResponse<>(result);
+
+    }
+
+    @GetMapping("/check/userId")
+    public BaseResponse<String> checkUserId(@Param("userId") String userId){
+        String result="";
+        if(userService.checkUserId(userId)){
+            return new BaseResponse<>(USERS_EXISTS_ID);
+        }
+        else{
+            result="사용 가능합니다.";
+        }
+        return new BaseResponse<>(result);
+
+    }
+
+
 }
