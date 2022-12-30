@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 import static com.example.lifolio.base.BaseResponseStatus.EMPTY_JWT;
+import static com.example.lifolio.base.BaseResponseStatus.INVALID_JWT;
 
 public class JwtFilter extends GenericFilterBean {
 
@@ -41,17 +42,15 @@ public class JwtFilter extends GenericFilterBean {
         String jwt = resolveToken(httpServletRequest);
         String requestURI = httpServletRequest.getRequestURI();
 
-        if (StringUtils.hasText(jwt)&& tokenProvider.validateToken(jwt)) {
-            try {
+        if (StringUtils.hasText(jwt)&& tokenProvider.validateToken(servletRequest,jwt)) {
                 Authentication authentication = tokenProvider.getAuthentication(jwt);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
-            } catch (BaseException e) {
-                e.printStackTrace();
-            }
+
         } else {
             logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
         }
+
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
