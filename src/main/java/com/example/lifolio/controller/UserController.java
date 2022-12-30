@@ -35,6 +35,7 @@ import static com.example.lifolio.base.BaseResponseStatus.USERS_EXISTS_NICKNAME;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
+    private final TokenProvider jwtProvider;
 
 
     @PostMapping("/login")
@@ -44,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public BaseResponse<SignupUserReq> signup(@Valid @RequestBody SignupUserReq signupUserReq) throws BaseException {
+    public BaseResponse<TokenRes> signup(@Valid @RequestBody SignupUserReq signupUserReq) throws BaseException {
         try {
             if (userService.checkUserId(signupUserReq.getUsername())) {
                 return new BaseResponse<>(USERS_EXISTS_ID);
@@ -74,7 +75,6 @@ public class UserController {
     @GetMapping("/check/nickname")
     public BaseResponse<String> checkNickName(@Param("nickname") String nickName) {
         String result="";
-        System.out.println(nickName);
         if(userService.checkNickName(nickName)){
             return new BaseResponse<>(USERS_EXISTS_NICKNAME);
         }

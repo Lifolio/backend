@@ -1,7 +1,8 @@
 package com.example.lifolio.controller;
 
+import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
-import org.springframework.http.ResponseEntity;
+import com.example.lifolio.jwt.TokenProvider;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,9 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class TestController {
 
+    private final TokenProvider jwtProvider;
+
+    public TestController(TokenProvider jwtProvider) {
+        this.jwtProvider = jwtProvider;
+    }
+
     @GetMapping("")
-    public String test() {
-        return "<h1>test 통과</h1>";
+    public BaseResponse<String> test() throws BaseException {
+        Long userId=jwtProvider.getUserIdx();
+        return new BaseResponse<>("유저 아이디값:"+userId);
     }
 
     /*
