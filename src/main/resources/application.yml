@@ -18,6 +18,10 @@ spring:
     username: admin
     password: lifolio1226
 
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
 jwt:
   header: Authorization
   #umc-3rd-team-project-lifolio-umc-3rd-team-project-lifolio-umc-3rd-team-project-lifolio-umc-3rd-team-project-lifolio

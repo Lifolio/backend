@@ -2,9 +2,7 @@ package com.example.lifolio.service;
 
 
 import com.example.lifolio.base.BaseException;
-import com.example.lifolio.dto.LoginUserReq;
-import com.example.lifolio.dto.SignupUserReq;
-import com.example.lifolio.dto.TokenRes;
+import com.example.lifolio.dto.*;
 import com.example.lifolio.entity.Authority;
 import com.example.lifolio.entity.User;
 import com.example.lifolio.jwt.JwtFilter;
@@ -12,6 +10,7 @@ import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.repository.UserRepository;
 import com.example.lifolio.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.Collections;
-import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -35,8 +33,16 @@ public class UserService {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
+    //현재 로그인한(jwt 인증된) 사용자 반환
+    public User findNowLoginUser(){
+        return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername).orElse(null);
+    }
 
 
+
+
+
+    //회원가입, 로그인 로직
     public TokenRes login(LoginUserReq loginUserReq){
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginUserReq.getUsername(), loginUserReq.getPassword());
@@ -44,7 +50,7 @@ public class UserService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        User user=userRepository.findByusername(loginUserReq.getUsername());
+        User user=userRepository.findByUsername(loginUserReq.getUsername());
         Long userId = user.getId();
 
         String jwt = tokenProvider.createToken(userId); //user인덱스로 토큰 생성
@@ -58,7 +64,9 @@ public class UserService {
     }
 
 
+
     @Transactional
+    @SneakyThrows
     public TokenRes signup(SignupUserReq signupUserReq) throws BaseException {
 
         Authority authority = Authority.builder()
@@ -68,11 +76,11 @@ public class UserService {
         User user = User.builder()
                 .username(signupUserReq.getUsername())
                 .password(passwordEncoder.encode(signupUserReq.getPassword()))
+                .name(signupUserReq.getName())
                 .nickname(signupUserReq.getNickname())
                 .authorities(Collections.singleton(authority))
                 .activated(true)
                 .build();
-
 
         Long userId=userRepository.save(user).getId();
         String jwt=tokenProvider.createToken(userId);
@@ -93,11 +101,28 @@ public class UserService {
 
 
     public boolean checkNickName(String nickName) {
-        return userRepository.existsBynickname(nickName);
+        return userRepository.existsByNickname(nickName);
     }
 
     public boolean checkUserId(String userId) {
-        return userRepository.existsByusername(userId);
+        return userRepository.existsByUsername(userId);
+    }
+
+
+
+
+    //비밀번호 로직
+    @SneakyThrows
+    public PasswordRes setNewPassword(PasswordReq passwordReq){ //새 비밀번호로 바꾸기
+        User user = userRepository.findByUsernameEquals(passwordReq.getUsername());
+        if(user != null){
+            user.setPassword(passwordEncoder.encode(passwordReq.getNewPassword()));
+            userRepository.save(user);
+            return new PasswordRes(passwordReq.getNewPassword());
+        } else {
+            return null;
+        }
+
     }
 
 

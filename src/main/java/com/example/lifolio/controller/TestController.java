@@ -21,6 +21,11 @@ public class TestController {
         return new BaseResponse<>("유저 아이디값:"+userId);
     }
 
+    @GetMapping("test")
+    public BaseResponse<String> testTest() throws BaseException {
+        return new BaseResponse<>("테스트");
+    }
+
     /*
     @GetMapping("/jwt")
     public String getJwt(){
