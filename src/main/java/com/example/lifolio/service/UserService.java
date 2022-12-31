@@ -47,14 +47,13 @@ public class UserService {
         User user=userRepository.findByusername(loginUserReq.getUsername());
         Long userId = user.getId();
 
-        String jwt = tokenProvider.createToken(userId);
-
-        //반환 값 userId 추가
-
+        String jwt = tokenProvider.createToken(userId); //user인덱스로 토큰 생성
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
+
+        //반환 값 아이디 추가
         return new TokenRes(userId,jwt);
     }
 
@@ -62,23 +61,23 @@ public class UserService {
     @Transactional
     public TokenRes signup(SignupUserReq signupUserReq) throws BaseException {
 
-            Authority authority = Authority.builder()
-                    .authorityName("ROLE_USER")
-                    .build();
+        Authority authority = Authority.builder()
+                .authorityName("ROLE_USER")
+                .build();
 
-            User user = User.builder()
-                    .username(signupUserReq.getUsername())
-                    .password(passwordEncoder.encode(signupUserReq.getPassword()))
-                    .nickname(signupUserReq.getNickname())
-                    .authorities(Collections.singleton(authority))
-                    .activated(true)
-                    .build();
+        User user = User.builder()
+                .username(signupUserReq.getUsername())
+                .password(passwordEncoder.encode(signupUserReq.getPassword()))
+                .nickname(signupUserReq.getNickname())
+                .authorities(Collections.singleton(authority))
+                .activated(true)
+                .build();
 
 
-            Long userId=userRepository.save(user).getId();
-            String jwt=tokenProvider.createToken(userId);
+        Long userId=userRepository.save(user).getId();
+        String jwt=tokenProvider.createToken(userId);
 
-            return new TokenRes(userId,jwt);
+        return new TokenRes(userId,jwt);
 
     }
 
