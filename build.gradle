@@ -35,12 +35,6 @@ dependencies {
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
 
-//    implementation "io.springfox:springfox-swagger2:3.0.0"
-//    implementation "io.springfox:springfox-swagger-ui:3.0.0"
-//    implementation "io.springfox:springfox-spring-web:3.0.0"
-//    implementation "io.springfox:springfox-oas:3.0.0"
-//    implementation "io.swagger:swagger-annotations:1.5.21"
-//    implementation "io.swagger:swagger-models:1.5.21"
 
     // swagger dependency
     implementation "io.springfox:springfox-boot-starter:3.0.0"
