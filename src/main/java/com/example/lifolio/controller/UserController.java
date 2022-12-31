@@ -4,13 +4,11 @@ import antlr.Token;
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
 import com.example.lifolio.base.BaseResponseStatus;
-import com.example.lifolio.dto.LogInTokenReq;
-import com.example.lifolio.dto.LoginUserReq;
-import com.example.lifolio.dto.SignupUserReq;
-import com.example.lifolio.dto.TokenRes;
+import com.example.lifolio.dto.*;
 import com.example.lifolio.jwt.JwtFilter;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
@@ -26,8 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.example.lifolio.base.BaseResponseStatus.USERS_EXISTS_ID;
-import static com.example.lifolio.base.BaseResponseStatus.USERS_EXISTS_NICKNAME;
+import static com.example.lifolio.base.BaseResponseStatus.*;
 
 
 @RequiredArgsConstructor
@@ -58,6 +55,19 @@ public class UserController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ApiOperation(value = "새로운 비밀번호 설정", notes = "새로운 비밀번호 설정")
+    @PatchMapping("/password")
+    public BaseResponse<PasswordRes> setNewPassword(PasswordReq passwordReq){
+        //이름, 아이디
+        PasswordRes passwordRes = userService.setNewPassword(passwordReq);
+        if(passwordRes != null){
+            return new BaseResponse<>(passwordRes);
+        } else {
+            return new BaseResponse<>(NOT_EXIST_USER_ID);
+        }
+    }
+
 
     @GetMapping("/user")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")

@@ -18,10 +18,12 @@ public class SignupUserReq {
 
     private String username;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     private String nickname;
+
+    private String name;
 
 
     //이건 requestBody 입력할 때, 입력할 필요 없음
@@ -32,7 +34,9 @@ public class SignupUserReq {
 
         return SignupUserReq.builder()
                 .username(user.getUsername())
+                .password(user.getPassword())
                 .nickname(user.getNickname())
+                .name(user.getName())
                 .authorityResSet(user.getAuthorities().stream()
                         .map(authority -> AuthorityRes.builder().authorityName(authority.getAuthorityName()).build())
                         .collect(Collectors.toSet()))
