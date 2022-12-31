@@ -30,6 +30,7 @@ public class User extends BaseEntity {
     @Column(name = "username", length = 50, unique = true)
     private String username;
 
+
     @Column(name = "password", length = 100)
     private String password;
 
@@ -43,9 +44,7 @@ public class User extends BaseEntity {
     private boolean activated;
 
 
-//
-//    @Column(name="created_date")
-//    private Timestamp createdDate;
+
 
 
 

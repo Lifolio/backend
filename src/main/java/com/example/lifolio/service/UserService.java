@@ -2,6 +2,7 @@ package com.example.lifolio.service;
 
 
 import com.example.lifolio.base.BaseException;
+import com.example.lifolio.base.BaseResponseStatus;
 import com.example.lifolio.dto.*;
 import com.example.lifolio.entity.Authority;
 import com.example.lifolio.entity.User;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.Collections;
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -40,28 +42,34 @@ public class UserService {
 
 
 
+    public TokenRes login(LoginUserReq loginUserReq) throws BaseException {
+        if(!checkUserId(loginUserReq.getUsername())){
+            throw new BaseException(BaseResponseStatus.NOT_EXIST_USER_ID);
+        }
+
+        User user=userRepository.findByUsername(loginUserReq.getUsername());
+        Long userId = user.getId();
+
+        if(!passwordEncoder.matches(loginUserReq.getPassword(),user.getPassword())){
+            throw new BaseException(BaseResponseStatus.NOT_CORRECT_PASSWORD);
+        }
 
 
-    //회원가입, 로그인 로직
-    public TokenRes login(LoginUserReq loginUserReq){
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginUserReq.getUsername(), loginUserReq.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        User user=userRepository.findByUsername(loginUserReq.getUsername());
-        Long userId = user.getId();
+
+
 
         String jwt = tokenProvider.createToken(userId); //user인덱스로 토큰 생성
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-
-        //반환 값 아이디 추가
-        return new TokenRes(userId,jwt);
-    }
+            //반환 값 아이디 추가
+        return new TokenRes(userId, jwt);
+        }
 
 
 
