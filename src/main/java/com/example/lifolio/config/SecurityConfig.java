@@ -59,9 +59,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/test/**").authenticated()
-                .antMatchers("/user/login").permitAll()
-                .antMatchers("/user/signup").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/v3/api-docs").permitAll()
+                .antMatchers("/image/**").permitAll()
+
+                .antMatchers("/test/**").permitAll()
+                //.antMatchers("/user/login").permitAll()
+                //.antMatchers("/user/signup").permitAll()
                 .antMatchers("/user/**").permitAll()
 
                 //위의 경로 제외 전부 JWT 인증해야 함
