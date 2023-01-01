@@ -2,6 +2,7 @@ package com.example.lifolio.service;
 
 
 import com.example.lifolio.base.BaseException;
+import com.example.lifolio.base.BaseResponseStatus;
 import com.example.lifolio.dto.*;
 import com.example.lifolio.entity.Authority;
 import com.example.lifolio.entity.User;
@@ -43,15 +44,25 @@ public class UserService {
 
 
     //회원가입, 로그인 로직
-    public TokenRes login(LoginUserReq loginUserReq){
+    public TokenRes login(LoginUserReq loginUserReq) throws BaseException {
+
+        if(!checkUserId(loginUserReq.getUsername())){
+            throw new BaseException(BaseResponseStatus.NOT_EXIST_USER_ID);
+        }
+
+        User user=userRepository.findByUsername(loginUserReq.getUsername());
+        Long userId = user.getId();
+
+        if(!passwordEncoder.matches(loginUserReq.getPassword(),user.getPassword())){
+            throw new BaseException(BaseResponseStatus.NOT_CORRECT_PASSWORD);
+        }
+
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginUserReq.getUsername(), loginUserReq.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        User user=userRepository.findByUsername(loginUserReq.getUsername());
-        Long userId = user.getId();
 
         String jwt = tokenProvider.createToken(userId); //user인덱스로 토큰 생성
 

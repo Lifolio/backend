@@ -16,9 +16,13 @@ public class TestController {
     private final TokenProvider jwtProvider;
 
     @GetMapping("")
-    public BaseResponse<String> test() throws BaseException {
-        Long userId=jwtProvider.getUserIdx();
-        return new BaseResponse<>("유저 아이디값:"+userId);
+    public BaseResponse<String> test() {
+        try {
+            Long userId = jwtProvider.getUserIdx();
+            return new BaseResponse<>("유저 아이디값:" + userId);
+        }catch(BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
     }
 
     @GetMapping("test")

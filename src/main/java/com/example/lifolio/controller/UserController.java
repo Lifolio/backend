@@ -37,8 +37,19 @@ public class UserController {
     @ApiOperation(value = "로그인", notes = "로그인")
     @PostMapping("/login")
     public BaseResponse<TokenRes> login(@Valid @RequestBody LoginUserReq loginUserReq){
-        TokenRes tokenRes = userService.login(loginUserReq);
-        return new BaseResponse<>(tokenRes);
+        if(loginUserReq.getUsername()==null){
+            return new BaseResponse<>(USERS_EMPTY_USER_ID);
+        }
+        if(loginUserReq.getPassword()==null){
+            return new BaseResponse<>(USERS_EMPTY_USER_PASSWORD);
+        }
+
+        try {
+            TokenRes tokenRes = userService.login(loginUserReq);
+            return new BaseResponse<>(tokenRes);
+        }catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
     }
 
 
