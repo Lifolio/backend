@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TokenRes {
-    private Long userId; //아이디 == username
+    private Long userId; //user 인덱스
     private String accessToken;
 }
