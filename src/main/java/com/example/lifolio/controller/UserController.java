@@ -34,32 +34,15 @@ public class UserController {
     private final UserService userService;
     private final TokenProvider jwtProvider;
 
-
-    @ResponseBody
+    @ApiOperation(value = "로그인", notes = "로그인")
     @PostMapping("/login")
     public BaseResponse<TokenRes> login(@Valid @RequestBody LoginUserReq loginUserReq){
-        /*
-        if (!userService.checkUserId(loginUserReq.getUsername())) {
-            return new BaseResponse<>(NOT_EXIST_USER_ID);
-        }
-
-         */
-
-        if(loginUserReq.getUsername()==null){
-            return new BaseResponse<>(USERS_EMPTY_USER_ID);
-        }
-        if(loginUserReq.getPassword()==null){
-            return new BaseResponse<>(USERS_EMPTY_USER_PASSWORD);
-        }
-
-        try {
-            TokenRes tokenRes = userService.login(loginUserReq);
-            return new BaseResponse<>(tokenRes);
-        }catch (BaseException e){
-            return new BaseResponse<>(e.getStatus());
-        }
+        TokenRes tokenRes = userService.login(loginUserReq);
+        return new BaseResponse<>(tokenRes);
     }
 
+
+    @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping("/signup")
     public BaseResponse<TokenRes> signup(@Valid @RequestBody SignupUserReq signupUserReq) throws BaseException {
         try {
