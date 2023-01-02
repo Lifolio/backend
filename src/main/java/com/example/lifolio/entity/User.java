@@ -6,11 +6,10 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "User")
 @Getter
 @Setter
 @Builder
