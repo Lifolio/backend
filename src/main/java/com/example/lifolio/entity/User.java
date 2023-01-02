@@ -27,7 +27,7 @@ public class User extends BaseEntity {
 
     //username == userId
     //여러가지 시도해보다가 오류나서 일단은 username상태로 뒀습니다ㅠㅠ
-    //테스트용 주석 (민기)
+    //테스트용 주석  (민기)
     @Column(name = "username", length = 50, unique = true)
     private String username;
 
