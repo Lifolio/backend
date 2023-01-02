@@ -6,11 +6,10 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "User")
 @Getter
 @Setter
 @Builder
@@ -27,6 +26,7 @@ public class User extends BaseEntity {
 
     //username == userId
     //여러가지 시도해보다가 오류나서 일단은 username상태로 뒀습니다ㅠㅠ
+    //테스트용 주석  (민기)
     @Column(name = "username", length = 50, unique = true)
     private String username;
 
