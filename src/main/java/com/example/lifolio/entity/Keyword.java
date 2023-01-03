@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name = "Keyword")
 public class Keyword implements Serializable {
 

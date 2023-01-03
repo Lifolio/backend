@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name = "Category")
 public class Category implements Serializable {
 

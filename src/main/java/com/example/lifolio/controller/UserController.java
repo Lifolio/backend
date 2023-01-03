@@ -1,24 +1,14 @@
 package com.example.lifolio.controller;
 
-import antlr.Token;
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
-import com.example.lifolio.base.BaseResponseStatus;
-import com.example.lifolio.dto.*;
-import com.example.lifolio.jwt.JwtFilter;
+import com.example.lifolio.dto.user.*;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -119,6 +109,13 @@ public class UserController {
         }
         return new BaseResponse<>(result);
 
+    }
+
+    @GetMapping("/home/{userId}")
+    public BaseResponse<GetHomeRes> home(@PathVariable("userId") Long userId){
+
+        GetHomeRes getHomeRes = userService.getHomeRes(userId);
+        return new BaseResponse<>(getHomeRes);
     }
 
 
