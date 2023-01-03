@@ -43,6 +43,25 @@ public class User extends BaseEntity {
     @Column(name = "activated")
     private boolean activated;
 
+    @Column(name="phone")
+    private String phone;
+
+    @Column(name="social")
+    private String social;
+
+    @Column(name="all_alarm")
+    private String allAlarm;
+
+    @Column(name="my_alarm")
+    private String myAlarm;
+
+    @Column(name="planning_alarm")
+    private String planningAlarm;
+
+    @Column(name="social_alarm")
+    private String socialAlarm;
+
+
 
 
 
