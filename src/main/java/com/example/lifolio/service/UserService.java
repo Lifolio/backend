@@ -11,6 +11,10 @@ import com.example.lifolio.repository.*;
 import com.example.lifolio.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import net.nurigo.java_sdk.api.Message;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,9 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 @RequiredArgsConstructor
@@ -39,6 +41,12 @@ public class UserService {
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    @Value("${coolsms.key}")
+    private String apiKey;
+    @Value("${coolsms.secret}")
+    private String apiSecret;
+
 
     //현재 로그인한(jwt 인증된) 사용자 반환
     public User findNowLoginUser(){
@@ -180,7 +188,6 @@ public class UserService {
                 }
         );
 
-
         //CustomLifolio 조회
         List<CustomLifolioRepository.CustomUserLifolio> customUserLifolioResult =customLifolioRepository.getCustomFolio(userId);
 
@@ -198,5 +205,33 @@ public class UserService {
 
 
 
+    }
+
+    public String phoneNumberCheck(String to) throws CoolsmsException {
+
+        Message coolsms = new Message(apiKey, apiSecret);
+
+        Random rand  = new Random();
+        String numStr = "";
+        for(int i=0; i<6; i++) {
+            String ran = Integer.toString(rand.nextInt(10));
+            numStr+=ran;
+        }
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("to", to);    // 수신전화번호
+        params.put("from", "01049177671");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+        params.put("type", "sms");
+        params.put("text", "[Lifolio] 인증번호는 [" + numStr + "] 입니다.");
+
+
+        try {
+            JSONObject obj = (JSONObject) coolsms.send(params);
+            System.out.println(obj.toString());
+        } catch (CoolsmsException e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getCode());
+        }
+        return numStr;
     }
 }

@@ -31,3 +31,7 @@ jwt:
 logging:
   level:
     study.cherry: DEBUG
+
+coolsms:
+  key: NCSNMZXJWB2W7OSP
+  secret: AQA4ROR9GMGDQGKN67CLPAWYKCKPY1SR
