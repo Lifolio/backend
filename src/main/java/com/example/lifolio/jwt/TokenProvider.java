@@ -100,6 +100,8 @@ public class TokenProvider implements InitializingBean {
             claims = Jwts.parser()
                     .setSigningKey(secret)
                     .parseClaimsJws(token);
+            servletRequest.getParameter("userId");
+
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             servletRequest.setAttribute("exception","MalformedJwtException");
@@ -129,19 +131,13 @@ public class TokenProvider implements InitializingBean {
     public Long getUserIdx() throws BaseException{
         //1. JWT 추출
         String accessToken = getJwt();
-        if(accessToken == null || accessToken.length() == 0){
-            throw new BaseException(EMPTY_JWT);
-        }
 
         // 2. JWT parsing
         Jws<Claims> claims;
-        try{
             claims = Jwts.parser()
                     .setSigningKey(secret)
                     .parseClaimsJws(accessToken);
-        } catch (Exception ignored) {
-            throw new BaseException(INVALID_JWT);
-        }
+
 
         // 3. userId 추출
         return claims.getBody().get("userId",Long.class);
