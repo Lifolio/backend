@@ -7,6 +7,7 @@ import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -101,6 +102,10 @@ public class UserController {
     @GetMapping("/check/userId")
     public BaseResponse<String> checkUserId(@Param("userId") String userId){
         String result="";
+
+        System.out.println(userId);
+        System.out.println(userService.checkUserId(userId));
+
         if(userService.checkUserId(userId)){
             return new BaseResponse<>(USERS_EXISTS_ID);
         }
@@ -123,6 +128,13 @@ public class UserController {
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
+    }
+
+    @ResponseBody
+    @GetMapping("/check/sendSMS")
+    public BaseResponse<String> sendSMS(@RequestParam(value="to")String to) throws CoolsmsException {
+        String result = userService.phoneNumberCheck(to);
+        return new BaseResponse<>(result);
     }
 
 
