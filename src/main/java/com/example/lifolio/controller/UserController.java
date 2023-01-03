@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import static com.example.lifolio.base.BaseResponseStatus.*;
+import static com.example.lifolio.base.BaseResponseStatus.EMPTY_ACCESS_TOKEN;
 
 
 @RequiredArgsConstructor
@@ -143,5 +144,18 @@ public class UserController {
         return new BaseResponse<>(userService.setGoalOfYear(postGoalReq));
     }
 
+    @PostMapping("/kakao/certificate")
+    public BaseResponse<KakaoLoginRes> login(@Valid @RequestBody KakaoLoginReq kakaoLoginReq) {
+        if (kakaoLoginReq.getAccessToken() == null) {
+            return new BaseResponse<>(EMPTY_ACCESS_TOKEN);
+        }
 
+        try {
+            KakaoLoginRes kakaoLoginRes = userService.createKakaoUser(kakaoLoginReq.getAccessToken());
+            return new BaseResponse<>(kakaoLoginRes);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+
+    }
 }
