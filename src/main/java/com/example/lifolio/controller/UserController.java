@@ -113,9 +113,16 @@ public class UserController {
 
     @GetMapping("/home/{userId}")
     public BaseResponse<GetHomeRes> home(@PathVariable("userId") Long userId){
-
-        GetHomeRes getHomeRes = userService.getHomeRes(userId);
-        return new BaseResponse<>(getHomeRes);
+        try {
+            Long idByJwt= jwtProvider.getUserIdx();
+            if(userId!=idByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            GetHomeRes getHomeRes = userService.getHomeRes(userId);
+            return new BaseResponse<>(getHomeRes);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
     }
 
 
