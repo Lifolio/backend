@@ -3,12 +3,11 @@ package com.example.lifolio.service;
 
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponseStatus;
-import com.example.lifolio.dto.*;
-import com.example.lifolio.entity.Authority;
-import com.example.lifolio.entity.User;
+import com.example.lifolio.dto.user.*;
+import com.example.lifolio.entity.*;
 import com.example.lifolio.jwt.JwtFilter;
 import com.example.lifolio.jwt.TokenProvider;
-import com.example.lifolio.repository.UserRepository;
+import com.example.lifolio.repository.*;
 import com.example.lifolio.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -22,14 +21,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final GoalOfYearRepository goalOfYearRepository;
+    private final CustomLifolioColorRepository customLifolioColorRepository;
+    private final CustomLifolioRepository customLifolioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MyFolioRepository myFolioRepository;
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -137,4 +143,60 @@ public class UserService {
     }
 
 
+    public GetHomeRes getHomeRes(Long userId) {
+        // 현재 날짜 구하기
+        LocalDate now = LocalDate.now();
+
+        //올해 기준 홈
+        int year = now.getYear();
+        CustomLifolioColor customLifolioColor = customLifolioColorRepository.findByUserId(userId);
+        GoalOfYear goalOfYear=goalOfYearRepository.findByUserIdAndYear(userId, year);
+
+        TopInfo topInfo = new TopInfo();
+
+        //TopInfo null 값 예외처리
+        if(customLifolioColor==null && goalOfYear==null){
+            topInfo=new TopInfo(1,"목표 없음");
+        }
+        else if(customLifolioColor==null){
+            topInfo=new TopInfo(1,goalOfYear.getGoal());
+        }
+        else if(goalOfYear==null){
+            topInfo=new TopInfo(customLifolioColor.getColorStatus(),"목표 없음");
+        }
+        else {
+            topInfo=new TopInfo(customLifolioColor.getColorStatus(),goalOfYear.getGoal());
+        }
+
+        //MainLifolio 조회
+        List<MyFolioRepository.MainLifolio> mainLifolioResult=myFolioRepository.getMainFolio(userId,year);
+        List<MainLifolio> mainLifolio=new ArrayList<>();
+        mainLifolioResult.forEach(
+                myFolio->{
+                    mainLifolio.add(new MainLifolio(
+                            myFolio.getMonth(),
+                            myFolio.getStar()
+                    ));
+                }
+        );
+
+
+        //CustomLifolio 조회
+        List<CustomLifolioRepository.CustomUserLifolio> customUserLifolioResult =customLifolioRepository.getCustomFolio(userId);
+
+        List<CustomUserLifolioRes> customResult=new ArrayList<>();
+        customUserLifolioResult.forEach(
+                custom->{
+                    customResult.add(new CustomUserLifolioRes(
+                    custom.getCustomId(),
+                    custom.getConcept(),
+                    custom.getEmoji(),
+                    custom.getCustomName()));
+                }
+        );
+        return new GetHomeRes(topInfo,mainLifolio, customResult);
+
+
+
+    }
 }
