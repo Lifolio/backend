@@ -103,6 +103,7 @@ public class UserService {
                 .password(passwordEncoder.encode(signupUserReq.getPassword()))
                 .name(signupUserReq.getName())
                 .nickname(signupUserReq.getNickname())
+                .phone(signupUserReq.getPhone())
                 .authorities(Collections.singleton(authority))
                 .activated(true)
                 .build();
@@ -207,7 +208,7 @@ public class UserService {
 
     }
 
-    public String phoneNumberCheck(String to) throws CoolsmsException {
+    public int phoneNumberCheck(String to) throws CoolsmsException {
 
         Message coolsms = new Message(apiKey, apiSecret);
 
@@ -232,6 +233,6 @@ public class UserService {
             System.out.println(e.getMessage());
             System.out.println(e.getCode());
         }
-        return numStr;
+        return Integer.parseInt(numStr);
     }
 }

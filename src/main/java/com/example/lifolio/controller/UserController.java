@@ -103,9 +103,6 @@ public class UserController {
     public BaseResponse<String> checkUserId(@Param("userId") String userId){
         String result="";
 
-        System.out.println(userId);
-        System.out.println(userService.checkUserId(userId));
-
         if(userService.checkUserId(userId)){
             return new BaseResponse<>(USERS_EXISTS_ID);
         }
@@ -132,9 +129,10 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/check/sendSMS")
-    public BaseResponse<String> sendSMS(@RequestParam(value="to")String to) throws CoolsmsException {
-        String result = userService.phoneNumberCheck(to);
-        return new BaseResponse<>(result);
+    public BaseResponse<GetSMSRes> sendSMS(@RequestParam(value="to")String to) throws CoolsmsException {
+        int result = userService.phoneNumberCheck(to);
+        GetSMSRes getSMSRes = new GetSMSRes(result);
+        return new BaseResponse<>(getSMSRes);
     }
 
 
