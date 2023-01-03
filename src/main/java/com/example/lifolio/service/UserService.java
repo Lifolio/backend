@@ -235,4 +235,24 @@ public class UserService {
         }
         return Integer.parseInt(numStr);
     }
+
+
+    public PostGoalRes setGoalOfYear(PostGoalReq postGoalReq){
+        LocalDate now = LocalDate.now();
+        int year = now.getYear(); //일단은 현재 시간에만 설정할 수 있도록 설정
+
+        User user = findNowLoginUser();
+
+        GoalOfYear toSaveGoalOfYear = GoalOfYear.builder()
+                .userId(user.getId())
+                .goal(postGoalReq.getGoal())
+                .year(year)
+                .build();
+
+        goalOfYearRepository.save(toSaveGoalOfYear);
+
+        return new PostGoalRes(toSaveGoalOfYear.getGoal());
+    }
+
+
 }

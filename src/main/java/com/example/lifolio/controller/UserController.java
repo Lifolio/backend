@@ -5,6 +5,7 @@ import com.example.lifolio.base.BaseResponse;
 import com.example.lifolio.dto.user.*;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.UserService;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
@@ -133,6 +134,13 @@ public class UserController {
         int result = userService.phoneNumberCheck(to);
         GetSMSRes getSMSRes = new GetSMSRes(result);
         return new BaseResponse<>(getSMSRes);
+    }
+
+    @ApiOperation(value = "올해의 나 설정", notes = "올해의 나 설정")
+    @PostMapping("/goal")
+    public BaseResponse<PostGoalRes> setGoalOfYear(@RequestBody PostGoalReq postGoalReq){
+
+        return new BaseResponse<>(userService.setGoalOfYear(postGoalReq));
     }
 
 
