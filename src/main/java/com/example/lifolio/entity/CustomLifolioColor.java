@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 
 @Entity
@@ -12,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name = "CustomLifolioColor")
 public class CustomLifolioColor implements Serializable {
 
@@ -24,7 +23,7 @@ public class CustomLifolioColor implements Serializable {
  @Column(name = "user_id")
  private Long userId;
 
- @Column(name = "color_staus")
- private Integer colorStaus;
+ @Column(name = "color_status")
+ private Integer colorStatus;
 
 }

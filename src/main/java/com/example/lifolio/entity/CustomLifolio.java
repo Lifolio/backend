@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name = "CustomLifolio")
 public class CustomLifolio implements Serializable {
 
@@ -27,7 +27,13 @@ public class CustomLifolio implements Serializable {
  private Long categoryId;
 
  @Column(name = "concept")
- private String concept;
+ private int concept;
+
+ @Column(name ="title")
+ private String title;
+
+ @Column(name="emoji")
+ private String emoji;
 
  @Column(name = "created_at")
  private LocalDateTime createdAt;

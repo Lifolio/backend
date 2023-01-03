@@ -1,11 +1,8 @@
-package com.example.lifolio.dto;
+package com.example.lifolio.dto.user;
 
 import com.example.lifolio.entity.User;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Set;
 import java.util.stream.Collectors;
 

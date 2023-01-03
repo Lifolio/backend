@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name = "GoalOfYear")
 public class GoalOfYear implements Serializable {
 
@@ -27,10 +27,15 @@ public class GoalOfYear implements Serializable {
  @Column(name = "goal")
  private String goal;
 
+ @Column(name="year")
+ private Integer year;
+
  @Column(name = "created_at")
  private LocalDateTime createdAt;
 
  @Column(name = "updated_at")
  private LocalDateTime updatedAt;
+
+
 
 }

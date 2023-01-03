@@ -1,4 +1,4 @@
-package com.example.lifolio.dto;
+package com.example.lifolio.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
