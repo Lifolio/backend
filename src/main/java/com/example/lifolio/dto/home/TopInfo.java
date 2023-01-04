@@ -1,15 +1,16 @@
-package com.example.lifolio.dto.user;
+package com.example.lifolio.dto.home;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MainLifolio {
-    private int month;
-    private int star;
+public class TopInfo {
+    private int colorStatus;
+    private String goal;
 }

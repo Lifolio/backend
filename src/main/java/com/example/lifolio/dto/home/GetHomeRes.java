@@ -1,4 +1,4 @@
-package com.example.lifolio.dto.user;
+package com.example.lifolio.dto.home;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 public class GetHomeRes {
     private TopInfo topInfo;
-    private List<MainLifolio> mainLifolio;
+    private List<GraphLifolio> graphLifolio;
     private List<CustomUserLifolioRes> customLifolio;
 }
