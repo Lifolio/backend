@@ -40,6 +40,13 @@ public class CustomLifolio extends BaseEntity implements Serializable {
  @Column(name="emoji")
  private String emoji;
 
+public void updateCustomLifolio(String title, Long categoryId, int concept, String emoji){
+ this.title = title;
+ this.categoryId = categoryId;
+ this.concept = concept;
+ this.emoji = emoji;
+}
+
 
 
 }

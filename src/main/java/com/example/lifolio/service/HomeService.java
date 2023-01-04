@@ -1,16 +1,22 @@
 package com.example.lifolio.service;
 
 import com.example.lifolio.dto.home.*;
+import com.example.lifolio.dto.user.PasswordReq;
+import com.example.lifolio.dto.user.PasswordRes;
+import com.example.lifolio.entity.CustomLifolio;
 import com.example.lifolio.entity.CustomLifolioColor;
 import com.example.lifolio.entity.GoalOfYear;
+import com.example.lifolio.entity.User;
 import com.example.lifolio.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -104,5 +110,14 @@ public class HomeService {
                 }
         );
         return customResult;
+    }
+
+    @SneakyThrows
+    public void setCustomLifolio(Long userId, Long customId, CustomUpdateReq customUpdateReq){ //커스텀폴리오 수정
+        //CustomLifolio customLifolio = customLifolioRepository.getCustomFolioCategory(customId);
+        CustomLifolio customLifolio=customLifolioRepository.getOne(customId);
+        customLifolio.updateCustomLifolio(customUpdateReq.getCustomName(),customUpdateReq.getCategory(),
+                customUpdateReq.getConcept(),customUpdateReq.getEmoji());
+        customLifolioRepository.save(customLifolio);
     }
 }
