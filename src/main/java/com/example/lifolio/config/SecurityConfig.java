@@ -77,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/home/**").authenticated()
                 .antMatchers("/user/find").permitAll()
 
-                //위의 경로 제외 전부 JWT 인증해야 함
+                //위의 경로 제외 전부 JWT 인증해야 함(헤더에 JWT 포함하기)
                 .anyRequest().authenticated()
 
                 .and()

@@ -5,6 +5,7 @@ import com.example.lifolio.base.BaseResponse;
 import com.example.lifolio.dto.user.*;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.UserService;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import static com.example.lifolio.base.BaseResponseStatus.*;
+import static com.example.lifolio.base.BaseResponseStatus.EMPTY_ACCESS_TOKEN;
 
 
 @RequiredArgsConstructor
@@ -146,5 +148,25 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "올해의 나 설정", notes = "올해의 나 설정")
+    @PostMapping("/goal")
+    public BaseResponse<PostGoalRes> setGoalOfYear(@RequestBody PostGoalReq postGoalReq){
 
+        return new BaseResponse<>(userService.setGoalOfYear(postGoalReq));
+    }
+
+    @PostMapping("/kakao/certificate")
+    public BaseResponse<KakaoLoginRes> login(@Valid @RequestBody KakaoLoginReq kakaoLoginReq) {
+        if (kakaoLoginReq.getAccessToken() == null) {
+            return new BaseResponse<>(EMPTY_ACCESS_TOKEN);
+        }
+
+        try {
+            KakaoLoginRes kakaoLoginRes = userService.createKakaoUser(kakaoLoginReq.getAccessToken());
+            return new BaseResponse<>(kakaoLoginRes);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+
+    }
 }

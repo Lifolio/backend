@@ -1,6 +1,9 @@
 package com.example.lifolio.entity;
 
+import com.example.lifolio.base.BaseEntity;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -10,13 +13,15 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Getter
 @Builder
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "MyFolio")
-public class MyFolio {
+public class MyFolio extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,14 +42,6 @@ public class MyFolio {
 
     @Column(name="date")
     private Date date;
-
-    @CreatedDate
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 
     @Column(name="status")
     private Integer status;

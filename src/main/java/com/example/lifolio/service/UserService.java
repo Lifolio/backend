@@ -3,12 +3,15 @@ package com.example.lifolio.service;
 
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponseStatus;
+import com.example.lifolio.dto.user.KakaoLoginRes;
 import com.example.lifolio.dto.user.*;
 import com.example.lifolio.entity.*;
 import com.example.lifolio.jwt.JwtFilter;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.repository.*;
 import com.example.lifolio.util.SecurityUtil;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import net.nurigo.java_sdk.api.Message;
@@ -25,6 +28,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Collections;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -245,4 +252,86 @@ public class UserService {
         }
         return user.getUsername();
     }
+
+    public PostGoalRes setGoalOfYear(PostGoalReq postGoalReq){
+        LocalDate now = LocalDate.now();
+        int year = now.getYear(); //일단은 현재 시간에만 설정할 수 있도록 설정
+
+        User user = findNowLoginUser();
+
+        GoalOfYear toSaveGoalOfYear = GoalOfYear.builder()
+                .userId(user.getId())
+                .goal(postGoalReq.getGoal())
+                .year(year)
+                .build();
+
+        goalOfYearRepository.save(toSaveGoalOfYear);
+
+        return new PostGoalRes(toSaveGoalOfYear.getGoal());
+    }
+
+    public KakaoLoginRes createKakaoUser(String token) throws BaseException {
+
+        String reqURL = "https://kapi.kakao.com/v2/user/me";
+        String profileImgUrl="";
+        String nickname="";
+        String email = "";
+
+        //access_token을 이용하여 사용자 정보 조회
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Authorization", "Bearer " + token); //전송할 header 작성, access_token전송
+
+
+            int responseCode = conn.getResponseCode();
+
+            if (responseCode==401){
+                throw new BaseException(BaseResponseStatus.INVALID_ACCESS_TOKEN);
+            }
+
+            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            String result = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            System.out.println("response body : " + result);
+
+            //Gson 라이브러리로 JSON 파싱
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(result);
+
+
+            //kakao로부터 정보 받아옴
+            profileImgUrl = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("profile").getAsString();
+            nickname = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("name").getAsString();
+            email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
+
+            br.close();
+
+//            //유저 로그인 & 회원가입으로 유저 ID값 받아오기
+//            if (!checkNickName(nickname)){
+//
+//            }
+//
+//            else {
+//
+//            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //임시 아이디 반환
+        return new KakaoLoginRes(100, nickname, profileImgUrl, "kakao");
+
+
+    }
+
 }
