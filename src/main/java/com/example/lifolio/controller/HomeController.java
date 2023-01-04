@@ -67,6 +67,21 @@ public class HomeController {
         }
     }
 
+    @ResponseBody
+    @PatchMapping("/custom/{userId}/{customId}")
+    public BaseResponse<String> updateCustomFolio(@PathVariable("userId") Long userId, @PathVariable("customId") Long customId,@RequestBody CustomUpdateReq customUpdateReq){
+        try {
+            Long idByJwt= jwtProvider.getUserIdx();
+            if(userId!=idByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            homeService.setCustomLifolio(userId,customId,customUpdateReq);
+            return new BaseResponse<>("수정 성공.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
 
 
 
