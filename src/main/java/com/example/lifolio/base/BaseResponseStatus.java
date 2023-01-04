@@ -60,6 +60,7 @@ public enum     BaseResponseStatus {
     NOT_CORRECT_PASSWORD(false, 2027, "비밀번호가 일치하지 않습니다."),
 
     ALREADY_DELETED_USER(false, 2028, "이미 탈퇴된 유저입니다."),
+    NOT_CORRECT_USER(false,2029,"회원 정보에 일치하는 아이디가 없습니다."),
 
 
 

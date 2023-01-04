@@ -35,6 +35,8 @@ import java.util.Collections;
 import java.time.LocalDate;
 import java.util.*;
 
+import static com.example.lifolio.base.BaseResponseStatus.NOT_CORRECT_USER;
+
 
 @RequiredArgsConstructor
 @Service
@@ -243,6 +245,13 @@ public class UserService {
         return Integer.parseInt(numStr);
     }
 
+    public String findUserId(FindUserIdReq findUserIdReq) throws BaseException {
+        User user =userRepository.findByNameAndPhone(findUserIdReq.getName(),findUserIdReq.getPhone());
+        if(user==null){
+            throw new BaseException(NOT_CORRECT_USER);
+        }
+        return user.getUsername();
+    }
 
     public PostGoalRes setGoalOfYear(PostGoalReq postGoalReq){
         LocalDate now = LocalDate.now();
@@ -324,6 +333,5 @@ public class UserService {
 
 
     }
-
 
 }

@@ -137,6 +137,17 @@ public class UserController {
         return new BaseResponse<>(getSMSRes);
     }
 
+    @ResponseBody
+    @PostMapping("/find")
+    public BaseResponse<FindUserIdRes> findUserId(@RequestBody FindUserIdReq findUserIdReq){
+        try{
+            FindUserIdRes findUserIdRes = new FindUserIdRes(userService.findUserId(findUserIdReq));
+            return new BaseResponse<>(findUserIdRes);
+        }catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
     @ApiOperation(value = "올해의 나 설정", notes = "올해의 나 설정")
     @PostMapping("/goal")
     public BaseResponse<PostGoalRes> setGoalOfYear(@RequestBody PostGoalReq postGoalReq){
