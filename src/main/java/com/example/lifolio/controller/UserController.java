@@ -135,5 +135,16 @@ public class UserController {
         return new BaseResponse<>(getSMSRes);
     }
 
+    @ResponseBody
+    @PostMapping("/find")
+    public BaseResponse<FindUserIdRes> findUserId(@RequestBody FindUserIdReq findUserIdReq){
+        try{
+            FindUserIdRes findUserIdRes = new FindUserIdRes(userService.findUserId(findUserIdReq));
+            return new BaseResponse<>(findUserIdRes);
+        }catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
 
 }
