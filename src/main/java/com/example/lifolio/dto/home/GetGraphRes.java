@@ -1,15 +1,13 @@
-package com.example.lifolio.dto.user;
+package com.example.lifolio.dto.home;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
-public class MainLifolio {
-    private int month;
+public class GetGraphRes {
+    private String day;
     private int star;
 }

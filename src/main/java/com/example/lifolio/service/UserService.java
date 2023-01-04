@@ -161,61 +161,7 @@ public class UserService {
     }
 
 
-    public GetHomeRes getHomeRes(Long userId) {
-        // 현재 날짜 구하기
-        LocalDate now = LocalDate.now();
 
-        //올해 기준 홈
-        int year = now.getYear();
-        CustomLifolioColor customLifolioColor = customLifolioColorRepository.findByUserId(userId);
-        GoalOfYear goalOfYear=goalOfYearRepository.findByUserIdAndYear(userId, year);
-
-        TopInfo topInfo = new TopInfo();
-
-        //TopInfo null 값 예외처리
-        if(customLifolioColor==null && goalOfYear==null){
-            topInfo=new TopInfo(1,"목표 없음");
-        }
-        else if(customLifolioColor==null){
-            topInfo=new TopInfo(1,goalOfYear.getGoal());
-        }
-        else if(goalOfYear==null){
-            topInfo=new TopInfo(customLifolioColor.getColorStatus(),"목표 없음");
-        }
-        else {
-            topInfo=new TopInfo(customLifolioColor.getColorStatus(),goalOfYear.getGoal());
-        }
-
-        //MainLifolio 조회
-        List<MyFolioRepository.MainLifolio> mainLifolioResult=myFolioRepository.getMainFolio(userId,year);
-        List<MainLifolio> mainLifolio=new ArrayList<>();
-        mainLifolioResult.forEach(
-                myFolio->{
-                    mainLifolio.add(new MainLifolio(
-                            myFolio.getMonth(),
-                            myFolio.getStar()
-                    ));
-                }
-        );
-
-        //CustomLifolio 조회
-        List<CustomLifolioRepository.CustomUserLifolio> customUserLifolioResult =customLifolioRepository.getCustomFolio(userId);
-
-        List<CustomUserLifolioRes> customResult=new ArrayList<>();
-        customUserLifolioResult.forEach(
-                custom->{
-                    customResult.add(new CustomUserLifolioRes(
-                    custom.getCustomId(),
-                    custom.getConcept(),
-                    custom.getEmoji(),
-                    custom.getCustomName()));
-                }
-        );
-        return new GetHomeRes(topInfo,mainLifolio, customResult);
-
-
-
-    }
 
     public int phoneNumberCheck(String to) throws CoolsmsException {
 
