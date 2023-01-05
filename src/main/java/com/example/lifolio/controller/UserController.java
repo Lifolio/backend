@@ -138,7 +138,7 @@ public class UserController {
 
 
     @PostMapping("/kakao/certificate")
-    public BaseResponse<KakaoLoginRes> login(@Valid @RequestBody KakaoLoginReq kakaoLoginReq) {
+    public BaseResponse<KakaoLoginRes> login(@RequestBody KakaoLoginReq kakaoLoginReq) {
         if (kakaoLoginReq.getAccessToken() == null) {
             return new BaseResponse<>(EMPTY_ACCESS_TOKEN);
         }

@@ -243,19 +243,19 @@ public class UserService {
 
             //kakao로부터 정보 받아옴
             profileImgUrl = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("profile").getAsString();
-            nickname = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("name").getAsString();
+            nickname = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("nickname").getAsString();
             email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
 
             br.close();
 
-//            //유저 로그인 & 회원가입으로 유저 ID값 받아오기
-//            if (!checkNickName(nickname)){
-//
-//            }
-//
-//            else {
-//
-//            }
+            //유저 로그인 & 회원가입으로 유저 ID값 받아오기
+            if (!checkNickName(nickname)){
+
+            }
+
+            else {
+
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -263,8 +263,6 @@ public class UserService {
 
         //임시 아이디 반환
         return new KakaoLoginRes(100, nickname, profileImgUrl, "kakao");
-
-
     }
 
 }
