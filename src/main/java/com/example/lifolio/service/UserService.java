@@ -206,7 +206,6 @@ public class UserService {
     public KakaoLoginRes createKakaoUser(String token) throws BaseException {
 
         String reqURL = "https://kapi.kakao.com/v2/user/me";
-        String profileImgUrl="";
         String nickname="";
         String email = "";
 
@@ -220,7 +219,7 @@ public class UserService {
             conn.setRequestProperty("Authorization", "Bearer " + token); //전송할 header 작성, access_token전송
 
 
-            int responseCode = conn.getResponseCode();
+            int responseCode = conn.getResponseCode(); //200번이 성공
 
             if (responseCode==401){
                 throw new BaseException(BaseResponseStatus.INVALID_ACCESS_TOKEN);
@@ -241,20 +240,15 @@ public class UserService {
             JsonElement element = parser.parse(result);
 
 
-            //kakao로부터 정보 받아옴
-            profileImgUrl = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("profile").getAsString();
+            //kakao 한테 정보 받아옴
             nickname = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("nickname").getAsString();
             email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
 
             br.close();
 
-            //유저 로그인 & 회원가입으로 유저 ID값 받아오기
+            //유저 회원가입으로 유저 ID값 받아오기
             if (!checkNickName(nickname)){
-
-            }
-
-            else {
-
+                //회원가입 (이메일, 닉네임, 유저타입 삽입)
             }
 
         } catch (IOException e) {
@@ -262,7 +256,7 @@ public class UserService {
         }
 
         //임시 아이디 반환
-        return new KakaoLoginRes(100, nickname, profileImgUrl, "kakao");
+        return new KakaoLoginRes(100, email, nickname, "kakao");
     }
 
 }
