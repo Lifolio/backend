@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class KakaoLoginRes {
     private long userId;
+    private String email;
     private String nickname;
-    private String profileImgUrl;
     private String type;
 }
