@@ -146,6 +146,7 @@ public class HomeService {
         List<GoalOfYear> goalList = goalOfYearRepository.findAllByUserIdOrderByYearAsc(userId);
         List<GetGoalRes> getGoalResList = new ArrayList<>();
 
+        if(goalList.isEmpty()) return null;
 
         for(GoalOfYear g: goalList){
             GetGoalRes getGoalRes = new GetGoalRes(g.getYear(), g.getGoal(), g.getCreatedAt().toLocalDate());
