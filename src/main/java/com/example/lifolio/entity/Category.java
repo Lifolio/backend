@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 
 @Entity
@@ -29,5 +28,12 @@ public class Category implements Serializable {
 
  @Column(name = "title")
  private String title;
+
+ public void updateCategory(Long id, Long userId, Long colorId, String title){
+  this.id = id;
+  this.userId = userId;
+  this.colorId = colorId;
+  this.title = title;
+ }
 
 }
