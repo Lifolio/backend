@@ -51,7 +51,7 @@ public enum     BaseResponseStatus {
 
     FAILED_TO_LOGIN(false, 2023, "로그인에 실패하였습니다."),
 
-    NOT_EXIST_USER_ID(false, 2024, "존재하지 않는 유저 아이디입니다."),
+    NOT_EXIST_USER(false, 2024, "존재하지 않는 유저입니다."),
 
     NOT_EXIST_NICKNAME(false, 2025, "존재하지 않는 닉네임입니다."),
 

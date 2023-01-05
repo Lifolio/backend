@@ -3,6 +3,9 @@ package com.example.lifolio.service;
 
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponseStatus;
+import com.example.lifolio.dto.home.GetGoalRes;
+import com.example.lifolio.dto.home.PostGoalReq;
+import com.example.lifolio.dto.home.PostGoalRes;
 import com.example.lifolio.dto.user.KakaoLoginRes;
 import com.example.lifolio.dto.user.*;
 import com.example.lifolio.entity.*;
@@ -70,7 +73,7 @@ public class UserService {
     public TokenRes login(LoginUserReq loginUserReq) throws BaseException {
 
         if(!checkUserId(loginUserReq.getUsername())){
-            throw new BaseException(BaseResponseStatus.NOT_EXIST_USER_ID);
+            throw new BaseException(BaseResponseStatus.NOT_EXIST_USER);
         }
 
         User user=userRepository.findByUsername(loginUserReq.getUsername());
@@ -199,22 +202,6 @@ public class UserService {
         return user.getUsername();
     }
 
-    public PostGoalRes setGoalOfYear(PostGoalReq postGoalReq){
-        LocalDate now = LocalDate.now();
-        int year = now.getYear(); //일단은 현재 시간에만 설정할 수 있도록 설정
-
-        User user = findNowLoginUser();
-
-        GoalOfYear toSaveGoalOfYear = GoalOfYear.builder()
-                .userId(user.getId())
-                .goal(postGoalReq.getGoal())
-                .year(year)
-                .build();
-
-        goalOfYearRepository.save(toSaveGoalOfYear);
-
-        return new PostGoalRes(toSaveGoalOfYear.getGoal());
-    }
 
     public KakaoLoginRes createKakaoUser(String token) throws BaseException {
 
