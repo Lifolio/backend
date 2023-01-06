@@ -23,9 +23,9 @@ public enum     BaseResponseStatus {
 
     INVALID_JWT(false, 2002, "유효하지 않은 JWT입니다."),
 
-    EMPTY_ACCESS_TOKEN(false,2004, "access token을 입력해주세요"),
+    EMPTY_ACCESS_TOKEN(false,2004, "access token을 입력해주세요."),
 
-    INVALID_ACCESS_TOKEN(false, 2005, "access token이 유효하지 않습니다."),
+    INVALID_ACCESS_TOKEN(false, 2005, "유효하지 않은 ccess Token 입니다."),
 
     INVALID_USER_JWT(false,403,"권한이 없는 유저의 접근입니다."),
 
@@ -51,7 +51,7 @@ public enum     BaseResponseStatus {
 
     FAILED_TO_LOGIN(false, 2023, "로그인에 실패하였습니다."),
 
-    NOT_EXIST_USER_ID(false, 2024, "존재하지 않는 유저 아이디입니다."),
+    NOT_EXIST_USER(false, 2024, "존재하지 않는 유저입니다."),
 
     NOT_EXIST_NICKNAME(false, 2025, "존재하지 않는 닉네임입니다."),
 

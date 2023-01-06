@@ -1,4 +1,4 @@
-package com.example.lifolio.dto.user;
+package com.example.lifolio.dto.home;
 
 
 import lombok.AllArgsConstructor;
@@ -9,9 +9,8 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 @Getter
-public class PostGoalReq {
-    //아이디는 securityContext에서 불러옴
+@Setter
+public class PostGoalRes {
     private String goal;
 }

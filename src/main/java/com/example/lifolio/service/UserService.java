@@ -3,6 +3,9 @@ package com.example.lifolio.service;
 
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponseStatus;
+import com.example.lifolio.dto.home.GetGoalRes;
+import com.example.lifolio.dto.home.PostGoalReq;
+import com.example.lifolio.dto.home.PostGoalRes;
 import com.example.lifolio.dto.user.KakaoLoginRes;
 import com.example.lifolio.dto.user.*;
 import com.example.lifolio.entity.*;
@@ -70,7 +73,7 @@ public class UserService {
     public TokenRes login(LoginUserReq loginUserReq) throws BaseException {
 
         if(!checkUserId(loginUserReq.getUsername())){
-            throw new BaseException(BaseResponseStatus.NOT_EXIST_USER_ID);
+            throw new BaseException(BaseResponseStatus.NOT_EXIST_USER);
         }
 
         User user=userRepository.findByUsername(loginUserReq.getUsername());
@@ -199,27 +202,10 @@ public class UserService {
         return user.getUsername();
     }
 
-    public PostGoalRes setGoalOfYear(PostGoalReq postGoalReq){
-        LocalDate now = LocalDate.now();
-        int year = now.getYear(); //일단은 현재 시간에만 설정할 수 있도록 설정
-
-        User user = findNowLoginUser();
-
-        GoalOfYear toSaveGoalOfYear = GoalOfYear.builder()
-                .userId(user.getId())
-                .goal(postGoalReq.getGoal())
-                .year(year)
-                .build();
-
-        goalOfYearRepository.save(toSaveGoalOfYear);
-
-        return new PostGoalRes(toSaveGoalOfYear.getGoal());
-    }
 
     public KakaoLoginRes createKakaoUser(String token) throws BaseException {
 
         String reqURL = "https://kapi.kakao.com/v2/user/me";
-        String profileImgUrl="";
         String nickname="";
         String email = "";
 
@@ -233,7 +219,7 @@ public class UserService {
             conn.setRequestProperty("Authorization", "Bearer " + token); //전송할 header 작성, access_token전송
 
 
-            int responseCode = conn.getResponseCode();
+            int responseCode = conn.getResponseCode(); //200번이 성공
 
             if (responseCode==401){
                 throw new BaseException(BaseResponseStatus.INVALID_ACCESS_TOKEN);
@@ -254,30 +240,23 @@ public class UserService {
             JsonElement element = parser.parse(result);
 
 
-            //kakao로부터 정보 받아옴
-            profileImgUrl = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("profile").getAsString();
-            nickname = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("name").getAsString();
+            //kakao 한테 정보 받아옴
+            nickname = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("nickname").getAsString();
             email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
 
             br.close();
 
-//            //유저 로그인 & 회원가입으로 유저 ID값 받아오기
-//            if (!checkNickName(nickname)){
-//
-//            }
-//
-//            else {
-//
-//            }
+            //유저 회원가입으로 유저 ID값 받아오기
+            if (!checkNickName(nickname)){
+                //회원가입 (이메일, 닉네임, 유저타입 삽입)
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         //임시 아이디 반환
-        return new KakaoLoginRes(100, nickname, profileImgUrl, "kakao");
-
-
+        return new KakaoLoginRes(100, email, nickname, "kakao");
     }
 
 }

@@ -27,6 +27,7 @@ public class HomeService {
     private final CustomLifolioRepository customLifolioRepository;
     private final PasswordEncoder passwordEncoder;
     private final MyFolioRepository myFolioRepository;
+    private final UserService userService;
 
     public GetHomeRes getHomeRes(Long userId) {
         // 현재 날짜 구하기
@@ -120,4 +121,41 @@ public class HomeService {
                 customUpdateReq.getConcept(),customUpdateReq.getEmoji());
         customLifolioRepository.save(customLifolio);
     }
+
+
+    public PostGoalRes setGoalOfYear(PostGoalReq postGoalReq){
+        LocalDate now = LocalDate.now();
+        int year = now.getYear(); //일단은 현재 시간에만 설정할 수 있도록 설정
+
+        User user = userService.findNowLoginUser();
+
+        GoalOfYear toSaveGoalOfYear = GoalOfYear.builder()
+                .userId(user.getId())
+                .goal(postGoalReq.getGoal())
+                .year(year)
+                .build();
+
+        goalOfYearRepository.save(toSaveGoalOfYear);
+
+        return new PostGoalRes(toSaveGoalOfYear.getGoal());
+    }
+
+
+
+    public List<GetGoalRes> getGoalsByUserId(Long userId) {
+        List<GoalOfYear> goalList = goalOfYearRepository.findAllByUserIdOrderByYearAsc(userId);
+        List<GetGoalRes> getGoalResList = new ArrayList<>();
+
+        if(goalList.isEmpty()) return null;
+
+        for(GoalOfYear g: goalList){
+            GetGoalRes getGoalRes = new GetGoalRes(g.getYear(), g.getGoal(), g.getCreatedAt().toLocalDate());
+            getGoalResList.add(getGoalRes);
+        }
+
+        return getGoalResList;
+    }
+
+
+
 }
