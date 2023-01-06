@@ -74,17 +74,17 @@ public class UserController {
     }
 
 
-    @GetMapping("/user")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public BaseResponse<SignupUserReq> getMyUserInfo() {
-        return new BaseResponse<>(userService.getMyUserWithAuthorities());
-    }
-
-    @GetMapping("/user/{username}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public BaseResponse<SignupUserReq> getUserInfo(@PathVariable String username) {
-        return new BaseResponse<>(userService.getUserWithAuthorities(username));
-    }
+//    @GetMapping("/user")
+//    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+//    public BaseResponse<SignupUserReq> getMyUserInfo() {
+//        return new BaseResponse<>(userService.getMyUserWithAuthorities());
+//    }
+//
+//    @GetMapping("/user/{username}")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
+//    public BaseResponse<SignupUserReq> getUserInfo(@PathVariable String username) {
+//        return new BaseResponse<>(userService.getUserWithAuthorities(username));
+//    }
 
 
     @GetMapping("/check/nickname")
