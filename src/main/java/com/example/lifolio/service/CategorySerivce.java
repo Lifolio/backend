@@ -14,16 +14,11 @@ import javax.transaction.Transactional;
 public class CategorySerivce {
     private final CategoryRepository categoryRepository;
 
-    public Long saveCategory (CategoryDto categoryDTO) {
+    public void saveCategory(CategoryDto categoryDTO) {
         Category category = categoryDTO.toEntity();
     }
 
-    public Long updateCategory (Long id, CategoryDto CategoryDTO) {
-        Category category = findCategory(id);
+//    public Long updateCategory(Long id, CategoryDto CategoryDTO);
 
-        category.setName(categoryDTO.getName());
-
-        return category.getId();
-    }
 }
 
