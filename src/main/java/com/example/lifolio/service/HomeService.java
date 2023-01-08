@@ -4,6 +4,7 @@ import com.example.lifolio.dto.home.*;
 import com.example.lifolio.dto.user.PasswordReq;
 import com.example.lifolio.dto.user.PasswordRes;
 import com.example.lifolio.entity.CustomLifolio;
+import com.example.lifolio.entity.CustomLifolio;
 import com.example.lifolio.entity.CustomLifolioColor;
 import com.example.lifolio.entity.GoalOfYear;
 import com.example.lifolio.entity.User;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -100,6 +100,8 @@ public class HomeService {
     public List<GetCustomRes> getCustomLifolio(Long userId, Long customId) {
         List<MyFolioRepository.CustomInfoLifolio> customLifolioResult = myFolioRepository.getCustomLifolio(userId, customId);
         List<GetCustomRes> customResult = new ArrayList<>();
+
+        CustomLifolio customLifolio=customLifolioRepository.getOne(customId);
 
         customLifolioResult.forEach(
                 custom -> {

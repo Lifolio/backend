@@ -90,6 +90,8 @@ public class UserController {
     @GetMapping("/check/nickname")
     public BaseResponse<String> checkNickName(@Param("nickname") String nickName) {
         String result="";
+        System.out.println(userService.checkNickName(nickName));
+        System.out.println(nickName);
         if(userService.checkNickName(nickName)){
             return new BaseResponse<>(USERS_EXISTS_NICKNAME);
         }
@@ -103,7 +105,8 @@ public class UserController {
     @GetMapping("/check/userId")
     public BaseResponse<String> checkUserId(@Param("userId") String userId){
         String result="";
-
+        System.out.println(userService.checkUserId(userId));
+        System.out.println(userId);
         if(userService.checkUserId(userId)){
             return new BaseResponse<>(USERS_EXISTS_ID);
         }
@@ -142,7 +145,6 @@ public class UserController {
         if (kakaoLoginReq.getAccessToken() == null) {
             return new BaseResponse<>(EMPTY_ACCESS_TOKEN);
         }
-
         try {
             KakaoLoginRes kakaoLoginRes = userService.createKakaoUser(kakaoLoginReq.getAccessToken());
             return new BaseResponse<>(kakaoLoginRes);
