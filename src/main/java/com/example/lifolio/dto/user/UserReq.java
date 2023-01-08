@@ -14,11 +14,4 @@ public class UserReq {
         private String social;
         private String accessToken;
     }
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @Builder
-    public static class PostSocialReq {
-    }
 }
