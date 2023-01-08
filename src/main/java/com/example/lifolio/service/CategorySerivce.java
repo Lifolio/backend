@@ -43,12 +43,12 @@ public class CategorySerivce {
             category.setLevel(parentCategory.getLevel() + 1);
             category.setParentCategory(parentCategory);
             parentCategory.getSubCategory().add(category);
-        } //중,소분류 등록
+        } //소분류 등록
 
        return categoryRepository.save(category).getId();
     }
 
-    public Map<String, CategoryDTO> readCategory (String branch) {
+    public Map<String, CategoryDTO> readCategory(String branch) {
         Category category = categoryRepository.findByBranchAndTitle(branch, "ROOT")
                 .orElseThrow(() -> new IllegalArgumentException("찾는 대분류가 없습니다"));
 
@@ -60,14 +60,15 @@ public class CategorySerivce {
         return data;
     } //branch로 검색했을 때 가장 최상단부터 최하단까지 조회
 
-    public Long updateCategory (Long categoryId,CategoryDTO categoryDTO) {
+    public Long updateCategory(Long categoryId, CategoryDTO categoryDTO) {
         Category category = findCategory(categoryId);
         category.setTitle(categoryDTO.getTitle());
+        category.setColorId(categoryDTO.getColorId());
 
         return category.getId();
     }
 
-    public void deleteCategory (Long categoryId) {
+    public void deleteCategory(Long categoryId) {
         Category category = findCategory(categoryId);
 
         if (category.getSubCategory().size() == 0) { //하위 카테고리 없으면
@@ -85,7 +86,7 @@ public class CategorySerivce {
         }
     }
 
-    private Category findCategory (Long categoryId) {
+    private Category findCategory(Long categoryId) {
         return categoryRepository.findById(categoryId).orElseThrow(IllegalArgumentException::new);
     }
 

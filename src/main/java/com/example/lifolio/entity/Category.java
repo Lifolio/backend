@@ -35,6 +35,9 @@ public class Category implements Serializable {
  @Column(name = "branch")
  private String branch;
 
+ @Column(name = "level")
+ private Integer level;
+
  @ManyToOne (fetch = FetchType.LAZY)
  @JoinColumn (name ="parent_cagegory_id")
  private Category parentCategory;
@@ -43,8 +46,6 @@ public class Category implements Serializable {
  @OneToMany (mappedBy = "parentCategory", cascade = CascadeType.ALL)
  @Builder.Default
  private List<Category> subCategory = new ArrayList<>();
-
- private Integer level;
 
  @Builder
  public Category(String branch, Long id, Long userId, Long colorId, String title, Integer level, Category parentCategory) {
