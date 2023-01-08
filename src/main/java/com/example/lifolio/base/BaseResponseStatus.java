@@ -61,6 +61,7 @@ public enum     BaseResponseStatus {
 
     ALREADY_DELETED_USER(false, 2028, "이미 탈퇴된 유저입니다."),
     NOT_CORRECT_USER(false,2029,"회원 정보에 일치하는 아이디가 없습니다."),
+    NOT_EXIST_KAKAO(false,2030,"회원정보에 존재하는 카카오가 존재하지 않습니다. 회원가입 해주세요"),
 
 
 
