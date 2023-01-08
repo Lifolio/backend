@@ -43,8 +43,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+
                 // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
                 .csrf().disable()
+
 
                 // enable h2-console
                 .headers()
@@ -62,6 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(jwtAccessDeniedHandler)
 
 
+
                 .and()
                 .authorizeRequests()
                 .antMatchers("/swagger-resources/**").permitAll()
@@ -76,11 +79,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/check/**").permitAll()
                 .antMatchers("/home/**").authenticated()
                 .antMatchers("/user/find").permitAll()
-
+                .antMatchers("/auth/**").permitAll()
                 //위의 경로 제외 전부 JWT 인증해야 함(헤더에 JWT 포함하기)
                 .anyRequest().authenticated()
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
+
     }
 }

@@ -13,15 +13,11 @@ public interface CustomLifolioRepository extends JpaRepository<CustomLifolio, Lo
 
     @Query(value="select id'customId',concept,emoji,title'customName' from CustomLifolio where user_id = :userId",nativeQuery = true)
     List<CustomUserLifolio> getCustomFolio(@Param("userId")Long userId);
-
-//    @Query(value="select concept,emoji,title'customName',category_id from CustomLifolio where id = :customId",nativeQuery = true)
-//    CustomLifolio getCustomFolioCategory(@Param("customId")Long customId);
-    Optional<CustomLifolio> findById(Long customId);
-
     interface CustomUserLifolio{
         Long getCustomId();
         int getConcept();
         String getEmoji();
         String getCustomName();
     }
+
 }

@@ -67,8 +67,6 @@ public class UserService {
 
 
 
-
-
     //회원가입, 로그인 로직
     public TokenRes login(LoginUserReq loginUserReq) throws BaseException {
 
@@ -97,10 +95,8 @@ public class UserService {
 
 
         //반환 값 아이디 추가
-        return new TokenRes(userId,jwt, user.getUsername());
+        return new TokenRes(userId,jwt, user.getName());
     }
-
-
 
     @Transactional
     @SneakyThrows
@@ -123,7 +119,7 @@ public class UserService {
         Long userId=userRepository.save(user).getId();
         String jwt=tokenProvider.createToken(userId);
 
-        return new TokenRes(userId,jwt, user.getUsername());
+        return new TokenRes(userId,jwt, user.getName());
 
     }
 
@@ -147,8 +143,6 @@ public class UserService {
     }
 
 
-
-
     //비밀번호 로직
     @SneakyThrows
     public PasswordRes setNewPassword(PasswordReq passwordReq){ //새 비밀번호로 바꾸기
@@ -162,8 +156,6 @@ public class UserService {
         }
 
     }
-
-
 
 
     public int phoneNumberCheck(String to) throws CoolsmsException {
@@ -258,5 +250,6 @@ public class UserService {
         //임시 아이디 반환
         return new KakaoLoginRes(100, email, nickname, "kakao");
     }
+
 
 }
