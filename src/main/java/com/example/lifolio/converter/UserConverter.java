@@ -1,5 +1,6 @@
 package com.example.lifolio.converter;
 
+
 import com.example.lifolio.entity.Authority;
 import com.example.lifolio.entity.User;
 
@@ -19,5 +20,5 @@ public class UserConverter {
                 authorities(Collections.singleton(authority))
                 .activated(true).
                 build();
-    }
+
 }
