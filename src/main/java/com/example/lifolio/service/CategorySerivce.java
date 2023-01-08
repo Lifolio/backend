@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -14,7 +16,7 @@ import javax.transaction.Transactional;
 public class CategorySerivce {
     private final CategoryRepository categoryRepository;
 
-    public Long saveCategory(CategoryDTO categoryDTO) {
+    public Long createCategory(CategoryDTO categoryDTO) {
 
         Category category = categoryDTO.toEntity();
 
@@ -31,7 +33,7 @@ public class CategorySerivce {
                             .branch(categoryDTO.getBranch())
                             .level(0)
                             .build()
-                    );
+                    ); //branch의 상위 카테고리 첫 생성 시 ROOT 생성
             category.setParentCategory(rootCategory);
             category.setLevel(1);
         } else {
@@ -44,6 +46,47 @@ public class CategorySerivce {
         } //중,소분류 등록
 
        return categoryRepository.save(category).getId();
+    }
+
+    public Map<String, CategoryDTO> readCategory (String branch) {
+        Category category = categoryRepository.findByBranchAndTitle(branch, "ROOT")
+                .orElseThrow(() -> new IllegalArgumentException("찾는 대분류가 없습니다"));
+
+        CategoryDTO categoryDTO = new CategoryDTO(category);
+
+        Map <String, CategoryDTO> data = new HashMap<>();
+        data.put(categoryDTO.getTitle(), categoryDTO);
+
+        return data;
+    } //branch로 검색했을 때 가장 최상단부터 최하단까지 조회
+
+    public Long updateCategory (Long categoryId,CategoryDTO categoryDTO) {
+        Category category = findCategory(categoryId);
+        category.setTitle(categoryDTO.getTitle());
+
+        return category.getId();
+    }
+
+    public void deleteCategory (Long categoryId) {
+        Category category = findCategory(categoryId);
+
+        if (category.getSubCategory().size() == 0) { //하위 카테고리 없으면
+            Category parentCategory = findCategory(category.getParentCategory().getId());
+            if (!parentCategory.getTitle().equals("ROOT")) { //ROOT가 아닌 다른 부모일 경우
+                parentCategory.getSubCategory().remove(category);
+            }
+            categoryRepository.deleteById(category.getId());
+        } else { //하위 카테고리 있으면
+            Category parentCategory = findCategory(category.getParentCategory().getId());
+            if(!parentCategory.getTitle().equals("ROOT")) {
+                parentCategory.getSubCategory().remove(category);
+            }
+            category.setTitle("Deleted category");
+        }
+    }
+
+    private Category findCategory (Long categoryId) {
+        return categoryRepository.findById(categoryId).orElseThrow(IllegalArgumentException::new);
     }
 
 }
