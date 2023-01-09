@@ -3,6 +3,7 @@ package com.example.lifolio.controller;
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
 import com.example.lifolio.dto.home.*;
+import com.example.lifolio.entity.User;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.HomeService;
 import com.example.lifolio.service.UserService;
@@ -12,8 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.lifolio.base.BaseResponseStatus.INVALID_USER_JWT;
-import static com.example.lifolio.base.BaseResponseStatus.NOT_EXIST_USER;
+import static com.example.lifolio.base.BaseResponseStatus.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -87,9 +87,14 @@ public class HomeController {
 
 
     @ApiOperation(value = "올해의 나 추가", notes = "올해의 나 추가")
-    @PostMapping("/goal")
-    public BaseResponse<PostGoalRes> setGoalOfYear(@RequestBody PostGoalReq postGoalReq){
+    @PostMapping("/goal/{userId}")
+    public BaseResponse<PostGoalRes> setGoalOfYear(@PathVariable("userId") Long userId, @RequestBody PostGoalReq postGoalReq){
+
+        if(userService.findNowLoginUser().getId() != userId){
+            return new BaseResponse<>(INVALID_USER_JWT);
+        }
         return new BaseResponse<>(homeService.setGoalOfYear(postGoalReq));
+
     }
 
 
@@ -98,10 +103,14 @@ public class HomeController {
     public BaseResponse<List<GetGoalRes>> setGoalOfYear(@PathVariable("userId") Long userId){
         List<GetGoalRes> getGoalResList = homeService.getGoalsByUserId(userId);
 
+        if(userService.findNowLoginUser().getId() != userId){
+            return new BaseResponse<>(INVALID_USER_JWT);
+        }
+
         if(getGoalResList != null){
             return new BaseResponse<>(getGoalResList);
         } else{
-            return new BaseResponse<>(NOT_EXIST_USER);
+            return new BaseResponse<>(EMPTY_GOAL_OF_YEAR);
         }
     }
 
