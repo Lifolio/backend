@@ -6,7 +6,7 @@ import java.util.Collections;
 
 public class UserConverter {
 
-    public static User postUser(String id, String social, String name){
+    public static User postUser(String id, String social, String name) {
         Authority authority = Authority.builder()
                 .authorityName("ROLE_USER")
                 .build();
@@ -19,4 +19,5 @@ public class UserConverter {
                 .activated(true).
                 build();
 
+    }
 }
