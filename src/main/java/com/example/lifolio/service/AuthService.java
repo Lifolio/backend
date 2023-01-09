@@ -124,7 +124,7 @@ public class AuthService {
                 User user=UserConverter.postUser(String.valueOf(id),socialReq.getSocial(),name);
                 Long userId=userRepository.save(user).getId();
                 String jwt = tokenProvider.createToken(userId); //user인덱스로 토큰 생성
-                return new TokenRes(userId,jwt,user.getUsername());
+                return new TokenRes(userId,jwt,user.getName());
             }
 
             br.close();

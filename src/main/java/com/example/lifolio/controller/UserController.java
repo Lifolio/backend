@@ -138,5 +138,26 @@ public class UserController {
         }
     }
 
+    @ResponseBody
+    @GetMapping("/my")
+    public BaseResponse<UserRes.GetMyRes> getMyLifolio(){
+        try {
+            Long userId=jwtProvider.getUserIdx();
+            UserRes.GetMyRes getMyRes=userService.getMyLifolio(userId);
+            return new BaseResponse<>(getMyRes);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+
+    }
+
+    @ResponseBody
+    @GetMapping("/my/calender")
+    public BaseResponse<UserRes.GetMyRes> getMyLifolioCalender(@RequestParam("date") String date){
+        return null;
+    }
+
+
+
 
 }
