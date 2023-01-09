@@ -129,29 +129,13 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("/find")
-    public BaseResponse<FindUserIdRes> findUserId(@RequestBody FindUserIdReq findUserIdReq){
-        try{
+    public BaseResponse<FindUserIdRes> findUserId(@RequestBody FindUserIdReq findUserIdReq) {
+        try {
             FindUserIdRes findUserIdRes = new FindUserIdRes(userService.findUserId(findUserIdReq));
             return new BaseResponse<>(findUserIdRes);
-        }catch(BaseException e){
-            return new BaseResponse<>(e.getStatus());
-        }
-    }
-
-
-
-    @PostMapping("/kakao/certificate")
-    public BaseResponse<KakaoLoginRes> login(@RequestBody KakaoLoginReq kakaoLoginReq) {
-        if (kakaoLoginReq.getAccessToken() == null) {
-            return new BaseResponse<>(EMPTY_ACCESS_TOKEN);
-        }
-        try {
-            KakaoLoginRes kakaoLoginRes = userService.createKakaoUser(kakaoLoginReq.getAccessToken());
-            return new BaseResponse<>(kakaoLoginRes);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
-
     }
 
 
