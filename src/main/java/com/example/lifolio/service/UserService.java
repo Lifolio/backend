@@ -95,7 +95,7 @@ public class UserService {
 
 
         //반환 값 아이디 추가
-        return new TokenRes(userId,jwt, user.getUsername());
+        return new TokenRes(userId,jwt, user.getName());
     }
 
     @Transactional
@@ -119,7 +119,7 @@ public class UserService {
         Long userId=userRepository.save(user).getId();
         String jwt=tokenProvider.createToken(userId);
 
-        return new TokenRes(userId,jwt, user.getUsername());
+        return new TokenRes(userId,jwt, user.getName());
 
     }
 
