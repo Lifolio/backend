@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final AuthService authService;
 
-    @PostMapping("/kakao")
-    public BaseResponse<String> getAccessToken(@RequestParam String code) throws BaseException {
+    @GetMapping("/kakao")
+    public BaseResponse<String> getAccessTokenKakao(@RequestParam String code) throws BaseException {
         String accessToken=authService.getKakaoAccessToken(code);
         System.out.println(accessToken);
         return new BaseResponse<>(accessToken);
@@ -26,6 +26,24 @@ public class AuthController {
     public BaseResponse<TokenRes> kakaoCallback(@RequestBody UserReq.SocialReq socialReq) throws BaseException {
         try {
             TokenRes tokenRes = authService.logInKakaoUser(socialReq);
+            return new BaseResponse<>(tokenRes);
+        }catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @GetMapping("/naver")
+    public BaseResponse<String> getAccessTokenNaver(@RequestParam String code) throws BaseException {
+        String accessToken=authService.getNaverAccessToken(code);
+        System.out.println(accessToken);
+        return new BaseResponse<>(accessToken);
+    }
+
+    @ResponseBody
+    @PostMapping("/naver/logIn")
+    public BaseResponse<TokenRes> naverCallback(@RequestBody UserReq.SocialReq socialReq) throws BaseException {
+        try {
+            TokenRes tokenRes = authService.logInNaverUser(socialReq);
             return new BaseResponse<>(tokenRes);
         }catch(BaseException e){
             return new BaseResponse<>(e.getStatus());
