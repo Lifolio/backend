@@ -1,6 +1,7 @@
 
 package com.example.lifolio.entity;
 
+import com.example.lifolio.base.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "Archive")
-public class Archive implements Serializable {
+public class Archive extends BaseEntity implements Serializable {
 
  @Id
  @GeneratedValue(strategy = GenerationType.IDENTITY)

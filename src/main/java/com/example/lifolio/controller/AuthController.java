@@ -23,7 +23,7 @@ public class AuthController {
 
     @ResponseBody
     @PostMapping("/kakao/logIn")
-    public BaseResponse<TokenRes> kakaoCallback(@RequestBody UserReq.SocialReq socialReq) throws BaseException {
+    public BaseResponse<TokenRes> kakaoLogin(@RequestBody UserReq.SocialReq socialReq) throws BaseException {
         try {
             TokenRes tokenRes = authService.logInKakaoUser(socialReq);
             return new BaseResponse<>(tokenRes);
@@ -49,5 +49,6 @@ public class AuthController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
 
 }

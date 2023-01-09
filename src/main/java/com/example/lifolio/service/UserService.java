@@ -50,6 +50,7 @@ public class UserService {
     private final CustomLifolioRepository customLifolioRepository;
     private final PasswordEncoder passwordEncoder;
     private final MyFolioRepository myFolioRepository;
+    private final ArchiveRepository archiveRepository;
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -195,61 +196,41 @@ public class UserService {
     }
 
 
-    public KakaoLoginRes createKakaoUser(String token) throws BaseException {
 
-        String reqURL = "https://kapi.kakao.com/v2/user/me";
-        String nickname="";
-        String email = "";
+    public UserRes.GetMyRes getMyLifolio(Long userId) {
+        User user=userRepository.getOne(userId);
+        int lifolioCnt=myFolioRepository.countByUserId(user.getId());
+        // 베스트 카테고리 TOP 5
+        List<MyFolioRepository.BestCategory> bestCategoryResult=myFolioRepository.getBestCategories(user.getId());
 
-        //access_token을 이용하여 사용자 정보 조회
-        try {
-            URL url = new URL(reqURL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        List<UserRes.BestCategory> bestCategory=new ArrayList<>();
+        bestCategoryResult.forEach(
+                result->{
+                    bestCategory.add(new UserRes.BestCategory(
+                            result.getColor(),
+                            result.getCategory(),
+                            result.getUrl(),
+                            result.getTitle(),
+                            result.getStar()
+                    ));
+                }
+        );
 
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Authorization", "Bearer " + token); //전송할 header 작성, access_token전송
-
-
-            int responseCode = conn.getResponseCode(); //200번이 성공
-
-            if (responseCode==401){
-                throw new BaseException(BaseResponseStatus.INVALID_ACCESS_TOKEN);
-            }
-
-            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line = "";
-            String result = "";
-
-            while ((line = br.readLine()) != null) {
-                result += line;
-            }
-            System.out.println("response body : " + result);
-
-            //Gson 라이브러리로 JSON 파싱
-            JsonParser parser = new JsonParser();
-            JsonElement element = parser.parse(result);
+        List<ArchiveRepository.ArchiveList> archiveList=archiveRepository.getArchiveList(user.getId());
+        List<UserRes.Archive> archive=new ArrayList<>();
+        archiveList.forEach(
+                result->{
+                        archive.add(
+                                new UserRes.Archive(
+                                        result.getFolioId(),
+                                        result.getColor(),
+                                        result.getCategory()
+                                )
+                        );
+                        }
+        );
 
 
-            //kakao 한테 정보 받아옴
-            nickname = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("nickname").getAsString();
-            email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
-
-            br.close();
-
-            //유저 회원가입으로 유저 ID값 받아오기
-            if (!checkNickName(nickname)){
-                //회원가입 (이메일, 닉네임, 유저타입 삽입)
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //임시 아이디 반환
-        return new KakaoLoginRes(100, email, nickname, "kakao");
+        return new UserRes.GetMyRes(user.getNickname(),lifolioCnt,bestCategory,archive);
     }
-
-
 }

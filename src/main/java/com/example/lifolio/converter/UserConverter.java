@@ -1,9 +1,6 @@
 package com.example.lifolio.converter;
 
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/main
 import com.example.lifolio.entity.Authority;
 import com.example.lifolio.entity.User;
 
@@ -25,5 +22,4 @@ public class UserConverter {
                     .activated(true).
                     build();
         }
-    }
 }
