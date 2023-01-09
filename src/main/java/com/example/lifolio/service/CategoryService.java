@@ -6,13 +6,12 @@ import com.example.lifolio.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class CategorySerivce {
+public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     public Long createCategory(CategoryDTO categoryDTO) {
