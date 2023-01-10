@@ -3,11 +3,8 @@ package com.example.lifolio.service;
 import com.example.lifolio.dto.home.*;
 import com.example.lifolio.dto.user.PasswordReq;
 import com.example.lifolio.dto.user.PasswordRes;
+import com.example.lifolio.entity.*;
 import com.example.lifolio.entity.CustomLifolio;
-import com.example.lifolio.entity.CustomLifolio;
-import com.example.lifolio.entity.CustomLifolioColor;
-import com.example.lifolio.entity.GoalOfYear;
-import com.example.lifolio.entity.User;
 import com.example.lifolio.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -28,6 +25,7 @@ public class HomeService {
     private final PasswordEncoder passwordEncoder;
     private final MyFolioRepository myFolioRepository;
     private final UserService userService;
+    private final BadgeRepository badgeRepository;
 
     public GetHomeRes getHomeRes(Long userId) {
         // 현재 날짜 구하기
@@ -65,7 +63,6 @@ public class HomeService {
 
         //CustomLifolio 조회
         List<CustomLifolioRepository.CustomUserLifolio> customUserLifolioResult = customLifolioRepository.getCustomFolio(userId);
-
         List<CustomUserLifolioRes> customResult = new ArrayList<>();
         customUserLifolioResult.forEach(
                 custom -> {
@@ -160,4 +157,19 @@ public class HomeService {
 
 
 
+    public List<GetBadgeRes> getBadgeByUserId(Long userId) {
+        List<BadgeRepository.BadgeSuccess> badgeList = badgeRepository.getBadgeByUserId(userId);
+        List<GetBadgeRes> getBadgeResList = new ArrayList<>();
+
+        badgeList.forEach(
+                custom -> {
+                    getBadgeResList.add(new GetBadgeRes(
+                            custom.getUrl(),
+                            custom.getTitle(),
+                            custom.getSuccess()
+                    ));
+                }
+        );
+        return getBadgeResList;
+    }
 }
