@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class UserRes {
@@ -47,7 +48,10 @@ public class UserRes {
     @AllArgsConstructor
     @Builder
     public static class Calender{
-        private Long categoryColor;
+        private LocalDate date;
+        private String color;
+        private Long folioId;
+        private String url;
         private String title;
     }
 }

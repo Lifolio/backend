@@ -233,4 +233,24 @@ public class UserService {
 
         return new UserRes.GetMyRes(user.getNickname(),lifolioCnt,bestCategory,archive);
     }
+
+    public List<UserRes.Calender> getCalender(Long userId, String date) {
+        List<MyFolioRepository.Calender> calenderList=myFolioRepository.getCalenderList(userId,date);
+        List<UserRes.Calender> calender=new ArrayList<>();
+
+        calenderList.forEach(
+                result->{
+                    calender.add(
+                            new UserRes.Calender(
+                                    result.getDate(),
+                                    result.getColor(),
+                                    result.getFolioId(),
+                                    result.getUrl(),
+                                    result.getTitle()
+                            )
+                    );
+                }
+        );
+        return calender;
+    }
 }

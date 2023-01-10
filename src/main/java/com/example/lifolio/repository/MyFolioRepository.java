@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface MyFolioRepository extends JpaRepository<MyFolio, Long> {
@@ -67,5 +68,22 @@ public interface MyFolioRepository extends JpaRepository<MyFolio, Long> {
 
     int countByUserId(Long userId);
 
-
+    @Query(value="select MF.date, color_name'color',MF.id'folioId', MFI.url,MF.title\n" +
+            "    from MyFolio MF\n" +
+            "    left join MyFolioImg MFI on MF.id = MFI.folio_id\n" +
+            "    left join SubCategory SC on MF.category_id = SC.id\n" +
+            "    left join Category C on SC.category_id = C.id\n" +
+            "    left join Color on C.color_id = Color.id\n" +
+            "    join (select date,max(star)as max_star from MyFolio group by date)as MF2 on MF2.max_star=MF.star and MF.date=MF2.date\n" +
+            "    where MF.user_Id = :userId and DATE_FORMAT(MF.date,'%Y-%m')=:date\n" +
+            "    group by date\n" +
+            "    order by date asc;",nativeQuery = true)
+    List<MyFolioRepository.Calender> getCalenderList(@Param("userId")Long userId,@Param("date") String date);
+    public interface Calender {
+        LocalDate getDate();
+        String getColor();
+        Long getFolioId();
+        String getUrl();
+        String getTitle();
+    }
 }

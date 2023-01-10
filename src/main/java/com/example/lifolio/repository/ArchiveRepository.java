@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ArchiveRepository extends JpaRepository<Archive, Long> {
 
-    @Query(value="select MF.id'folioId', C.color_name'color',SC.title from MyFolio MF " +
+    @Query(value="select MF.id'folioId', C.color_name'color',SC.title'category' from MyFolio MF " +
             "join SubCategory SC on MF.category_id = SC.id " +
             "join Category on Category.id = SC.category_id " +
             "join Color C on Category.color_id=C.id " +
