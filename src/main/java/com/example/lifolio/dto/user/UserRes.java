@@ -54,4 +54,15 @@ public class UserRes {
         private String url;
         private String title;
     }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class Profile{
+        private String name;
+    }
+
+
+
 }

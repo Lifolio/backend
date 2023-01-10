@@ -74,4 +74,13 @@ public class MyService {
         );
         return calender;
     }
+
+
+    public UserRes.Profile getMyProfileSimple(Long userId) {
+        User user = userRepository.getOne(userId);
+
+        UserRes.Profile profile = new UserRes.Profile(user.getName());
+
+        return profile;
+    }
 }
