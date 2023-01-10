@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.util.List;
+
 import static com.example.lifolio.base.BaseResponseStatus.*;
 import static com.example.lifolio.base.BaseResponseStatus.EMPTY_ACCESS_TOKEN;
 
@@ -153,8 +155,14 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/my/calender")
-    public BaseResponse<UserRes.GetMyRes> getMyLifolioCalender(@RequestParam("date") String date){
-        return null;
+    public BaseResponse<List<UserRes.Calender>> getMyLifolioCalender(@RequestParam("date") String date){
+        try{
+            Long userId=jwtProvider.getUserIdx();
+            List<UserRes.Calender> calender=userService.getCalender(userId,date);
+            return new BaseResponse<>(calender);
+        }catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
     }
 
 
