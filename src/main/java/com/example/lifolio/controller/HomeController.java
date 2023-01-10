@@ -114,6 +114,21 @@ public class HomeController {
         }
     }
 
+    @ResponseBody
+    @GetMapping("/badge/{userId}")
+    public BaseResponse<List<GetBadgeRes>> getBadge(@PathVariable("userId") Long userId){
+        List<GetBadgeRes> getBadgeResList = homeService.getBadgeByUserId(userId);
+
+        if(userService.findNowLoginUser().getId() != userId){
+            return new BaseResponse<>(INVALID_USER_JWT);
+        }
+
+        if(getBadgeResList != null){
+            return new BaseResponse<>(getBadgeResList);
+        } else{
+            return new BaseResponse<>(EMPTY_GOAL_OF_YEAR);
+        }
+    }
 
 
 
