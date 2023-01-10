@@ -6,6 +6,7 @@ import com.example.lifolio.base.BaseResponse;
 import com.example.lifolio.dto.user.UserRes;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.MyService;
+import com.example.lifolio.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ import java.util.List;
 public class MyController {
     private final TokenProvider jwtProvider;
     private final MyService myService;
+    private final UserService userService;
 
     @ResponseBody
     @GetMapping("")
@@ -43,4 +45,16 @@ public class MyController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+
+
+    @GetMapping("/profile/simple") //#2-1 4번은 /profile/detail
+    public BaseResponse<UserRes.Profile> getMyProfile(){
+        Long userId= userService.findNowLoginUser().getId();
+        UserRes.Profile profile = myService.getMyProfileSimple(userId);
+        return new BaseResponse<>(profile);
+    }
+
+
+
 }
