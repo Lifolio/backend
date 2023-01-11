@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -72,7 +73,34 @@ public class UserRes {
         private String refreshToken;
     }
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class AlarmList {
 
+        private Integer AllAlarm;
 
+        private Integer myAlarm;
 
+        private Integer weekAlarm;
+
+        private Integer badgeAlarm;
+
+        private Integer planningAlarm;
+
+        private Integer todoAlarm;
+
+        private Integer goalAlarm;
+
+        private Integer socialAlarm;
+
+        private Integer uploadAlarm;
+
+        private Integer interestAlarm;
+
+        private Integer likeAlarm;
+
+        private Integer marketingAlarm;
+    }
 }

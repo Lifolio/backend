@@ -22,9 +22,8 @@ public class Alarm {
  @Column(name = "id")
  private Long id;
 
- @OneToOne
- @JoinColumn(name="user_id")
- private User user;
+ @Column(name="user_id")
+ private Long userId;
 
  @Column(name = "week_alarm")
  private Integer weekAlarm;

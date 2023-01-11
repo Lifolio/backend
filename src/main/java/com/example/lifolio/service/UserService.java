@@ -3,6 +3,7 @@ package com.example.lifolio.service;
 
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponseStatus;
+import com.example.lifolio.converter.UserConverter;
 import com.example.lifolio.dto.home.GetGoalRes;
 import com.example.lifolio.dto.home.PostGoalReq;
 import com.example.lifolio.dto.home.PostGoalRes;
@@ -34,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.time.LocalDate;
 import java.util.*;
@@ -51,6 +53,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final MyFolioRepository myFolioRepository;
     private final ArchiveRepository archiveRepository;
+    private final AlarmRepository alarmRepository;
     private final RedisService redisService;
 
     private final TokenProvider tokenProvider;
@@ -106,7 +109,7 @@ public class UserService {
 
     }
 
-    @Transactional
+    @Transactional(rollbackFor=SQLException.class)
     @SneakyThrows
     public TokenRes signup(SignupUserReq signupUserReq) throws BaseException {
 
@@ -129,6 +132,7 @@ public class UserService {
         String refreshToken =tokenProvider.createRefreshToken(userId);
 
 
+        postAlarmUser(userId);
 
         return new TokenRes(userId,jwt,refreshToken, user.getName());
 
@@ -220,5 +224,11 @@ public class UserService {
         String refreshToken=tokenProvider.createRefreshToken(userId);
 
         return new UserRes.GenerateToken(accessToken,refreshToken);
+    }
+
+    @Transactional(rollbackFor=SQLException.class)
+    public void postAlarmUser(Long userId){
+        Alarm alarm=UserConverter.postAlarm(userId);
+        alarmRepository.save(alarm);
     }
 }
