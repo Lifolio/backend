@@ -15,4 +15,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Boolean existsByBranchAndTitle(String branch, String title);
     //DB 여부 반환
+
+
+
+
 }

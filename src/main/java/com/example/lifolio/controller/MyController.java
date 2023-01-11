@@ -4,13 +4,20 @@ package com.example.lifolio.controller;
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
 import com.example.lifolio.dto.user.UserRes;
+import com.example.lifolio.entity.MyFolio;
 import com.example.lifolio.jwt.TokenProvider;
+import com.example.lifolio.repository.MyFolioRepository;
 import com.example.lifolio.service.MyService;
 import com.example.lifolio.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
+
+import static com.example.lifolio.base.BaseResponseStatus.EMPTY_MYFOLIO_AT_THAT_DATE;
 
 
 @RequiredArgsConstructor
@@ -20,6 +27,7 @@ public class MyController {
     private final TokenProvider jwtProvider;
     private final MyService myService;
     private final UserService userService;
+    private final MyFolioRepository myFolioRepository;
 
     @ResponseBody
     @GetMapping("")
@@ -44,6 +52,20 @@ public class MyController {
         }catch(BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
+    }
+
+
+    @ApiOperation(value = "일간 캘린더 조회", notes = "일간 캘린더 조회")
+    @GetMapping("/dailyCalender")
+    public BaseResponse<List<UserRes.DailyCalender>> getMyLifolioDailyCalender(@RequestParam("date") String date) throws ParseException {
+        Long userId= userService.findNowLoginUser().getId();
+        List<UserRes.DailyCalender> dailyCalenderList = myService.getDailyCalender(userId, date);
+
+        if(dailyCalenderList.isEmpty()){
+            return new BaseResponse<>(EMPTY_MYFOLIO_AT_THAT_DATE);
+        }
+
+        return new BaseResponse<>(dailyCalenderList);
     }
 
 
