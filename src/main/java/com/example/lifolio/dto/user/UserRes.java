@@ -1,11 +1,7 @@
 package com.example.lifolio.dto.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Column;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -102,5 +98,58 @@ public class UserRes {
         private Integer likeAlarm;
 
         private Integer marketingAlarm;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class TokenRes {
+        private Long userId; //user 인덱스
+        private String accessToken;
+        private String refreshToken;
+        private String name; //실제 유저 이름
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class FindUserIdRes {
+        private String username;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class GetSMSRes {
+        private int number;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class KakaoLoginRes {
+        private long userId;
+        private String email;
+        private String nickname;
+        private String type;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Setter
+    @Getter
+    public static class PasswordRes {
+        private String newPassword;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AuthorityRes {
+        private String authorityName;
     }
 }

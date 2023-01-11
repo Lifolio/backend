@@ -3,7 +3,6 @@ package com.example.lifolio.controller;
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
 import com.example.lifolio.dto.home.*;
-import com.example.lifolio.entity.User;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.HomeService;
 import com.example.lifolio.service.UserService;
@@ -26,13 +25,13 @@ public class HomeController {
 
     @ResponseBody
     @GetMapping("/{userId}")
-    public BaseResponse<GetHomeRes> home(@PathVariable("userId") Long userId){
+    public BaseResponse<HomeRes.GetHomeRes> home(@PathVariable("userId") Long userId){
         try {
             Long idByJwt= jwtProvider.getUserIdx();
             if(userId!=idByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            GetHomeRes getHomeRes = homeService.getHomeRes(userId);
+            HomeRes.GetHomeRes getHomeRes = homeService.getHomeRes(userId);
             return new BaseResponse<>(getHomeRes);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -41,13 +40,13 @@ public class HomeController {
 
     @ResponseBody
     @GetMapping("/graph/{userId}/{customId}")
-    public BaseResponse<List<GetGraphRes>> getGraphCustomFolio(@PathVariable("userId") Long userId, @PathVariable("customId")Long customId){
+    public BaseResponse<List<HomeRes.GetGraphRes>> getGraphCustomFolio(@PathVariable("userId") Long userId, @PathVariable("customId")Long customId){
         try {
             Long idByJwt= jwtProvider.getUserIdx();
             if(userId!=idByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            List<GetGraphRes> graphInfo = homeService.getGraphLifolio(userId,customId);
+            List<HomeRes.GetGraphRes> graphInfo = homeService.getGraphLifolio(userId,customId);
             return new BaseResponse<>(graphInfo);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -56,13 +55,13 @@ public class HomeController {
 
     @ResponseBody
     @GetMapping("/custom/{userId}/{customId}")
-    public BaseResponse<List<GetCustomRes>> getCustomFolio(@PathVariable("userId") Long userId, @PathVariable("customId")Long customId){
+    public BaseResponse<List<HomeRes.GetCustomRes>> getCustomFolio(@PathVariable("userId") Long userId, @PathVariable("customId")Long customId){
         try {
             Long idByJwt= jwtProvider.getUserIdx();
             if(userId!=idByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            List<GetCustomRes> customInfo = homeService.getCustomLifolio(userId,customId);
+            List<HomeRes.GetCustomRes> customInfo = homeService.getCustomLifolio(userId,customId);
             return new BaseResponse<>(customInfo);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -71,7 +70,7 @@ public class HomeController {
 
     @ResponseBody
     @PatchMapping("/custom/{userId}/{customId}")
-    public BaseResponse<String> updateCustomFolio(@PathVariable("userId") Long userId, @PathVariable("customId") Long customId,@RequestBody CustomUpdateReq customUpdateReq){
+    public BaseResponse<String> updateCustomFolio(@PathVariable("userId") Long userId, @PathVariable("customId") Long customId,@RequestBody HomeReq.CustomUpdateReq customUpdateReq){
         try {
             Long idByJwt= jwtProvider.getUserIdx();
             if(userId!=idByJwt){
@@ -88,7 +87,7 @@ public class HomeController {
 
     @ApiOperation(value = "올해의 나 추가", notes = "올해의 나 추가")
     @PostMapping("/goal/{userId}")
-    public BaseResponse<PostGoalRes> setGoalOfYear(@PathVariable("userId") Long userId, @RequestBody PostGoalReq postGoalReq){
+    public BaseResponse<HomeRes.PostGoalRes> setGoalOfYear(@PathVariable("userId") Long userId, @RequestBody HomeReq.PostGoalReq postGoalReq){
 
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
@@ -100,8 +99,8 @@ public class HomeController {
 
     @ApiOperation(value = "올해의 나 전부 조회(userId=유저인덱스)", notes = "올해의 나 전부 조회")
     @GetMapping("/goal/{userId}")
-    public BaseResponse<List<GetGoalRes>> setGoalOfYear(@PathVariable("userId") Long userId){
-        List<GetGoalRes> getGoalResList = homeService.getGoalsByUserId(userId);
+    public BaseResponse<List<HomeRes.GetGoalRes>> setGoalOfYear(@PathVariable("userId") Long userId){
+        List<HomeRes.GetGoalRes> getGoalResList = homeService.getGoalsByUserId(userId);
 
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
@@ -116,8 +115,8 @@ public class HomeController {
 
     @ResponseBody
     @GetMapping("/badge/{userId}")
-    public BaseResponse<List<GetBadgeRes>> getBadge(@PathVariable("userId") Long userId){
-        List<GetBadgeRes> getBadgeResList = homeService.getBadgeByUserId(userId);
+    public BaseResponse<List<HomeRes.GetBadgeRes>> getBadge(@PathVariable("userId") Long userId){
+        List<HomeRes.GetBadgeRes> getBadgeResList = homeService.getBadgeByUserId(userId);
 
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);

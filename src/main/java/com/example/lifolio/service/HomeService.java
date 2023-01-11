@@ -1,8 +1,6 @@
 package com.example.lifolio.service;
 
 import com.example.lifolio.dto.home.*;
-import com.example.lifolio.dto.user.PasswordReq;
-import com.example.lifolio.dto.user.PasswordRes;
 import com.example.lifolio.entity.*;
 import com.example.lifolio.entity.CustomLifolio;
 import com.example.lifolio.repository.*;
@@ -27,7 +25,7 @@ public class HomeService {
     private final UserService userService;
     private final BadgeRepository badgeRepository;
 
-    public GetHomeRes getHomeRes(Long userId) {
+    public HomeRes.GetHomeRes getHomeRes(Long userId) {
         // 현재 날짜 구하기
         LocalDate now = LocalDate.now();
 
@@ -36,25 +34,25 @@ public class HomeService {
         CustomLifolioColor customLifolioColor = customLifolioColorRepository.findByUserId(userId);
         GoalOfYear goalOfYear = goalOfYearRepository.findByUserIdAndYear(userId, year);
 
-        TopInfo topInfo = new TopInfo();
+        HomeRes.TopInfo topInfo = new HomeRes.TopInfo();
 
         //TopInfo null 값 예외처리
         if (customLifolioColor == null && goalOfYear == null) {
-            topInfo = new TopInfo(1, "목표 없음");
+            topInfo = new HomeRes.TopInfo(1, "목표 없음");
         } else if (customLifolioColor == null) {
-            topInfo = new TopInfo(1, goalOfYear.getGoal());
+            topInfo = new HomeRes.TopInfo(1, goalOfYear.getGoal());
         } else if (goalOfYear == null) {
-            topInfo = new TopInfo(customLifolioColor.getColorStatus(), "목표 없음");
+            topInfo = new HomeRes.TopInfo(customLifolioColor.getColorStatus(), "목표 없음");
         } else {
-            topInfo = new TopInfo(customLifolioColor.getColorStatus(), goalOfYear.getGoal());
+            topInfo = new HomeRes.TopInfo(customLifolioColor.getColorStatus(), goalOfYear.getGoal());
         }
 
         //MainLifolio 조회
         List<MyFolioRepository.GraphLifolio> mainLifolioResult = myFolioRepository.getMainFolio(userId, year);
-        List<GraphLifolio> graphLifolio = new ArrayList<>();
+        List<HomeRes.GraphLifolio> graphLifolio = new ArrayList<>();
         mainLifolioResult.forEach(
                 myFolio -> {
-                    graphLifolio.add(new GraphLifolio(
+                    graphLifolio.add(new HomeRes.GraphLifolio(
                             myFolio.getMonth(),
                             myFolio.getStar()
                     ));
@@ -63,29 +61,29 @@ public class HomeService {
 
         //CustomLifolio 조회
         List<CustomLifolioRepository.CustomUserLifolio> customUserLifolioResult = customLifolioRepository.getCustomFolio(userId);
-        List<CustomUserLifolioRes> customResult = new ArrayList<>();
+        List<HomeRes.CustomUserLifolioRes> customResult = new ArrayList<>();
         customUserLifolioResult.forEach(
                 custom -> {
-                    customResult.add(new CustomUserLifolioRes(
+                    customResult.add(new HomeRes.CustomUserLifolioRes(
                             custom.getCustomId(),
                             custom.getConcept(),
                             custom.getEmoji(),
                             custom.getCustomName()));
                 }
         );
-        return new GetHomeRes(topInfo, graphLifolio, customResult);
+        return new HomeRes.GetHomeRes(topInfo, graphLifolio, customResult);
 
 
     }
 
-    public List<GetGraphRes> getGraphLifolio(Long userId, Long customId) {
+    public List<HomeRes.GetGraphRes> getGraphLifolio(Long userId, Long customId) {
         List<MyFolioRepository.CustomGraphLifolio> graphLifolioResult = myFolioRepository.getGraphLifolio(userId, customId);
 
-        List<GetGraphRes> graphResult = new ArrayList<>();
+        List<HomeRes.GetGraphRes> graphResult = new ArrayList<>();
 
         graphLifolioResult.forEach(
                 myFolio -> {
-                    graphResult.add(new GetGraphRes(
+                    graphResult.add(new HomeRes.GetGraphRes(
                             myFolio.getDay(),
                             myFolio.getStar()
                     ));
@@ -94,15 +92,15 @@ public class HomeService {
         return graphResult;
     }
 
-    public List<GetCustomRes> getCustomLifolio(Long userId, Long customId) {
+    public List<HomeRes.GetCustomRes> getCustomLifolio(Long userId, Long customId) {
         List<MyFolioRepository.CustomInfoLifolio> customLifolioResult = myFolioRepository.getCustomLifolio(userId, customId);
-        List<GetCustomRes> customResult = new ArrayList<>();
+        List<HomeRes.GetCustomRes> customResult = new ArrayList<>();
 
         CustomLifolio customLifolio=customLifolioRepository.getOne(customId);
 
         customLifolioResult.forEach(
                 custom -> {
-                    customResult.add(new GetCustomRes(
+                    customResult.add(new HomeRes.GetCustomRes(
                             custom.getFolioId(),
                             custom.getTitle(),
                             custom.getUrl()
@@ -113,7 +111,7 @@ public class HomeService {
     }
 
     @SneakyThrows
-    public void setCustomLifolio(Long userId, Long customId, CustomUpdateReq customUpdateReq){ //커스텀폴리오 수정
+    public void setCustomLifolio(Long userId, Long customId, HomeReq.CustomUpdateReq customUpdateReq){ //커스텀폴리오 수정
         //CustomLifolio customLifolio = customLifolioRepository.getCustomFolioCategory(customId);
         CustomLifolio customLifolio=customLifolioRepository.getOne(customId);
         customLifolio.updateCustomLifolio(customUpdateReq.getCustomName(),customUpdateReq.getCategory(),
@@ -122,7 +120,7 @@ public class HomeService {
     }
 
 
-    public PostGoalRes setGoalOfYear(PostGoalReq postGoalReq){
+    public HomeRes.PostGoalRes setGoalOfYear(HomeReq.PostGoalReq postGoalReq){
         LocalDate now = LocalDate.now();
         int year = now.getYear(); //일단은 현재 시간에만 설정할 수 있도록 설정
 
@@ -136,19 +134,19 @@ public class HomeService {
 
         goalOfYearRepository.save(toSaveGoalOfYear);
 
-        return new PostGoalRes(toSaveGoalOfYear.getGoal());
+        return new HomeRes.PostGoalRes(toSaveGoalOfYear.getGoal());
     }
 
 
 
-    public List<GetGoalRes> getGoalsByUserId(Long userId) {
+    public List<HomeRes.GetGoalRes> getGoalsByUserId(Long userId) {
         List<GoalOfYear> goalList = goalOfYearRepository.findAllByUserIdOrderByYearAsc(userId);
-        List<GetGoalRes> getGoalResList = new ArrayList<>();
+        List<HomeRes.GetGoalRes> getGoalResList = new ArrayList<>();
 
         if(goalList.isEmpty()) return null;
 
         for(GoalOfYear g: goalList){
-            GetGoalRes getGoalRes = new GetGoalRes(g.getYear(), g.getGoal(), g.getCreatedAt().toLocalDate());
+            HomeRes.GetGoalRes getGoalRes = new HomeRes.GetGoalRes(g.getYear(), g.getGoal(), g.getCreatedAt().toLocalDate());
             getGoalResList.add(getGoalRes);
         }
 
@@ -157,13 +155,13 @@ public class HomeService {
 
 
 
-    public List<GetBadgeRes> getBadgeByUserId(Long userId) {
+    public List<HomeRes.GetBadgeRes> getBadgeByUserId(Long userId) {
         List<BadgeRepository.BadgeSuccess> badgeList = badgeRepository.getBadgeByUserId(userId);
-        List<GetBadgeRes> getBadgeResList = new ArrayList<>();
+        List<HomeRes.GetBadgeRes> getBadgeResList = new ArrayList<>();
 
         badgeList.forEach(
                 custom -> {
-                    getBadgeResList.add(new GetBadgeRes(
+                    getBadgeResList.add(new HomeRes.GetBadgeRes(
                             custom.getUrl(),
                             custom.getTitle(),
                             custom.getSuccess()

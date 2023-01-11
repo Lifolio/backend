@@ -2,7 +2,6 @@ package com.example.lifolio.service;
 
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.converter.UserConverter;
-import com.example.lifolio.dto.user.TokenRes;
 import com.example.lifolio.dto.user.UserReq;
 import com.example.lifolio.dto.user.UserRes;
 import com.example.lifolio.entity.User;
@@ -83,7 +82,7 @@ public class AuthService {
     }
 
     @Transactional(rollbackFor=SQLException.class)
-    public TokenRes logInKakaoUser(UserReq.SocialReq socialReq) throws BaseException {
+    public UserRes.TokenRes logInKakaoUser(UserReq.SocialReq socialReq) throws BaseException {
 
         String reqURL = "https://kapi.kakao.com/v2/user/me";
 
@@ -132,7 +131,7 @@ public class AuthService {
 
                 UserRes.GenerateToken generateToken=userService.createToken(userId);
                 userService.postAlarmUser(userId);
-                return new TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
+                return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
             }
 
             br.close();
@@ -141,7 +140,7 @@ public class AuthService {
 
             UserRes.GenerateToken generateToken=userService.createToken(userId);
 
-            return new TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
+            return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
 
 
 
@@ -211,7 +210,7 @@ public class AuthService {
     }
 
     @Transactional(rollbackFor= SQLException.class)
-    public TokenRes logInNaverUser(UserReq.SocialReq socialReq) throws BaseException {
+    public UserRes.TokenRes logInNaverUser(UserReq.SocialReq socialReq) throws BaseException {
 
         String reqURL = "https://openapi.naver.com/v1/nid/me";
 
@@ -260,7 +259,7 @@ public class AuthService {
                 Long userId=userRepository.save(user).getId();
                 UserRes.GenerateToken generateToken=userService.createToken(userId);
                 userService.postAlarmUser(userId);
-                return new TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
+                return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
             }
 
             br.close();
@@ -269,7 +268,7 @@ public class AuthService {
 
             UserRes.GenerateToken generateToken=userService.createToken(userId);
 
-            return new TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
+            return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
 
 
             
