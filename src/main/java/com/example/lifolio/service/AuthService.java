@@ -12,10 +12,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.SQLException;
 
 @Service
 @RequiredArgsConstructor
@@ -80,6 +82,7 @@ public class AuthService {
         return access_Token;
     }
 
+    @Transactional(rollbackFor=SQLException.class)
     public TokenRes logInKakaoUser(UserReq.SocialReq socialReq) throws BaseException {
 
         String reqURL = "https://kapi.kakao.com/v2/user/me";
@@ -128,6 +131,7 @@ public class AuthService {
                 Long userId=userRepository.save(user).getId();
 
                 UserRes.GenerateToken generateToken=userService.createToken(userId);
+                userService.postAlarmUser(userId);
                 return new TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
             }
 
@@ -206,6 +210,7 @@ public class AuthService {
         return access_Token;
     }
 
+    @Transactional(rollbackFor= SQLException.class)
     public TokenRes logInNaverUser(UserReq.SocialReq socialReq) throws BaseException {
 
         String reqURL = "https://openapi.naver.com/v1/nid/me";
@@ -254,6 +259,7 @@ public class AuthService {
                 User user=UserConverter.postUser(String.valueOf(id),socialReq.getSocial(),name);
                 Long userId=userRepository.save(user).getId();
                 UserRes.GenerateToken generateToken=userService.createToken(userId);
+                userService.postAlarmUser(userId);
                 return new TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
             }
 

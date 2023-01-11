@@ -162,8 +162,6 @@ public class TokenProvider implements InitializingBean {
 
         // 3. userId 추출
         Long userId = claims.getBody().get("userId",Long.class);
-        System.out.println(expiredAt);
-        System.out.println(userId);
 
         if(expiredAt==null){
             return userId;
