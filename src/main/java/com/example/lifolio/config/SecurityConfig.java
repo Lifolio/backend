@@ -81,6 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/find").permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/my/**").authenticated()
+                .antMatchers("/user/re_token").permitAll()
                 //위의 경로 제외 전부 JWT 인증해야 함(헤더에 JWT 포함하기)
                 .anyRequest().authenticated()
 

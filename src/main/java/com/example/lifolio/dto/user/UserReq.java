@@ -14,4 +14,13 @@ public class UserReq {
         private String social;
         private String accessToken;
     }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class PostReIssueReq {
+        private Long userId;
+        private String refreshToken;
+    }
 }

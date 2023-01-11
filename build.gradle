@@ -45,6 +45,8 @@ dependencies {
     implementation 'net.nurigo:sdk:4.2.7'
     implementation group: 'net.nurigo', name: 'javaSDK', version: '2.2'
 
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 }
 
 tasks.named('test') {

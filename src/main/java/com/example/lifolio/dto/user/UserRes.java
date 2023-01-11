@@ -63,6 +63,16 @@ public class UserRes {
         private String name;
     }
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class GenerateToken{
+        private String accessToken;
+        private String refreshToken;
+    }
+
+
 
 
 }
