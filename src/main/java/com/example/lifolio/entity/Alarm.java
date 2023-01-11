@@ -49,4 +49,20 @@ public class Alarm {
  @Column(name = "marketing_alarm")
  private Integer marketingAlarm;
 
+
+ public void updateAllAlarm(int weekAlarm, int badgeAlarm, int todoAlarm, int goalAlarm, int uploadAlarm, int interestAlarm, int likeAlarm, int marketingAlarm){
+  this.weekAlarm = weekAlarm;
+  this.badgeAlarm = badgeAlarm;
+  this.todoAlarm = todoAlarm;
+  this.goalAlarm = goalAlarm;
+  this.uploadAlarm = uploadAlarm;
+  this.interestAlarm = interestAlarm;
+  this.likeAlarm = likeAlarm;
+  this.marketingAlarm = marketingAlarm;
+ }
+
+ public void updateMyAllAlarm(int weekAlarm, int badgeAlarm) {
+  this.weekAlarm = weekAlarm;
+  this.badgeAlarm = badgeAlarm;
+ }
 }

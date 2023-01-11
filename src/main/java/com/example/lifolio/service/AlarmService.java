@@ -1,12 +1,15 @@
 package com.example.lifolio.service;
 
 import com.example.lifolio.converter.UserConverter;
+import com.example.lifolio.dto.alarm.AlarmReq;
+import com.example.lifolio.dto.home.HomeReq;
 import com.example.lifolio.dto.user.UserRes;
 import com.example.lifolio.entity.Alarm;
 import com.example.lifolio.entity.User;
 import com.example.lifolio.repository.AlarmRepository;
 import com.example.lifolio.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -45,5 +48,28 @@ public class AlarmService {
 
         return UserConverter.GetAlarmList(alarm,allAlarm,socialAlarm,myAlarm,planningAlarm);
 
+    }
+
+    @SneakyThrows
+    public void setAllAlarm(Long userId, AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq) {
+        Alarm alarm = alarmRepository.findByUserId(userId);
+        if(allAlarmUpdateReq.getAlarm() == 1) {
+            alarm.updateAllAlarm(1,1,1,1,1,1,1,1);
+        }
+        else{
+            alarm.updateAllAlarm(0,0,0,0,0,0,0,0);
+        }
+        alarmRepository.save(alarm);
+    }
+
+    public void setMyAllAlarm(Long userId, AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq) {
+        Alarm alarm = alarmRepository.findByUserId(userId);
+        if(allAlarmUpdateReq.getAlarm() == 1){
+            alarm.updateMyAllAlarm(1,1);
+        }
+        else{
+            alarm.updateMyAllAlarm(0,0);
+        }
+        alarmRepository.save(alarm);
     }
 }
