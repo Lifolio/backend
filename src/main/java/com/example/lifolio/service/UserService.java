@@ -4,18 +4,12 @@ package com.example.lifolio.service;
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponseStatus;
 import com.example.lifolio.converter.UserConverter;
-import com.example.lifolio.dto.home.GetGoalRes;
-import com.example.lifolio.dto.home.PostGoalReq;
-import com.example.lifolio.dto.home.PostGoalRes;
-import com.example.lifolio.dto.user.KakaoLoginRes;
 import com.example.lifolio.dto.user.*;
 import com.example.lifolio.entity.*;
 import com.example.lifolio.jwt.JwtFilter;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.repository.*;
 import com.example.lifolio.util.SecurityUtil;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import net.nurigo.java_sdk.api.Message;
@@ -32,12 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.Collections;
-import java.time.LocalDate;
 import java.util.*;
 
 import static com.example.lifolio.base.BaseResponseStatus.NOT_CORRECT_USER;
@@ -73,7 +63,7 @@ public class UserService {
 
 
     //회원가입, 로그인 로직
-    public TokenRes login(LoginUserReq loginUserReq) throws BaseException {
+    public UserRes.TokenRes login(UserReq.LoginUserReq loginUserReq) throws BaseException {
 
         if(!checkUserId(loginUserReq.getUsername())){
             throw new BaseException(BaseResponseStatus.NOT_EXIST_USER);
@@ -105,13 +95,13 @@ public class UserService {
 
 
         //반환 값 아이디 추가
-        return new TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
+        return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
 
     }
 
     @Transactional(rollbackFor=SQLException.class)
     @SneakyThrows
-    public TokenRes signup(SignupUserReq signupUserReq) throws BaseException {
+    public UserRes.TokenRes signup(UserReq.SignupUserReq signupUserReq) throws BaseException {
 
         Authority authority = Authority.builder()
                 .authorityName("ROLE_USER")
@@ -134,18 +124,18 @@ public class UserService {
 
         postAlarmUser(userId);
 
-        return new TokenRes(userId,jwt,refreshToken, user.getName());
+        return new UserRes.TokenRes(userId,jwt,refreshToken, user.getName());
 
     }
 
     @Transactional(readOnly = true)
-    public SignupUserReq getUserWithAuthorities(String username) {
-        return SignupUserReq.from(userRepository.findOneWithAuthoritiesByUsername(username).orElse(null));
+    public UserReq.SignupUserReq getUserWithAuthorities(String username) {
+        return UserReq.SignupUserReq.from(userRepository.findOneWithAuthoritiesByUsername(username).orElse(null));
     }
 
     @Transactional(readOnly = true)
-    public SignupUserReq getMyUserWithAuthorities() {
-        return SignupUserReq.from(SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername).orElse(null));
+    public UserReq.SignupUserReq getMyUserWithAuthorities() {
+        return UserReq.SignupUserReq.from(SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername).orElse(null));
     }
 
 
@@ -160,12 +150,12 @@ public class UserService {
 
     //비밀번호 로직
     @SneakyThrows
-    public PasswordRes setNewPassword(PasswordReq passwordReq){ //새 비밀번호로 바꾸기
+    public UserRes.PasswordRes setNewPassword(UserReq.PasswordReq passwordReq){ //새 비밀번호로 바꾸기
         User user = userRepository.findByUsernameEquals(passwordReq.getUsername());
         if(user != null){
             user.setPassword(passwordEncoder.encode(passwordReq.getNewPassword()));
             userRepository.save(user);
-            return new PasswordRes(passwordReq.getNewPassword());
+            return new UserRes.PasswordRes(passwordReq.getNewPassword());
         } else {
             return null;
         }
@@ -201,7 +191,7 @@ public class UserService {
         return Integer.parseInt(numStr);
     }
 
-    public String findUserId(FindUserIdReq findUserIdReq) throws BaseException {
+    public String findUserId(UserReq.FindUserIdReq findUserIdReq) throws BaseException {
         User user =userRepository.findByNameAndPhone(findUserIdReq.getName(),findUserIdReq.getPhone());
         if(user==null){
             throw new BaseException(NOT_CORRECT_USER);
@@ -209,14 +199,14 @@ public class UserService {
         return user.getUsername();
     }
 
-    public TokenRes reIssueToken(Long userId) {
+    public UserRes.TokenRes reIssueToken(Long userId) {
         User user=userRepository.getOne(userId);
         UserRes.GenerateToken generateToken=createToken(userId);
 
         //Redis 에 RefreshToken 저장
         redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(),(System.currentTimeMillis()+ (1000 * 60 * 60 * 24 * 365)));
 
-        return new TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
+        return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
     }
 
     public UserRes.GenerateToken createToken(Long userId){

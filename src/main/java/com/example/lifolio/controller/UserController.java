@@ -10,16 +10,12 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
 
-import java.util.List;
-
 import static com.example.lifolio.base.BaseResponseStatus.*;
-import static com.example.lifolio.base.BaseResponseStatus.EMPTY_ACCESS_TOKEN;
 
 
 @RequiredArgsConstructor
@@ -32,7 +28,7 @@ public class UserController {
 
     @ApiOperation(value = "로그인", notes = "로그인")
     @PostMapping("/login")
-    public BaseResponse<TokenRes> login(@Valid @RequestBody LoginUserReq loginUserReq){
+    public BaseResponse<UserRes.TokenRes> login(@Valid @RequestBody UserReq.LoginUserReq loginUserReq){
         if(loginUserReq.getUsername()==null){
             return new BaseResponse<>(USERS_EMPTY_USER_ID);
         }
@@ -41,7 +37,7 @@ public class UserController {
         }
 
         try {
-            TokenRes tokenRes = userService.login(loginUserReq);
+            UserRes.TokenRes tokenRes = userService.login(loginUserReq);
             return new BaseResponse<>(tokenRes);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
@@ -51,7 +47,7 @@ public class UserController {
 
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping("/signup")
-    public BaseResponse<TokenRes> signup(@Valid @RequestBody SignupUserReq signupUserReq) throws BaseException {
+    public BaseResponse<UserRes.TokenRes> signup(@Valid @RequestBody UserReq.SignupUserReq signupUserReq) throws BaseException {
         try {
             if (userService.checkUserId(signupUserReq.getUsername())) {
                 return new BaseResponse<>(USERS_EXISTS_ID);
@@ -67,9 +63,9 @@ public class UserController {
 
     @ApiOperation(value = "새로운 비밀번호 설정", notes = "새로운 비밀번호 설정")
     @PatchMapping("/password")
-    public BaseResponse<PasswordRes> setNewPassword(PasswordReq passwordReq){
+    public BaseResponse<UserRes.PasswordRes> setNewPassword(UserReq.PasswordReq passwordReq){
         //이름, 아이디
-        PasswordRes passwordRes = userService.setNewPassword(passwordReq);
+        UserRes.PasswordRes passwordRes = userService.setNewPassword(passwordReq);
         if(passwordRes != null){
             return new BaseResponse<>(passwordRes);
         } else {
@@ -125,17 +121,17 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/check/sendSMS")
-    public BaseResponse<GetSMSRes> sendSMS(@RequestParam(value="to")String to) throws CoolsmsException {
+    public BaseResponse<UserRes.GetSMSRes> sendSMS(@RequestParam(value="to")String to) throws CoolsmsException {
         int result = userService.phoneNumberCheck(to);
-        GetSMSRes getSMSRes = new GetSMSRes(result);
+        UserRes.GetSMSRes getSMSRes = new UserRes.GetSMSRes(result);
         return new BaseResponse<>(getSMSRes);
     }
 
     @ResponseBody
     @PostMapping("/find")
-    public BaseResponse<FindUserIdRes> findUserId(@RequestBody FindUserIdReq findUserIdReq) {
+    public BaseResponse<UserRes.FindUserIdRes> findUserId(@RequestBody UserReq.FindUserIdReq findUserIdReq) {
         try {
-            FindUserIdRes findUserIdRes = new FindUserIdRes(userService.findUserId(findUserIdReq));
+            UserRes.FindUserIdRes findUserIdRes = new UserRes.FindUserIdRes(userService.findUserId(findUserIdReq));
             return new BaseResponse<>(findUserIdRes);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -144,7 +140,7 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("/re_token")
-    public BaseResponse<TokenRes> reIssueToken(@RequestBody UserReq.PostReIssueReq postReIssueReq){
+    public BaseResponse<UserRes.TokenRes> reIssueToken(@RequestBody UserReq.PostReIssueReq postReIssueReq){
 
         String redisRT= redisService.getValues(String.valueOf(postReIssueReq.getUserId()));
 
@@ -156,7 +152,7 @@ public class UserController {
             return new BaseResponse<>(INVALID_USER_JWT);
         }
 
-        TokenRes tokenRes=userService.reIssueToken(postReIssueReq.getUserId());
+        UserRes.TokenRes tokenRes=userService.reIssueToken(postReIssueReq.getUserId());
 
         return new BaseResponse<>(tokenRes);
 

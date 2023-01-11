@@ -2,8 +2,8 @@ package com.example.lifolio.controller;
 
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
-import com.example.lifolio.dto.user.TokenRes;
 import com.example.lifolio.dto.user.UserReq;
+import com.example.lifolio.dto.user.UserRes;
 import com.example.lifolio.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +23,9 @@ public class AuthController {
 
     @ResponseBody
     @PostMapping("/kakao/logIn")
-    public BaseResponse<TokenRes> kakaoLogin(@RequestBody UserReq.SocialReq socialReq) throws BaseException {
+    public BaseResponse<UserRes.TokenRes> kakaoLogin(@RequestBody UserReq.SocialReq socialReq) throws BaseException {
         try {
-            TokenRes tokenRes = authService.logInKakaoUser(socialReq);
+            UserRes.TokenRes tokenRes = authService.logInKakaoUser(socialReq);
             return new BaseResponse<>(tokenRes);
         }catch(BaseException e){
             return new BaseResponse<>(e.getStatus());
@@ -41,9 +41,9 @@ public class AuthController {
 
     @ResponseBody
     @PostMapping("/naver/logIn")
-    public BaseResponse<TokenRes> naverCallback(@RequestBody UserReq.SocialReq socialReq) throws BaseException {
+    public BaseResponse<UserRes.TokenRes> naverCallback(@RequestBody UserReq.SocialReq socialReq) throws BaseException {
         try {
-            TokenRes tokenRes = authService.logInNaverUser(socialReq);
+            UserRes.TokenRes tokenRes = authService.logInNaverUser(socialReq);
             return new BaseResponse<>(tokenRes);
         }catch(BaseException e){
             return new BaseResponse<>(e.getStatus());
