@@ -51,6 +51,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final MyFolioRepository myFolioRepository;
     private final ArchiveRepository archiveRepository;
+    private final RedisService redisService;
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -88,15 +89,21 @@ public class UserService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        UserRes.GenerateToken generateToken=createToken(userId);
 
-        String jwt = tokenProvider.createToken(userId); //user인덱스로 토큰 생성
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + generateToken.getAccessToken());
+
+        //refresh token 저장
+        redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(), (System.currentTimeMillis()+ (1000 * 60 * 60 * 24 * 365)));
+
+
 
 
         //반환 값 아이디 추가
-        return new TokenRes(userId,jwt, user.getName());
+        return new TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
+
     }
 
     @Transactional
@@ -119,8 +126,11 @@ public class UserService {
 
         Long userId=userRepository.save(user).getId();
         String jwt=tokenProvider.createToken(userId);
+        String refreshToken =tokenProvider.createRefreshToken(userId);
 
-        return new TokenRes(userId,jwt, user.getName());
+
+
+        return new TokenRes(userId,jwt,refreshToken, user.getName());
 
     }
 
@@ -195,4 +205,20 @@ public class UserService {
         return user.getUsername();
     }
 
+    public TokenRes reIssueToken(Long userId) {
+        User user=userRepository.getOne(userId);
+        UserRes.GenerateToken generateToken=createToken(userId);
+
+        //Redis 에 RefreshToken 저장
+        redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(),(System.currentTimeMillis()+ (1000 * 60 * 60 * 24 * 365)));
+
+        return new TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
+    }
+
+    public UserRes.GenerateToken createToken(Long userId){
+        String accessToken=tokenProvider.createToken(userId);
+        String refreshToken=tokenProvider.createRefreshToken(userId);
+
+        return new UserRes.GenerateToken(accessToken,refreshToken);
+    }
 }

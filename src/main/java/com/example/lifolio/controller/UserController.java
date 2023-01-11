@@ -4,6 +4,7 @@ import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
 import com.example.lifolio.dto.user.*;
 import com.example.lifolio.jwt.TokenProvider;
+import com.example.lifolio.service.RedisService;
 import com.example.lifolio.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import static com.example.lifolio.base.BaseResponseStatus.EMPTY_ACCESS_TOKEN;
 public class UserController {
     private final UserService userService;
     private final TokenProvider jwtProvider;
+    private final RedisService redisService;
 
     @ApiOperation(value = "로그인", notes = "로그인")
     @PostMapping("/login")
@@ -140,6 +142,54 @@ public class UserController {
         }
     }
 
+    @ResponseBody
+    @PostMapping("/re_token")
+    public BaseResponse<TokenRes> reIssueToken(@RequestBody UserReq.PostReIssueReq postReIssueReq){
+
+        String redisRT= redisService.getValues(String.valueOf(postReIssueReq.getUserId()));
+
+        if(redisRT==null){
+            return new BaseResponse<>(INVALID_REFRESH_TOKEN);
+
+        }
+        if(!redisRT.equals(postReIssueReq.getRefreshToken())){
+            return new BaseResponse<>(INVALID_USER_JWT);
+        }
+
+        TokenRes tokenRes=userService.reIssueToken(postReIssueReq.getUserId());
+
+        return new BaseResponse<>(tokenRes);
+
+    }
+
+
+    // 토큰이 유효하다는 가정 하
+    // 만약 토큰이 만료되었다면 재발급 요청
+    @ResponseBody
+    @GetMapping("/logOut/{userId}")
+    public BaseResponse<String> logOut(@PathVariable("userId") Long userId){
+        try {
+
+            //탈취된 토큰인지 검증
+            Long userIdByJwt = jwtProvider.getUserIdx();
+
+            //userId와 접근한 유저가 같은지 확인
+            if (userId != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            //헤더에서 토큰 가져오기
+            String accessToken = jwtProvider.getJwt();
+            //jwt 에서 로그아웃 처리 & 오류처리 &
+            jwtProvider.logOut(userId,accessToken);
+            String result="로그아웃 성공";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException e) {
+            return new BaseResponse<>((e.getStatus()));
+        }
+
+    }
 
 
 

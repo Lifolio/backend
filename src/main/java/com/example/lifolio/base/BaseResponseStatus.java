@@ -28,6 +28,8 @@ public enum     BaseResponseStatus {
     INVALID_ACCESS_TOKEN(false, 2005, "유효하지 않은 ccess Token 입니다."),
 
     INVALID_USER_JWT(false,403,"권한이 없는 유저의 접근입니다."),
+    INVALID_REFRESH_TOKEN(false,406 ,"리프레쉬 토큰이 만료되었습니다 다시 로그인해주세요." ),
+    HIJACK_ACCESS_TOKEN(false,407,"탈취된(로그아웃 된) 토큰입니다 다시 로그인해주세요."),
 
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 입력해주세요."),
     USERS_EMPTY_USER_PASSWORD(false, 2011, "유저 비밀번호를 입력해주세요."),

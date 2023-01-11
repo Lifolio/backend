@@ -4,6 +4,7 @@ import com.example.lifolio.base.BaseException;
 import com.example.lifolio.converter.UserConverter;
 import com.example.lifolio.dto.user.TokenRes;
 import com.example.lifolio.dto.user.UserReq;
+import com.example.lifolio.dto.user.UserRes;
 import com.example.lifolio.entity.User;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.repository.UserRepository;
@@ -22,6 +23,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final TokenProvider tokenProvider;
+    private final UserService userService;
 
     public String getKakaoAccessToken(String code) {
         String access_Token="";
@@ -122,17 +124,20 @@ public class AuthService {
 
             if(!userRepository.existsByUsernameAndSocial(String.valueOf(id),socialReq.getSocial())){
                 User user=UserConverter.postUser(String.valueOf(id),socialReq.getSocial(),name);
+
                 Long userId=userRepository.save(user).getId();
-                String jwt = tokenProvider.createToken(userId); //user인덱스로 토큰 생성
-                return new TokenRes(userId,jwt,user.getName());
+
+                UserRes.GenerateToken generateToken=userService.createToken(userId);
+                return new TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
             }
 
             br.close();
             User user=userRepository.findByUsernameAndSocial(String.valueOf(id),socialReq.getSocial());
             Long userId=user.getId();
 
-            String jwt = tokenProvider.createToken(userId); //user인덱스로 토큰 생성
-            return new TokenRes(userId,jwt,user.getName());
+            UserRes.GenerateToken generateToken=userService.createToken(userId);
+
+            return new TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
 
 
 
@@ -248,21 +253,20 @@ public class AuthService {
             if(!userRepository.existsByUsernameAndSocial(String.valueOf(id),socialReq.getSocial())){
                 User user=UserConverter.postUser(String.valueOf(id),socialReq.getSocial(),name);
                 Long userId=userRepository.save(user).getId();
-                String jwt = tokenProvider.createToken(userId); //user인덱스로 토큰 생성
-                return new TokenRes(userId,jwt,user.getUsername());
+                UserRes.GenerateToken generateToken=userService.createToken(userId);
+                return new TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
             }
 
             br.close();
             User user=userRepository.findByUsernameAndSocial(String.valueOf(id),socialReq.getSocial());
             Long userId=user.getId();
 
-            String jwt = tokenProvider.createToken(userId); //user인덱스로 토큰 생성
-            return new TokenRes(userId,jwt,user.getName());
+            UserRes.GenerateToken generateToken=userService.createToken(userId);
+
+            return new TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
 
 
-
-
-
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
