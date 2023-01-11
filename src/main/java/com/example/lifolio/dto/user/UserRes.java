@@ -1,8 +1,11 @@
 package com.example.lifolio.dto.user;
 
+import com.example.lifolio.entity.Category;
 import lombok.*;
 
+import javax.persistence.Column;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public class UserRes {
@@ -152,4 +155,18 @@ public class UserRes {
     public static class AuthorityRes {
         private String authorityName;
     }
+
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class DailyCalender{
+        private Date date; //2023년 1월 1일
+        private String category;
+        private String title;
+        private Integer star;
+    }
+
+
 }

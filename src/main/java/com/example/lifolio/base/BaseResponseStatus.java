@@ -66,7 +66,7 @@ public enum     BaseResponseStatus {
     NOT_EXIST_KAKAO(false,2030,"회원정보에 존재하는 카카오가 존재하지 않습니다. 회원가입 해주세요"),
 
     EMPTY_GOAL_OF_YEAR(false, 2031, "'올해의 나'가 비어있습니다. 목표를 설정해주세요"),
-
+    EMPTY_MYFOLIO_AT_THAT_DATE(false, 2032, "해당 날짜의 MyFolio가 존재하지 않습니다"),
 
 
     /**

@@ -1,12 +1,13 @@
 package com.example.lifolio.repository;
 
 import com.example.lifolio.entity.MyFolio;
-import com.example.lifolio.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.temporal.TemporalAccessor;
+import java.util.Date;
 import java.util.List;
 
 public interface MyFolioRepository extends JpaRepository<MyFolio, Long> {
@@ -86,4 +87,10 @@ public interface MyFolioRepository extends JpaRepository<MyFolio, Long> {
         String getUrl();
         String getTitle();
     }
+
+
+    List<MyFolio> findAllByUserIdAndDate(Long userId, Date date);
+
+
+
 }
