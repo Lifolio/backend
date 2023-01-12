@@ -30,12 +30,19 @@ public class CategorySerivce {
             Category rootCategory = categoryRepository.findByBranchAndTitle(categoryDTO.getBranch(), "ROOT")
                     .orElseGet(() ->
                             Category.builder()
+                                    .title("ROOT")
                             .branch(categoryDTO.getBranch())
                             .level(0)
                             .build()
                     ); //branch의 상위 카테고리 첫 생성 시 ROOT 생성
+
+            if(!categoryRepository.existsByBranchAndTitle(categoryDTO.getBranch(), "ROOT")){
+                categoryRepository.save(rootCategory);
+            }
+
             category.setParentCategory(rootCategory);
             category.setLevel(1);
+
         } else {
             String parentCategoryName = categoryDTO.getParentCategoryName();
             Category parentCategory = categoryRepository.findByBranchAndTitle(categoryDTO.getBranch(), parentCategoryName)
@@ -62,8 +69,9 @@ public class CategorySerivce {
 
     public Long updateCategory(Long categoryId, CategoryDTO categoryDTO) {
         Category category = findCategory(categoryId);
-        category.setTitle(categoryDTO.getTitle());
+        category.setBranch(categoryDTO.getBranch());
         category.setColorId(categoryDTO.getColorId());
+        category.setTitle(categoryDTO.getTitle());
 
         return category.getId();
     }
@@ -73,7 +81,7 @@ public class CategorySerivce {
 
         if (category.getSubCategory().size() == 0) { //하위 카테고리 없으면
             Category parentCategory = findCategory(category.getParentCategory().getId());
-            if (!parentCategory.getTitle().equals("ROOT")) { //ROOT가 아닌 다른 부모일 경우
+            if (!parentCategory.getTitle().equals("ROOT")) { //최상단 카테고리가 아닌경우
                 parentCategory.getSubCategory().remove(category);
             }
             categoryRepository.deleteById(category.getId());
