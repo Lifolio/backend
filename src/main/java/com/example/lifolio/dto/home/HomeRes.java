@@ -39,9 +39,10 @@ public class HomeRes {
     @Setter
     @Getter
     public static class GetGoalRes {
-        private int year;
+        private int year;  //2022
         private String goal;
-        private LocalDate createDate;
+        //private LocalDate createDate;
+        private String createDate;  //1.1
     }
 
     @Getter

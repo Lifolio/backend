@@ -146,7 +146,10 @@ public class HomeService {
         if(goalList.isEmpty()) return null;
 
         for(GoalOfYear g: goalList){
-            HomeRes.GetGoalRes getGoalRes = new HomeRes.GetGoalRes(g.getYear(), g.getGoal(), g.getCreatedAt().toLocalDate());
+            LocalDate date = g.getCreatedAt().toLocalDate();
+            String createDate = date.getMonthValue() + ". " + date.getDayOfMonth();
+
+            HomeRes.GetGoalRes getGoalRes = new HomeRes.GetGoalRes(g.getYear(), g.getGoal(), createDate);
             getGoalResList.add(getGoalRes);
         }
 
