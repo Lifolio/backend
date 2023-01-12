@@ -30,10 +30,10 @@ public class Category implements Serializable {
  private Long colorId;
 
  @Column(name = "title")
- private String title;
-
+ private String title; //소분류 이름
+ 
  @Column(name = "branch")
- private String branch;
+ private String branch; //대분류 이름
 
  @Column(name = "level")
  private Integer level;
