@@ -4,6 +4,7 @@ import com.example.lifolio.entity.Category;
 import lombok.*;
 
 import javax.persistence.Column;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -178,8 +179,8 @@ public class UserRes {
         List<MyFolioImgList> myFolioImgList;
         String category; //대분류
         String content;
-        String latitude; //위도
-        String longitude; //경도
+        BigDecimal latitude; //위도
+        BigDecimal longitude; //경도
         List<MyFolioWithList> myFolioWithList;
     }
 

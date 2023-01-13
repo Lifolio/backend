@@ -68,6 +68,19 @@ public enum     BaseResponseStatus {
     EMPTY_GOAL_OF_YEAR(false, 2031, "'올해의 나'가 비어있습니다. 목표를 설정해주세요"),
     EMPTY_MYFOLIO_AT_THAT_DATE(false, 2032, "해당 날짜의 MyFolio가 존재하지 않습니다"),
 
+    NOT_EXIST_MYFOLIO_ID(false, 2032, "존재하지 않는 MyFolio입니다"),
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 3000 : Response 오류
