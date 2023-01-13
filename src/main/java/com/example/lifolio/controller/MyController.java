@@ -3,6 +3,9 @@ package com.example.lifolio.controller;
 
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
+import com.example.lifolio.dto.home.HomeRes;
+import com.example.lifolio.dto.my.MyReq;
+import com.example.lifolio.dto.my.MyRes;
 import com.example.lifolio.dto.user.UserRes;
 import com.example.lifolio.entity.MyFolio;
 import com.example.lifolio.jwt.TokenProvider;
@@ -77,6 +80,27 @@ public class MyController {
         return new BaseResponse<>(profile);
     }
 
+    @GetMapping("/graph")
+    public BaseResponse<List<HomeRes.GraphLifolio>> getGraphLifolio(){
+        try {
+            Long userId= jwtProvider.getUserIdx();
+            List<HomeRes.GraphLifolio> graphLifolio=myService.getGraphLifolio(userId);
+            return new BaseResponse<>(graphLifolio);
 
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @PostMapping("/category")
+    public BaseResponse<List<MyRes.ViewCategory>> getViewCategory(@RequestBody MyReq.FilterCategory filterCategory,@RequestParam(required = false,defaultValue="1") int page){
+        try{
+            Long userId= jwtProvider.getUserIdx();
+            List<MyRes.ViewCategory> viewCategory =myService.getViewCategory(userId,filterCategory,page);
+            return new BaseResponse<>(viewCategory);
+        }catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 
 }

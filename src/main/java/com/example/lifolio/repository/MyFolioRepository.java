@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
-import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +16,9 @@ public interface MyFolioRepository extends JpaRepository<MyFolio, Long> {
             "  and YEAR(date) = :year \n" +
             "group by MONTH(date);",nativeQuery = true)
     List<GraphLifolio> getMainFolio(@Param("userId")Long userId, @Param("year")int year);
+
+
+
     interface GraphLifolio{
         int getStar();
         int getMonth();
@@ -88,8 +90,89 @@ public interface MyFolioRepository extends JpaRepository<MyFolio, Long> {
         String getTitle();
     }
 
-
     List<MyFolio> findAllByUserIdAndDate(Long userId, Date date);
+
+
+
+
+    @Query(value="select MF.id                                                                          'folioId',\n" +
+            "       MFI.url,\n" +
+            "       MF.title'title',\n" +
+            "       (select exists(select Archive.id from Archive where Archive.folio_id = MF.id)) 'archiveCheck',\n" +
+            "       MF.date,\n" +
+            "       SC.title'category',color_name'colorName',\n" +
+            "       MF.star\n" +
+            "from MyFolio MF\n" +
+            "         join MyFolioImg MFI on MF.id = MFI.folio_id\n" +
+            "join Category C\n" +
+            "join Color on color_id=Color.id\n" +
+            "join SubCategory SC on C.id = SC.category_id and SC.id=MF.category_id\n" +
+            "where MF.user_id = :userId and SC.title IN(:categoryList) order by MF.date desc limit :startPage,:lastPage\n" +
+            "\n",nativeQuery = true)
+    List<ViewCategory> getViewCategoryDateDesc(@Param("userId") Long userId, @Param("categoryList") List<String> categoryList, @
+            Param("startPage") int startPage, @Param("lastPage") int lastPage);
+
+    @Query(value="select MF.id                                                                          'folioId',\n" +
+            "       MFI.url,\n" +
+            "       MF.title'title',\n" +
+            "       (select exists(select Archive.id from Archive where Archive.folio_id = MF.id)) 'archiveCheck',\n" +
+            "       MF.date,\n" +
+            "       SC.title'category',color_name'colorName',\n" +
+            "       MF.star\n" +
+            "from MyFolio MF\n" +
+            "         join MyFolioImg MFI on MF.id = MFI.folio_id\n" +
+            "join Category C\n" +
+            "join Color on color_id=Color.id\n" +
+            "join SubCategory SC on C.id = SC.category_id and SC.id=MF.category_id\n" +
+            "where MF.user_id = :userId and SC.title IN(:categoryList) order by MF.date asc limit :startPage,:lastPage\n" +
+            "\n",nativeQuery = true)
+    List<ViewCategory> getViewCategoryDateAsc(@Param("userId") Long userId, @Param("categoryList") List<String> categoryList,
+                                              @Param("startPage") int startPage, @Param("lastPage") int lastPage);
+
+    @Query(value="select MF.id                                                                          'folioId',\n" +
+            "       MFI.url,\n" +
+            "       MF.title'title',\n" +
+            "       (select exists(select Archive.id from Archive where Archive.folio_id = MF.id)) 'archiveCheck',\n" +
+            "       MF.date,\n" +
+            "       SC.title'category',color_name'colorName',\n" +
+            "       MF.star\n" +
+            "from MyFolio MF\n" +
+            "         join MyFolioImg MFI on MF.id = MFI.folio_id\n" +
+            "join Category C\n" +
+            "join Color on color_id=Color.id\n" +
+            "join SubCategory SC on C.id = SC.category_id and SC.id=MF.category_id\n" +
+            "where MF.user_id = :userId and SC.title IN(:categoryList) order by MF.star desc limit :startPage,:lastPage\n" +
+            "\n",nativeQuery = true)
+    List<ViewCategory> getViewCategoryStarDesc(@Param("userId") Long userId, @Param("categoryList") List<String> categoryList, @Param("startPage") int startPage, @Param("lastPage") int lastPage);
+
+    @Query(value="select MF.id                                                                          'folioId',\n" +
+            "       MFI.url,\n" +
+            "       MF.title'title',\n" +
+            "       (select exists(select Archive.id from Archive where Archive.folio_id = MF.id)) 'archiveCheck',\n" +
+            "       MF.date,\n" +
+            "       SC.title'category',color_name'colorName',\n" +
+            "       MF.star\n" +
+            "from MyFolio MF\n" +
+            "         join MyFolioImg MFI on MF.id = MFI.folio_id\n" +
+            "join Category C\n" +
+            "join Color on color_id=Color.id\n" +
+            "join SubCategory SC on C.id = SC.category_id and SC.id=MF.category_id\n" +
+            "where MF.user_id = :userId and SC.title IN(:categoryList) order by MF.star asc limit :startPage,:lastPage \n" +
+            "\n",nativeQuery = true)
+    List<ViewCategory> getViewCategoryStarAsc(@Param("userId") Long userId, @Param("categoryList") List<String> categoryList, @Param("startPage") int startPage, @Param("lastPage") int lastPage);
+
+
+
+    interface ViewCategory {
+        Long getFolioId();
+        String getUrl();
+        String getTitle();
+        int getArchiveCheck();
+        LocalDate getDate();
+        String getCategory();
+        String getColorName();
+        int getStar();
+    }
 
 
 
