@@ -89,7 +89,7 @@ public class UserService {
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + generateToken.getAccessToken());
 
         //refresh token 저장
-        redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(), (System.currentTimeMillis()+ (1000 * 60 * 60 * 24 * 365)));
+        redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(), (System.currentTimeMillis()+ 365*(1000 * 60 * 60 * 24 * 365)));
 
 
 
@@ -204,7 +204,7 @@ public class UserService {
         UserRes.GenerateToken generateToken=createToken(userId);
 
         //Redis 에 RefreshToken 저장
-        redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(),(System.currentTimeMillis()+ (1000 * 60 * 60 * 24 * 365)));
+        redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(),(System.currentTimeMillis()+ 365*(1000 * 60 * 60 * 24 * 365)));
 
         return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
     }
@@ -212,6 +212,8 @@ public class UserService {
     public UserRes.GenerateToken createToken(Long userId){
         String accessToken=tokenProvider.createToken(userId);
         String refreshToken=tokenProvider.createRefreshToken(userId);
+
+        redisService.saveToken(String.valueOf(userId),refreshToken, (System.currentTimeMillis()+ 365*(1000 * 60 * 60 * 24 * 365)));
 
         return new UserRes.GenerateToken(accessToken,refreshToken);
     }
