@@ -220,6 +220,9 @@ public class MyService {
 
     //마이폴리오 하나씩 보기
     public UserRes.GetMyFolioDetailRes getMyLifolioDetail(Long folioId) {
+
+        if(!myFolioRepository.existsMyFolioById(folioId)) return null;
+
         MyFolio myFolio = myFolioRepository.getOne(folioId);
 
         UserRes.GetMyFolioDetailRes getMyFolioDetailRes = new UserRes.GetMyFolioDetailRes(
@@ -231,9 +234,6 @@ public class MyService {
                 myFolio.getLongitude(),
                 getMyFolioWithList(folioId)
         );
-
-
-        if(getMyFolioDetailRes == null) return null;
 
         return getMyFolioDetailRes;
     }
@@ -251,6 +251,7 @@ public class MyService {
 
         return myFolioImgList;
     }
+
 
 
     public List<UserRes.MyFolioWithList> getMyFolioWithList(Long folioId){

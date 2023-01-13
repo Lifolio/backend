@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.List;
 
 public interface MyFolioRepository extends JpaRepository<MyFolio, Long> {
+
+    boolean existsMyFolioById(Long folioId);
+
     @Query(value="select max(star)as 'star', MONTH(date) 'month', content\n" +
             "from MyFolio\n" +
             "where user_id = :userId \n" +
