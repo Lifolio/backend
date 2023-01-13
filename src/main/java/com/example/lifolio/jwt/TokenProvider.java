@@ -76,7 +76,7 @@ public class TokenProvider implements InitializingBean {
                 .setHeaderParam("type","jwt")
                 .claim("userId",userId)
                 .setIssuedAt(now)
-                .setExpiration(new Date(System.currentTimeMillis()+1*(60*60*24*365)))
+                .setExpiration(new Date(System.currentTimeMillis()+365*(1000 * 60 * 60 * 24 * 365)))
                 .signWith(SignatureAlgorithm.HS256,secret)
                 .compact();
     }
@@ -88,7 +88,7 @@ public class TokenProvider implements InitializingBean {
                 .setHeaderParam("type","jwt")
                 .claim("userId",userId)
                 .setIssuedAt(now)
-                .setExpiration(new Date(System.currentTimeMillis()+1*(1000*60*60*24*365)))
+                .setExpiration(new Date(System.currentTimeMillis()+365*(1000*60*60*24*365)))
                 .signWith(SignatureAlgorithm.HS256,refreshSecret)
                 .compact();
 

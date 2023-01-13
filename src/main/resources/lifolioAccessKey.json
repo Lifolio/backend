@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "lifolio-7b354",
+  "private_key_id": "72485d837470a0e96b640dc18d2d311dfcb7b6cd",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC7OeqFzGQA7/td\nJnbFMHHLQ8gYAtPtbqs2s3UY7IYTT7gqWRbvSIHyY23MkKfug356qEbmbaanvRkP\navbrys4zIRFPmNOX+ftRS93fHIQm+XNQntj3AWxJFK/ZNr4npsChGTCouEHNhmIe\n3TekEZsHDQK8R4cnbS6mJhhXhqeytdz71b/89GYErpaOmwTgy+4CkhhjI1xe5X2o\nFgE38QKpxnRt5viz0+xzYP99tq5+9ry3X+MrMi8oMdIyMgjYsAC7ktZXbJLCJC11\nXI82LilAEvEM02OxYyQ1WYYf2PLpcppHNN9/R+jAGLJb4WSPqIfg9lBXRgJaOYDf\nLfuEaiYtAgMBAAECggEAFfLlNohOlPmNS09ODzHttTmeBIqYU7Zspf4F1UUtNqha\n28QT9ztV2JelcJzowwJxWmnN3geuyO1XOcJ9bgkZgU74G4+8Bo4M02wEd7p9F6CY\nzzPAFbz599tP/jP3uOhInto4JR9sv25opFukwTw7I2l4D6CHDK01Ec9XfTNRB5ct\nDDSTi/k5L8PQkbyhg0C+GjKBQFWvC1tBh6CPNWw4jwZnWJ7OJQGjLmG+yTfm+6g9\nrOaV3NjMME5AnQhFRKK51zDmcnNP6014yV+X1iTu7vEm+rnh8IcmKpIJciPyjdSo\n58QfJzNriWAZYgO4fJJZC8Spl+UhKfnxqLXkT6UTtQKBgQDlliybp55vhzrgX7RZ\nShqEC9/vWUNkBbxccfx7TiKbxrZs9d0umqa8DjEu8GDfFmwSvQRt0MfW1MYpwDjZ\n2dEiL9Ebvr71NcZHLi/+BihPcsk0mJqS66wul/Kpl48L39Hhx5NOQVH9h1zDZhiq\nfXhiNMJd9qzkvHCyajCUD9OKtwKBgQDQxCLnEoC9pV6kXyzvO5Y2c9OqZLVOtpSx\nBpT699pl2Ijeng06sahVrhgVwnVKiqd5l5ZPWobVLHRS74+/gkk+xxvfVkdgWgpD\nNqr6ONO8BIe/dPWnJD3RI3FS0EfhUFwW8o1PsLJankX0SZ1TvA+BiG02XZM/1TFH\nHxJcpEpCOwKBgHMsZBJuAyg18c5PlJzadPTbNCrRX+JUkkraD+wXpXr6M9fze1L+\n2Dgs8nV2t1IS4IKB+i/Q9f+K3CJjwOFgyO5aiI9foFJI+MAKpp7LnftFPTS6fYjI\n26bAKUb0thkh3hti0D4IvMXv2xRXKnaU3Qh/KSaUMeXJtst6RAZy7g9/AoGAfc3E\nDqVayW3PE5R7Gos44QV5hxP7Ijzqa6dAveAATyFmkWiDJlyKyV8JCovNbKcTdzV/\nEcDGwc1xJ81PPaPAicEorbRrfMelqY1XCUSXa5T7TMephRhU3CPUlYgH2OI5LGbr\n+xrKz8rS8vwtf5kzauaQkZNgObY6ZNZ3lTY3vaMCgYAxGIWSx34h6cw0OaonZY8C\n8nTjM5AB5V8tKzYA2z5gE8aCinsBi4hiFiwOqPPBhrqbpfJ6a9HFTkdp8lMcI3HX\nC5708SVxgpG1pwBpg71Dk3QPLUJOEkEbkhXXhi0xsqDR5OZT9KHeWMDpGbNZrPI6\nS/qCeCfrR1jCPWbZiSANMw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-x0d9a@lifolio-7b354.iam.gserviceaccount.com",
+  "client_id": "116343273863882166963",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-x0d9a%40lifolio-7b354.iam.gserviceaccount.com"
+}
