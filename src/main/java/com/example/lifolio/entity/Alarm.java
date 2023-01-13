@@ -65,4 +65,46 @@ public class Alarm {
   this.weekAlarm = weekAlarm;
   this.badgeAlarm = badgeAlarm;
  }
+
+ public void updateWeekAlarm(int weekAlarm) {
+  this.weekAlarm = weekAlarm;
+ }
+
+ public void updateBadgeAlarm(int badgeAlarm) {
+  this.badgeAlarm = badgeAlarm;
+ }
+
+ public void updatePlanningAllAlarm(int todoAlarm, int goalAlarm) {
+  this.todoAlarm = todoAlarm;
+  this.goalAlarm = goalAlarm;
+ }
+
+ public void updateTodoAlarm(int todoAlarm) {
+  this.todoAlarm = todoAlarm;
+ }
+
+ public void updateGoalAlarm(int goalAlarm) {
+  this.goalAlarm = goalAlarm;
+ }
+
+ public void updateSocialAllAlarm(int uploadAlarm, int interestAlarm) {
+  this.uploadAlarm = uploadAlarm;
+  this.interestAlarm = interestAlarm;
+ }
+
+ public void updateUploadAlarm(int uploadAlarm) {
+  this.uploadAlarm = uploadAlarm;
+ }
+
+ public void updateInterestAlarm(int interestAlarm) {
+  this.interestAlarm = interestAlarm;
+ }
+
+ public void updateLikeAlarm(int likeAlarm) {
+  this.likeAlarm = likeAlarm;
+ }
+
+ public void updateMarketingAlarm(int marketingAlarm) {
+  this.marketingAlarm = marketingAlarm;
+ }
 }

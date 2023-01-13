@@ -72,4 +72,114 @@ public class AlarmService {
         }
         alarmRepository.save(alarm);
     }
+
+    public void setWeekAlarm(Long userId, AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq) {
+        Alarm alarm = alarmRepository.findByUserId(userId);
+        if(allAlarmUpdateReq.getAlarm() == 1){
+            alarm.updateWeekAlarm(1);
+        }
+        else{
+            alarm.updateWeekAlarm(0);
+        }
+        alarmRepository.save(alarm);
+    }
+
+    public void setBadgeAlarm(Long userId, AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq) {
+        Alarm alarm = alarmRepository.findByUserId(userId);
+        if(allAlarmUpdateReq.getAlarm() == 1){
+            alarm.updateBadgeAlarm(1);
+        }
+        else{
+            alarm.updateBadgeAlarm(0);
+        }
+        alarmRepository.save(alarm);
+    }
+
+    public void setPlanningAllAlarm(Long userId, AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq) {
+        Alarm alarm = alarmRepository.findByUserId(userId);
+        if(allAlarmUpdateReq.getAlarm() == 1){
+            alarm.updatePlanningAllAlarm(1,1);
+        }
+        else{
+            alarm.updatePlanningAllAlarm(0,0);
+        }
+        alarmRepository.save(alarm);
+    }
+
+    public void setTodoAlarm(Long userId, AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq) {
+        Alarm alarm = alarmRepository.findByUserId(userId);
+        if(allAlarmUpdateReq.getAlarm() == 1){
+            alarm.updateTodoAlarm(1);
+        }
+        else{
+            alarm.updateTodoAlarm(0);
+        }
+        alarmRepository.save(alarm);
+    }
+
+    public void setGoalAlarm(Long userId, AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq) {
+        Alarm alarm = alarmRepository.findByUserId(userId);
+        if(allAlarmUpdateReq.getAlarm() == 1){
+            alarm.updateGoalAlarm(1);
+        }
+        else{
+            alarm.updateGoalAlarm(0);
+        }
+        alarmRepository.save(alarm);
+    }
+
+    public void setSocialAllAlarm(Long userId, AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq) {
+        Alarm alarm = alarmRepository.findByUserId(userId);
+        if(allAlarmUpdateReq.getAlarm() == 1){
+            alarm.updateSocialAllAlarm(1,1);
+        }
+        else{
+            alarm.updateSocialAllAlarm(0,0);
+        }
+        alarmRepository.save(alarm);
+    }
+
+    public void setUploadAlarm(Long userId, AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq) {
+        Alarm alarm = alarmRepository.findByUserId(userId);
+        if(allAlarmUpdateReq.getAlarm() == 1){
+            alarm.updateUploadAlarm(1);
+        }
+        else{
+            alarm.updateUploadAlarm(0);
+        }
+        alarmRepository.save(alarm);
+    }
+
+    public void setInterestAlarm(Long userId, AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq) {
+        Alarm alarm = alarmRepository.findByUserId(userId);
+        if(allAlarmUpdateReq.getAlarm() == 1){
+            alarm.updateInterestAlarm(1);
+        }
+        else{
+            alarm.updateInterestAlarm(0);
+        }
+        alarmRepository.save(alarm);
+    }
+
+    public void setLikeAlarm(Long userId, AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq) {
+        Alarm alarm = alarmRepository.findByUserId(userId);
+        if(allAlarmUpdateReq.getAlarm() == 1){
+            alarm.updateLikeAlarm(1);
+        }
+        else{
+            alarm.updateLikeAlarm(0);
+        }
+        alarmRepository.save(alarm);
+    }
+
+    public void setMarketingAlarm(Long userId, AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq) {
+        Alarm alarm = alarmRepository.findByUserId(userId);
+        if(allAlarmUpdateReq.getAlarm() == 1){
+            alarm.updateMarketingAlarm(1);
+        }
+        else{
+            alarm.updateMarketingAlarm(0);
+        }
+        alarmRepository.save(alarm);
+    }
 }
