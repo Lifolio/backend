@@ -69,13 +69,21 @@ public class MyController {
     }
 
 
-
+    @ApiOperation(value = "My탭에 들어왔을 때 보이는 유저 정보", notes = "My탭에 들어왔을 때 보이는 유저 정보")
     @GetMapping("/profile/simple") //#2-1 4번은 /profile/detail
     public BaseResponse<UserRes.Profile> getMyProfile(){
         Long userId= userService.findNowLoginUser().getId();
         UserRes.Profile profile = myService.getMyProfileSimple(userId);
         return new BaseResponse<>(profile);
     }
+
+    @ApiOperation(value = "MyFolio 세부 내용 보기", notes = "MyFolio 세부 내용 보기")
+    @GetMapping("/profile/simple") //#2-1 4번은 /profile/detail
+    public BaseResponse<UserRes.GetMyFolioDetailRes> getMyFolioDetailRes(){
+
+        return new BaseResponse<>(null);
+    }
+
 
 
 
