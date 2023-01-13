@@ -217,6 +217,8 @@ public class MyService {
         return category;
     }
 
+
+    //마이폴리오 하나씩 보기
     public UserRes.GetMyFolioDetailRes getMyLifolioDetail(Long folioId) {
         MyFolio myFolio = myFolioRepository.getOne(folioId);
 
