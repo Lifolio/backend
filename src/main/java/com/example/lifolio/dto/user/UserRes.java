@@ -182,6 +182,7 @@ public class UserRes {
         BigDecimal latitude; //위도
         BigDecimal longitude; //경도
         List<MyFolioWithList> myFolioWithList;
+
     }
 
 
