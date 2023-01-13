@@ -15,7 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //    Optional<User> findOneWithAuthoritiesById(Long userId);
 
 
-
     User findByUsername(String username);
 
     User findByUsernameEquals(String username);

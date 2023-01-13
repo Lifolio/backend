@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.example.lifolio.base.BaseResponseStatus.EMPTY_MYFOLIO_AT_THAT_DATE;
+import static com.example.lifolio.base.BaseResponseStatus.NOT_EXIST_MYFOLIO_ID;
 
 
 @RequiredArgsConstructor
@@ -76,6 +77,22 @@ public class MyController {
         UserRes.Profile profile = myService.getMyProfileSimple(userId);
         return new BaseResponse<>(profile);
     }
+
+
+    @ApiOperation(value = "MyFolio 세부 내용 보기", notes = "MyFolio 세부 내용 보기")
+    @GetMapping("/myfolio/{folioId}") //#2-1 4번은 /profile/detail
+    public BaseResponse<UserRes.GetMyFolioDetailRes> getMyFolioDetailRes(@PathVariable Long folioId){
+        Long userId= userService.findNowLoginUser().getId();
+        UserRes.GetMyFolioDetailRes getMyFolioDetailRes = myService.getMyLifolioDetail(folioId);
+
+        if(getMyFolioDetailRes == null){
+            return new BaseResponse<>(NOT_EXIST_MYFOLIO_ID);
+        }
+
+        return new BaseResponse<>(getMyFolioDetailRes);
+    }
+
+
 
 
 

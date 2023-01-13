@@ -6,6 +6,8 @@ import com.example.lifolio.dto.my.MyReq;
 import com.example.lifolio.dto.my.MyRes;
 import com.example.lifolio.dto.user.UserRes;
 import com.example.lifolio.entity.MyFolio;
+import com.example.lifolio.entity.MyFolioImg;
+import com.example.lifolio.entity.MyFolioWith;
 import com.example.lifolio.entity.User;
 import com.example.lifolio.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,8 @@ import java.util.stream.Collectors;
 public class MyService {
     private final UserRepository userRepository;
     private final MyFolioRepository myFolioRepository;
+    private final MyFolioImgRepository myFolioImgRepository;
+    private  final MyFolioWithRepository myFolioWithRepository;
     private final ArchiveRepository archiveRepository;
     private final SubCategoryRepository subCategoryRepository;
 
@@ -212,4 +216,56 @@ public class MyService {
         List<String> category=categoryList.stream().map(e-> e.getCategory()).collect(Collectors.toList());
         return category;
     }
+
+    public UserRes.GetMyFolioDetailRes getMyLifolioDetail(Long folioId) {
+        MyFolio myFolio = myFolioRepository.getOne(folioId);
+
+        UserRes.GetMyFolioDetailRes getMyFolioDetailRes = new UserRes.GetMyFolioDetailRes(
+                myFolio.getTitle(),
+                getMyLifolioDetailImg(folioId),
+                categoryRepository.findById(myFolio.getCategoryId()).get().getTitle(),
+                myFolio.getContent(),
+                myFolio.getLatitude(),
+                myFolio.getLongitude(),
+                getMyFolioWithList(folioId)
+        );
+
+
+        if(getMyFolioDetailRes == null) return null;
+
+        return getMyFolioDetailRes;
+    }
+
+
+
+    public List<UserRes.MyFolioImgList> getMyLifolioDetailImg(Long folioId){
+        List<MyFolioImg> imgs = myFolioImgRepository.findAllByFolioId(folioId);
+        List<UserRes.MyFolioImgList> myFolioImgList = new ArrayList<>();
+
+        for(MyFolioImg img : imgs){
+            UserRes.MyFolioImgList image = new UserRes.MyFolioImgList(img.getUrl());
+            myFolioImgList.add(image);
+        }
+
+        return myFolioImgList;
+    }
+
+
+    public List<UserRes.MyFolioWithList> getMyFolioWithList(Long folioId){
+        List<MyFolioWith> withs = myFolioWithRepository.findAllByFolioId(folioId);
+        List<UserRes.MyFolioWithList> myFolioWithList = new ArrayList<>();
+
+
+        for(MyFolioWith with : withs){
+            UserRes.MyFolioWithList person = new UserRes.MyFolioWithList(
+                    userRepository.findById(with.getUserId()).get().getName()
+            );
+            myFolioWithList.add(person);
+        }
+
+        return myFolioWithList;
+    }
+
+
+
 }
