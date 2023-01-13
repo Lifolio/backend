@@ -4,14 +4,9 @@ import com.example.lifolio.base.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Date;
-import java.time.LocalDateTime;
 
 @Entity
 @DynamicInsert
@@ -22,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "MyFolio")
-public class MyFolio extends BaseEntity {
+public class TemporaryMyFolio extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,6 +50,5 @@ public class MyFolio extends BaseEntity {
 
     @Column(name="longitude")
     private java.math.BigDecimal longitude;
-
 
 }
