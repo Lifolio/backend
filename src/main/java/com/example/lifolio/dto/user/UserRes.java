@@ -169,4 +169,36 @@ public class UserRes {
     }
 
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class GetMyFolioDetailRes{  //MyFolio 한 개 기록의 세부 내용 전부 보기
+        String myFolioTitle;
+        List<MyFolioImgList> myFolioImgList;
+        String category; //대분류
+        String content;
+        String latitude; //위도
+        String longitude; //경도
+        List<MyFolioWithList> myFolioWithList;
+    }
+
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class MyFolioWithList{
+        String withName;  //마이폴리오 같이 한 사람 이름
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class MyFolioImgList{
+        String url;
+    }
+
+
 }
