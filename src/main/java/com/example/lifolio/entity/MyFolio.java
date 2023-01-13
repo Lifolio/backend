@@ -41,6 +41,9 @@ public class MyFolio extends BaseEntity {
     @Column(name="content")
     private String content;
 
+    @Column(name="emoji")
+    private String emoji;
+
     @Column(name="star")
     private Integer star;
 
