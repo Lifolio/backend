@@ -30,7 +30,6 @@ public class AlarmController {
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
-
     }
 
     @ResponseBody

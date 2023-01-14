@@ -93,7 +93,6 @@ public class HomeController {
             return new BaseResponse<>(INVALID_USER_JWT);
         }
         return new BaseResponse<>(homeService.setGoalOfYear(postGoalReq));
-
     }
 
 

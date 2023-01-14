@@ -1,7 +1,9 @@
 package com.example.lifolio.entity;
 
 import com.example.lifolio.base.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -32,6 +34,6 @@ public class PlanningYear extends BaseEntity {
     @Column(name="date")
     private LocalDate date;
 
-    @Column(name = "check")
-    private int check;
+    @Column(name = "success")
+    private int success;
 }
