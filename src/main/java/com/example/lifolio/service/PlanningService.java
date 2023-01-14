@@ -49,4 +49,8 @@ public class PlanningService {
         planningYear.updateGoalOfYearSuccess(updateGoalOfYearSuccessReq.getSuccess());
         planningYearRepository.save(planningYear);
     }
+
+    public void deleteGoalOfYear(Long planningYearId) {
+        planningYearRepository.deleteById(planningYearId);
+    }
 }

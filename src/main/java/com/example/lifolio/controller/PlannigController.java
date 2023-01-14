@@ -65,5 +65,16 @@ public class PlannigController {
         }
     }
 
+    @ResponseBody
+    @DeleteMapping("/goalOfYear/{userId}/{planningYearId}")
+    public BaseResponse<String> deleteGoalOfYear (@PathVariable("planningYearId") Long planningYearId) {
+        try {
+            Long userId=tokenProvider.getUserIdx();
+            planningService.deleteGoalOfYear(planningYearId);
+            return new BaseResponse<>("삭제 성공.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
 
+    }
 }
