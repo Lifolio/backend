@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Planning")
+@Table(name = "PlanningYear")
 public class PlanningYear extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,4 +36,13 @@ public class PlanningYear extends BaseEntity {
 
     @Column(name = "success")
     private int success;
+
+    public void updateGoalOfYear(LocalDate date,String title){
+        this.date = date;
+        this.title = title;
+    }
+
+    public void updateGoalOfYearSuccess(int success){
+        this.success = success;
+    }
 }
