@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-public class PlanningYearReq {
+public class PlanningReq {
+
     @NoArgsConstructor
     @AllArgsConstructor
     @Setter
@@ -33,5 +35,20 @@ public class PlanningYearReq {
     @Getter
     public static class UpdateGoalOfYearSuccessReq{
         private int success;
+    }
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Setter
+    @Getter
+    public static class PostPlanningReq {
+        private String title;
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+        private LocalDateTime startTime;
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+        private LocalDateTime finishTime;
     }
 }
