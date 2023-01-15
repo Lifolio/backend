@@ -23,9 +23,9 @@ public class CategorySerivce {
         //대분류 등록
         if (categoryDTO.getParentCategoryName() == null) {
 
-            if (categoryRepository.existsByBranchAndTitle(categoryDTO.getBranch(), categoryDTO.getTitle())) {
-                throw new RuntimeException("branch와 title이 같을 수 없습니다. ");
-            } //branch와 title의 중복값 검사
+//            if (categoryRepository.existsByBranchAndTitle(categoryDTO.getBranch(), categoryDTO.getTitle())) {
+//                throw new RuntimeException("branch와 title이 같을 수 없습니다. ");
+//            } //branch와 title의 중복값 검사
             
             Category rootCategory = categoryRepository.findByBranchAndTitle(categoryDTO.getBranch(), "ROOT")
                     .orElseGet(() ->
@@ -94,7 +94,7 @@ public class CategorySerivce {
         }
     }
 
-    private Category findCategory(Long categoryId) {
+    public Category findCategory(Long categoryId) {
         return categoryRepository.findById(categoryId).orElseThrow(IllegalArgumentException::new);
     }
 
