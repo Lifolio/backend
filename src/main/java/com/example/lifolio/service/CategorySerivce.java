@@ -20,6 +20,7 @@ public class CategorySerivce {
 
         Category category = categoryDTO.toEntity();
 
+        //test
         //대분류 등록
         if (categoryDTO.getParentCategoryName() == null) {
 
