@@ -43,24 +43,26 @@ public class TokenProvider implements InitializingBean {
     private final String secret;
     private final String refreshSecret;
     private final RedisService redisService;
-    private final long tokenValidityInMilliseconds;
-
+    private final long accessTime;
+    private final long refreshTime;
     private Key key;
+
+
 
 
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds,
             @Value("${jwt.refresh}") String refreshSecret,
-            UserRepository userRepository,
+                    UserRepository userRepository,
             CustomUserDetailsService customUserDetailsService,
-            RedisService redisService) {
+            RedisService redisService, @Value("${jwt.access-token-seconds}") long accessTime, @Value("${jwt.refresh-token-seconds}")long refreshTime) {
         this.secret = secret;
-        this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
         this.userRepository = userRepository;
         this.refreshSecret=refreshSecret;
         this.customUserDetailsService=customUserDetailsService;
         this.redisService = redisService;
+        this.accessTime = accessTime*1000;
+        this.refreshTime = refreshTime*1000;
     }
 
     @Override
@@ -76,7 +78,7 @@ public class TokenProvider implements InitializingBean {
                 .setHeaderParam("type","jwt")
                 .claim("userId",userId)
                 .setIssuedAt(now)
-                .setExpiration(new Date(System.currentTimeMillis()+365*(1000 * 60 * 60 * 24 * 365)))
+                .setExpiration(new Date(System.currentTimeMillis()+accessTime))
                 .signWith(SignatureAlgorithm.HS256,secret)
                 .compact();
     }
@@ -88,7 +90,7 @@ public class TokenProvider implements InitializingBean {
                 .setHeaderParam("type","jwt")
                 .claim("userId",userId)
                 .setIssuedAt(now)
-                .setExpiration(new Date(System.currentTimeMillis()+365*(1000*60*60*24*365)))
+                .setExpiration(new Date(System.currentTimeMillis()+refreshTime))
                 .signWith(SignatureAlgorithm.HS256,refreshSecret)
                 .compact();
 

@@ -31,7 +31,6 @@ public class MyController {
     private final TokenProvider jwtProvider;
     private final MyService myService;
     private final UserService userService;
-    private final MyFolioRepository myFolioRepository;
 
     @ResponseBody
     @GetMapping("")

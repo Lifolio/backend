@@ -46,6 +46,10 @@ public class UserService {
     private final AlarmRepository alarmRepository;
     private final RedisService redisService;
 
+    @Value("${jwt.refresh-token-seconds}")
+    private long refreshTime;
+
+
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
@@ -53,6 +57,7 @@ public class UserService {
     private String apiKey;
     @Value("${coolsms.secret}")
     private String apiSecret;
+
 
 
     //현재 로그인한(jwt 인증된) 사용자 반환
@@ -89,7 +94,7 @@ public class UserService {
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + generateToken.getAccessToken());
 
         //refresh token 저장
-        redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(), (System.currentTimeMillis()+ 365*(1000 * 60 * 60 * 24 * 365)));
+        redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(), (System.currentTimeMillis()+ refreshTime*1000));
 
 
 
@@ -204,7 +209,7 @@ public class UserService {
         UserRes.GenerateToken generateToken=createToken(userId);
 
         //Redis 에 RefreshToken 저장
-        redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(),(System.currentTimeMillis()+ 365*(1000 * 60 * 60 * 24 * 365)));
+        redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(),(System.currentTimeMillis()+ refreshTime*1000));
 
         return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
     }
@@ -213,7 +218,7 @@ public class UserService {
         String accessToken=tokenProvider.createToken(userId);
         String refreshToken=tokenProvider.createRefreshToken(userId);
 
-        redisService.saveToken(String.valueOf(userId),refreshToken, (System.currentTimeMillis()+ 365*(1000 * 60 * 60 * 24 * 365)));
+        redisService.saveToken(String.valueOf(userId),refreshToken, (System.currentTimeMillis()+ refreshTime*1000));
 
         return new UserRes.GenerateToken(accessToken,refreshToken);
     }

@@ -10,6 +10,7 @@ import com.example.lifolio.repository.UserRepository;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,9 @@ public class AuthService {
     private final UserRepository userRepository;
     private final TokenProvider tokenProvider;
     private final UserService userService;
+    @Value("${jwt.refresh-token-seconds}")
+    private long refreshTime;
+    private final RedisService redisService;
 
     public String getKakaoAccessToken(String code) {
         String access_Token="";
@@ -131,6 +135,7 @@ public class AuthService {
 
                 UserRes.GenerateToken generateToken=userService.createToken(userId);
                 userService.postAlarmUser(userId);
+                redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(), (System.currentTimeMillis()+ refreshTime*1000));
                 return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
             }
 
@@ -140,6 +145,7 @@ public class AuthService {
 
             UserRes.GenerateToken generateToken=userService.createToken(userId);
 
+            redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(), (System.currentTimeMillis()+ refreshTime*1000));
             return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
 
 
@@ -259,6 +265,8 @@ public class AuthService {
                 Long userId=userRepository.save(user).getId();
                 UserRes.GenerateToken generateToken=userService.createToken(userId);
                 userService.postAlarmUser(userId);
+                redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(), (System.currentTimeMillis()+ refreshTime*1000));
+
                 return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
             }
 
@@ -267,6 +275,8 @@ public class AuthService {
             Long userId=user.getId();
 
             UserRes.GenerateToken generateToken=userService.createToken(userId);
+
+            redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(), (System.currentTimeMillis()+ refreshTime*1000));
 
             return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
 
