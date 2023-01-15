@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @Transactional
 class CategoryServiceTest {
+    //test
     @Autowired
     CategoryService categorySerivce;
     @Autowired
