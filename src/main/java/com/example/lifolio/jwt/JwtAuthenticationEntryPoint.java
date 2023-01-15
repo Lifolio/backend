@@ -48,6 +48,11 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             setResponse(response,errorCode);
             return;
         }
+        else if(exception.equals("HijackException")){
+            errorCode =JwtErrorCode.HijackJwtToken;
+            setResponse(response,errorCode);
+            return;
+        }
     }
 
     private void setResponse(HttpServletResponse response, JwtErrorCode errorCode) throws IOException {
