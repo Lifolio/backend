@@ -30,6 +30,8 @@ jwt:
   secret: dW1jLTNyZC10ZWFtLXByb2plY3QtbGlmb2xpby11bWMtM3JkLXRlYW0tcHJvamVjdC1saWZvbGlvLXVtYy0zcmQtdGVhbS1wcm9qZWN0LWxpZm9saW8tdW1jLTNyZC10ZWFtLXByb2plY3QtbGlmb2xpbwo=
   token-validity-in-seconds: 86400
   refresh: da21rklmlk2wVMSDKVLSBsd214124LKASFFnfsajfnk512rlpf2klfkasfoapokfjoifhbggSJKDfojoi1u248975102ijflkwnjasfsaklnfalknkgwqrwsjfcnalskfobiSIJODBNLMSDBNVMSLKVDkKFFLAM
+  access-token-seconds: 31536000
+  refresh-token-seconds: 31536000
 
 
 logging:
