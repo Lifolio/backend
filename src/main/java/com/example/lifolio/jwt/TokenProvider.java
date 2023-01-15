@@ -104,13 +104,13 @@ public class TokenProvider implements InitializingBean {
                 .parseClaimsJws(token);
 
 
-
         Long userId=claims.getBody().get("userId",Long.class);
 
         Optional<User> users=userRepository.findById(userId);
         String userName = users.get().getUsername();
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(userName);
+
         return new UsernamePasswordAuthenticationToken(userDetails,"",userDetails.getAuthorities());
     }
 
@@ -121,7 +121,22 @@ public class TokenProvider implements InitializingBean {
             claims = Jwts.parser()
                     .setSigningKey(secret)
                     .parseClaimsJws(token);
-            servletRequest.getParameter("userId");
+
+
+            Long userId = claims.getBody().get("userId",Long.class);
+
+
+            String expiredAt= redisService.getValues(token);
+
+
+            if(expiredAt==null){
+                return true;
+            }
+            if(expiredAt.equals(String.valueOf(userId))){
+                servletRequest.setAttribute("exception","HijackException");
+                return false;
+            }
+
 
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
