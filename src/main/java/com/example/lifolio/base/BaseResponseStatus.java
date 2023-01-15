@@ -70,6 +70,11 @@ public enum     BaseResponseStatus {
 
     NOT_EXIST_MYFOLIO_ID(false, 2032, "존재하지 않는 MyFolio입니다"),
 
+    //Planning
+
+    NOT_POST_TITLE(false,2040,"제목을 입력해주세요"),
+    NOT_EXIST_PLANNING(false,2041,"존재 하지 않는 계획입니다."),
+
 
 
 

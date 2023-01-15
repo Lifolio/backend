@@ -29,9 +29,16 @@ public class Planning extends BaseEntity {
     @Column(name="title")
     private String title;
 
-    @Column(name="date")
-    private LocalDateTime date;
+    @Column(name="start_date")
+    private LocalDateTime startDate;
 
-    @Column(name = "check")
-    private int check;
+    @Column(name="finish_date")
+    private LocalDateTime finishDate;
+
+    @Column(name = "success")
+    private int success;
+
+    public void updateSuccess(int success) {
+        this.success=success;
+    }
 }
