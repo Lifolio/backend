@@ -21,7 +21,7 @@ public class CategoryDTO {
     private Integer level;
     private Map<String, CategoryDTO> children;
 
-
+/*
     public CategoryDTO(Category entity) {
         this.categoryId = entity.getId();
         this.branch = entity.getBranch();
@@ -50,4 +50,6 @@ public class CategoryDTO {
                 .level(level)
                 .build();
     }
+
+ */
 }

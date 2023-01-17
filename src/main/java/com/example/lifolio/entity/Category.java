@@ -41,6 +41,7 @@ public class Category implements Serializable {
  private Integer level;
 
 
+ /*
  @JsonIgnore
  @ManyToOne (fetch = FetchType.LAZY)
  @JoinColumn (name ="parent_category_id")
@@ -62,5 +63,7 @@ public class Category implements Serializable {
   this.level = level;
   this.parentCategory = parentCategory;
  }
+
+  */
 
 }
