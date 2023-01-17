@@ -11,8 +11,5 @@ import java.util.List;
 
 @Repository
 public interface PlanningRepository extends JpaRepository<Planning, Long> {
-
-    List<Planning> findTByUserIdAndStartDateBetweenOrderByStartDateAsc(Long userId, LocalDateTime startDate, LocalDateTime finishDate);
-
     List<Planning> findTop3ByUserIdAndStartDateBetweenOrderByStartDateAsc(Long userId, LocalDateTime startDate, LocalDateTime finishDate);
 }

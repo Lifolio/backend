@@ -156,7 +156,7 @@ public class PlannigController {
                 todoList = planningService.getTodoList(userId);
             }
             else if(range==2){
-                todoList=planningService.getTodoListThisWeek(userId);
+                todoList= planningService.getTodoListThisWeek(userId);
             }
             else if(range==3){
                 todoList=planningService.getTodoListThisMonth(userId);
