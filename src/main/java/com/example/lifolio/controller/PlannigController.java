@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.lifolio.base.BaseResponseStatus.NOT_EXIST_PLANNING;
-import static com.example.lifolio.base.BaseResponseStatus.NOT_POST_TITLE;
+import static com.example.lifolio.base.BaseResponseStatus.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,6 +25,12 @@ public class PlannigController {
     public BaseResponse<String> setGoalOfYear(@RequestBody PlanningReq.PostGoalOfYearReq postGoalOfYearReq){
         try {
             Long userId=tokenProvider.getUserIdx();
+            if(postGoalOfYearReq.getTitle()==null){
+                return new BaseResponse<>(NOT_POST_TITLE);
+            }
+            if(postGoalOfYearReq.getDate()==null){
+                return new BaseResponse<>(NOT_POST_DATE);
+            }
             planningService.setGoalOfYear(userId,postGoalOfYearReq);
             return new BaseResponse<>("생성 완료.");
         } catch (BaseException e) {
@@ -49,6 +54,12 @@ public class PlannigController {
     public BaseResponse<String> updateGoalOfYear(@PathVariable("planningYearId") Long planningYearId,@RequestBody PlanningReq.UpdateGoalOfYearReq updateGoalOfYearReq){
         try {
             Long userId=tokenProvider.getUserIdx();
+            if(updateGoalOfYearReq.getTitle()==null){
+                return new BaseResponse<>(NOT_POST_TITLE);
+            }
+            if(updateGoalOfYearReq.getDate()==null){
+                return new BaseResponse<>(NOT_POST_DATE);
+            }
             planningService.updateGoalOfYear(userId,planningYearId,updateGoalOfYearReq);
             return new BaseResponse<>("수정 성공.");
         } catch (BaseException e) {
@@ -58,14 +69,18 @@ public class PlannigController {
 
     @ResponseBody
     @PatchMapping("/goalOfYearSuccess/{userId}/{planningYearId}")
-    public BaseResponse<String> updateGoalOfYearSuccess(@PathVariable("planningYearId") Long planningYearId,@RequestBody PlanningReq.UpdateGoalOfYearSuccessReq updateGoalOfYearSuccessReq){
-        try {
-            Long userId=tokenProvider.getUserIdx();
-            planningService.updateGoalOfYearSuccess(planningYearId,updateGoalOfYearSuccessReq);
-            return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
+    public BaseResponse<String> updateGoalOfYearSuccess(@PathVariable("planningYearId") Long planningYearId){
+
+        int success=planningService.getPlanningYearSuccess(planningYearId);
+
+        if(success==0) {
+            planningService.checkSuccessByYear(planningYearId);
+            return new BaseResponse<>("check");
         }
+        planningService.unCheckSuccessByYear(planningYearId);
+
+        return new BaseResponse<>("unCheck");
+
     }
 
     @ResponseBody
