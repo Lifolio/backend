@@ -1,6 +1,7 @@
 package com.example.lifolio.entity;
 
 import com.example.lifolio.base.BaseEntity;
+import com.example.lifolio.dto.planning.PlanningReq;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -40,5 +41,11 @@ public class Planning extends BaseEntity {
 
     public void updateSuccess(int success) {
         this.success=success;
+    }
+    public void updateInfo(PlanningReq.PostPlanningReq postPlanningReq){
+        this.title=postPlanningReq.getTitle();
+        this.startDate=postPlanningReq.getStartTime();
+        this.finishDate=postPlanningReq.getFinishTime();
+
     }
 }

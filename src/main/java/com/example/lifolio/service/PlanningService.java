@@ -10,12 +10,7 @@ import com.example.lifolio.repository.PlanningRepository;
 import com.example.lifolio.repository.PlanningYearRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.threeten.bp.LocalDate;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -132,4 +127,11 @@ public class PlanningService {
     }
 
 
+    public void patchPlan(Long userId, PlanningReq.PostPlanningReq postPlanningReq, Long planningId) {
+        Optional<Planning> planning =planningRepository.findById(planningId);
+
+        planning.get().updateInfo(postPlanningReq);
+
+        planningRepository.save(planning.get());
+    }
 }
