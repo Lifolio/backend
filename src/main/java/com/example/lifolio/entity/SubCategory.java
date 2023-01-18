@@ -23,4 +23,9 @@ public class SubCategory {
 
     @Column(name="title")
     private String title;
+
+    public void updateSubCategory(Long categoryId, String title) {
+        this.categoryId = categoryId;
+        this.title = title;
+    }
 }

@@ -33,13 +33,18 @@ public class Category implements Serializable {
  @Column(name = "title")
  private String title;
 
-
  @Column(name = "branch")
  private String branch;
 
  @Column(name = "level")
  private Integer level;
 
+
+ public void updateCategory(Long userId, Long colorId, String title) {
+  this.userId = userId;
+  this.colorId = colorId;
+  this.title = title;
+ }
 
  /*
  @JsonIgnore
@@ -52,17 +57,6 @@ public class Category implements Serializable {
  @OneToMany (mappedBy = "parentCategory", cascade = CascadeType.ALL)
  @Builder.Default
  private List<Category> subCategory = new ArrayList<>();
-
- @Builder
- public Category(String branch, Long id, Long userId, Long colorId, String title, Integer level, Category parentCategory) {
-  this.branch = branch;
-  this.id = id;
-  this.userId = userId;
-  this.colorId = colorId;
-  this.title = title;
-  this.level = level;
-  this.parentCategory = parentCategory;
- }
 
   */
 

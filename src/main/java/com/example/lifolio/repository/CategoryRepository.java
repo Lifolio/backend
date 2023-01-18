@@ -17,9 +17,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     Boolean existsByBranchAndTitle(String branch, String title);
 
     List<Category> findByUserId(Long userId);
-    //DB 여부 반환
-
-
-
 
 }
