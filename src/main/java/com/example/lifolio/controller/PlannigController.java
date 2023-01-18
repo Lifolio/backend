@@ -158,15 +158,24 @@ public class PlannigController {
             else if(range==2){
                 todoList= planningService.getTodoListThisWeek(userId);
             }
-            else if(range==3){
-                todoList=planningService.getTodoListThisMonth(userId);
+            else if(range==3) {
+                todoList = planningService.getTodoListThisMonth(userId);
             }
-
             return new BaseResponse<>(todoList);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
 
+    }
+    @PatchMapping("/day/info/{planningId}")
+    public BaseResponse<String> patchPlan(@PathVariable("planningId") Long planningId, @RequestBody PlanningReq.PostPlanningReq postPlanningReq){
+        try{
+            Long userId=tokenProvider.getUserIdx();
+            planningService.patchPlan(userId,postPlanningReq,planningId);
+            return new BaseResponse<>("수정 성공");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
     }
 
 

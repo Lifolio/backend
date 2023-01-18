@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/home")
+@RequestMapping("/category")
 public class CategoryController {
     private final CategoryService categoryService;
     private final TokenProvider jwtProvider;
@@ -49,7 +49,7 @@ public class CategoryController {
 
 
     @ResponseBody
-    @GetMapping("/category")
+    @GetMapping("")
     public BaseResponse<List<CategoryRes.Category>> getCategoryList(){
         try {
             Long userId=jwtProvider.getUserIdx();

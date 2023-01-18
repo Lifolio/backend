@@ -83,6 +83,17 @@ public class MyController {
         }
     }
 
+    @GetMapping("/category_list")
+    public BaseResponse<List<String>> getCategoryList(){
+        try {
+            Long userId= jwtProvider.getUserIdx();
+            List<String> categoryList = myService.getCategoryList(userId);
+            return new BaseResponse<>(categoryList);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
     @PostMapping("/category")
     public BaseResponse<List<MyRes.ViewCategory>> getViewCategory(@RequestBody MyReq.FilterCategory filterCategory, @RequestParam(required = false,defaultValue="1") int page){
         try{
@@ -93,6 +104,7 @@ public class MyController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
 
 
 

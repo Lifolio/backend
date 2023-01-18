@@ -122,9 +122,7 @@ public class TokenProvider implements InitializingBean {
                     .setSigningKey(secret)
                     .parseClaimsJws(token);
 
-
             Long userId = claims.getBody().get("userId",Long.class);
-
 
             String expiredAt= redisService.getValues(token);
 

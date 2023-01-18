@@ -41,3 +41,8 @@ logging:
 coolsms:
   key: NCSNMZXJWB2W7OSP
   secret: AQA4ROR9GMGDQGKN67CLPAWYKCKPY1SR
+
+fcm:
+  key:
+    path: lifolioAccessKey.json
+    scope: https://www.googleeapis.com/auth/cloud-platform
