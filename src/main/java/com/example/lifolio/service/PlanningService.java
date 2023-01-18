@@ -68,9 +68,28 @@ public class PlanningService {
         return planningRepository.existsById(planningId);
     }
 
+    public int getPlanningYearSuccess(Long planningYearId) {
+        Optional<PlanningYear> planningYear=planningYearRepository.findById(planningYearId);
+        return planningYear.get().getSuccess();
+    }
+
     public int getPlanningSuccess(Long planningId) {
         Optional<Planning> planning=planningRepository.findById(planningId);
         return planning.get().getSuccess();
+    }
+
+    public void checkSuccessByYear(Long planningYearId) {
+        Optional<PlanningYear> planningYear =planningYearRepository.findById(planningYearId);
+        planningYear.get().updateGoalOfYearSuccess(1);
+        planningYearRepository.save(planningYear.get());
+
+    }
+
+    public void unCheckSuccessByYear(Long planningYearId) {
+        Optional<PlanningYear> planningYear =planningYearRepository.findById(planningYearId);
+        planningYear.get().updateGoalOfYearSuccess(0);
+        planningYearRepository.save(planningYear.get());
+
     }
 
     public void checkSuccess(Long planningId) {

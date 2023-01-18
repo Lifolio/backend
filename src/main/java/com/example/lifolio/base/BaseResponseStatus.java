@@ -75,6 +75,8 @@ public enum     BaseResponseStatus {
     NOT_POST_TITLE(false,2040,"제목을 입력해주세요"),
     NOT_EXIST_PLANNING(false,2041,"존재 하지 않는 계획입니다."),
 
+    NOT_POST_DATE(false,2042,"날짜를 입력해주세요"),
+
 
 
 
