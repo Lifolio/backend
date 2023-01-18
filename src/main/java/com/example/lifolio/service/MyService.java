@@ -203,7 +203,7 @@ public class MyService {
         return viewCategory;
     }
 
-    private List<String> getCategoryList(Long userId){
+    public List<String> getCategoryList(Long userId){
         List<SubCategoryRepository.CategoryList> categoryListResult=subCategoryRepository.getCategoryList(userId);
         List<CategoryRes.CategoryList> categoryList=new ArrayList<>();
         categoryListResult.forEach(
