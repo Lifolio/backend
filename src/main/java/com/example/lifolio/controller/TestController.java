@@ -26,6 +26,7 @@ public class TestController {
     public BaseResponse<String> test() {
         try {
             Long userId = jwtProvider.getUserIdx();
+            System.out.println("유저 아이디값:" + userId);
             return new BaseResponse<>("유저 아이디값:" + userId);
         }catch(BaseException e) {
             return new BaseResponse<>(e.getStatus());

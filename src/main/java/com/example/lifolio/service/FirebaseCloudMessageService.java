@@ -8,6 +8,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.net.HttpHeaders;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FirebaseCloudMessageService {
 
-    private final String API_URL = "https://fcm.googleapis.com/v1/projects/lifolio-7b354/messages:send";
+    @Value("${fcm.key.path}")
+    private String FCM_ACCESS_KEY;
+    @Value("${fcm.api.url}")
+    private String API_URL;
+
+    @Value("${fcm.key.scope}")
+    private String FIREBASE_SCOPE;
+
     private final ObjectMapper objectMapper;
 
     public void sendMessageTo(String targetToken, String title, String body) throws IOException {
@@ -54,11 +62,11 @@ public class FirebaseCloudMessageService {
     }
 
     private String getAccessToken() throws IOException {
-        String firebaseConfigPath = "lifolioAccessKey.json";
+        String firebaseConfigPath = FCM_ACCESS_KEY;
 
         GoogleCredentials googleCredentials = GoogleCredentials
                 .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
-                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+                .createScoped(List.of(FIREBASE_SCOPE));
 
         googleCredentials.refreshIfExpired();
         return googleCredentials.getAccessToken().getTokenValue();
