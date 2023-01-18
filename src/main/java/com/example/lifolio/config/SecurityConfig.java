@@ -73,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/v3/api-docs").permitAll()
                 .antMatchers("/image/**").permitAll()
 
-                .antMatchers("/test/**").authenticated()
+                .antMatchers("/test/authUser").authenticated()
                 .antMatchers("/user/login").permitAll()
                 .antMatchers("/user/signup").permitAll()
                 .antMatchers("/user/check/**").permitAll()
@@ -84,6 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/re_token").permitAll()
                 .antMatchers("/alarm/**").permitAll()
                 .antMatchers("/category/**").authenticated()
+                .antMatchers("/test/api/fcm").permitAll()
                 //위의 경로 제외 전부 JWT 인증해야 함(헤더에 JWT 포함하기)
                 .anyRequest().authenticated()
 
