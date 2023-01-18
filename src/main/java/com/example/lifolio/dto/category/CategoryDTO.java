@@ -40,6 +40,7 @@ public class CategoryDTO {
                         Category::getTitle, CategoryDTO::new
                 ));
     }
+ */
 
     public Category toEntity() {
         return Category.builder()
@@ -51,5 +52,4 @@ public class CategoryDTO {
                 .build();
     }
 
- */
 }

@@ -3,6 +3,7 @@ package com.example.lifolio.controller;
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
 import com.example.lifolio.dto.category.CategoryDTO;
+import com.example.lifolio.dto.category.CategoryReq;
 import com.example.lifolio.dto.category.CategoryRes;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.CategoryService;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+
+import static com.example.lifolio.base.BaseResponseStatus.INVALID_USER_JWT;
 
 @RequiredArgsConstructor
 @RestController
@@ -61,5 +64,31 @@ public class CategoryController {
         }
     }
 
+    @ResponseBody
+    @PatchMapping("/{id}")
+    public BaseResponse<String> updateCategoryList(@PathVariable("id") Long id, @RequestBody CategoryReq.UpdateCategoryReq updateCategoryReq){
+        try {
+            Long userId= jwtProvider.getUserIdx();
+            categoryService.setCategoryList(id, updateCategoryReq);
+            return new BaseResponse<>("수정 성공.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    } //대분류 카테고리 수정
+
+    @ResponseBody
+    @PatchMapping("/sub/{id}")
+    public BaseResponse<String> updateSubCategoryList(@PathVariable("id") Long id, @RequestBody CategoryReq.UpdateCategoryReq updateCategoryReq){
+        try {
+            Long userId= jwtProvider.getUserIdx();
+            categoryService.setSubCategoryList(id, updateCategoryReq);
+            return new BaseResponse<>("수정 성공.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    } //소분류 카테고리 수정
+
 
 }
+
+
