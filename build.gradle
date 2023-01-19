@@ -49,6 +49,12 @@ dependencies {
 
     implementation group: 'com.google.firebase', name: 'firebase-admin', version: '8.1.0'
 
+
+    //이미지
+    implementation 'commons-io:commons-io:2.6'
+
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.5.RELEASE'
+
 }
 
 tasks.named('test') {

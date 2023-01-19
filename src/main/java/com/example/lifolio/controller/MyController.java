@@ -6,22 +6,25 @@ import com.example.lifolio.base.BaseResponse;
 import com.example.lifolio.dto.home.HomeRes;
 import com.example.lifolio.dto.my.MyReq;
 import com.example.lifolio.dto.my.MyRes;
+import com.example.lifolio.dto.planning.PlanningReq;
 import com.example.lifolio.dto.user.UserRes;
 import com.example.lifolio.entity.MyFolio;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.repository.MyFolioRepository;
 import com.example.lifolio.service.MyService;
+import com.example.lifolio.service.S3Service;
 import com.example.lifolio.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.lifolio.base.BaseResponseStatus.EMPTY_MYFOLIO_AT_THAT_DATE;
-import static com.example.lifolio.base.BaseResponseStatus.NOT_EXIST_MYFOLIO_ID;
+import static com.example.lifolio.base.BaseResponseStatus.*;
+import static com.example.lifolio.base.BaseResponseStatus.NOT_POST_DATE;
 
 
 @RequiredArgsConstructor
@@ -31,6 +34,29 @@ public class MyController {
     private final TokenProvider jwtProvider;
     private final MyService myService;
     private final UserService userService;
+    private final S3Service s3Service;
+
+    @PostMapping("")
+    public BaseResponse<String> setMyLifolio(@RequestPart("postMyLifolioReq") MyReq.PostMyLifolioReq postMyLifolioReq , @RequestPart("imgUrl") List<MultipartFile> multipartFiles){
+        try {
+            Long userId=jwtProvider.getUserIdx();
+            if(postMyLifolioReq.getTitle()==null){
+                return new BaseResponse<>(NOT_POST_TITLE);
+            }
+            if(postMyLifolioReq.getStart_date()==null || postMyLifolioReq.getEnd_date()==null){
+                return new BaseResponse<>(NOT_POST_DATE);
+            }
+            if(postMyLifolioReq.getContent()==null){
+                return new BaseResponse<>(NOT_POST_CONTENT);
+            }
+            List<String> imgPaths = s3Service.upload(multipartFiles);
+            System.out.println("IMG 경로들 : " + imgPaths);
+            myService.setMyLifolio(userId,imgPaths,postMyLifolioReq);
+            return new BaseResponse<>("생성 완료.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 
     @ResponseBody
     @GetMapping("")

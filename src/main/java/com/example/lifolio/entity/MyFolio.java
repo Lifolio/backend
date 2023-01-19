@@ -7,7 +7,10 @@ import org.hibernate.annotations.DynamicUpdate;
 
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @DynamicInsert
@@ -24,6 +27,9 @@ public class MyFolio extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
+    @Transient
+    private final List<MyFolioImg> imgList = new ArrayList<>();
 
     @Column(name = "user_id")
     private Long userId;
@@ -42,6 +48,9 @@ public class MyFolio extends BaseEntity {
 
     @Column(name="star")
     private Integer star;
+
+    @Column(name="start_date")
+    private LocalDate start_date;
 
     @Column(name="date")
     private Date date;

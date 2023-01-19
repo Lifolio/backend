@@ -5,10 +5,7 @@ import com.example.lifolio.dto.home.HomeRes;
 import com.example.lifolio.dto.my.MyReq;
 import com.example.lifolio.dto.my.MyRes;
 import com.example.lifolio.dto.user.UserRes;
-import com.example.lifolio.entity.MyFolio;
-import com.example.lifolio.entity.MyFolioImg;
-import com.example.lifolio.entity.MyFolioWith;
-import com.example.lifolio.entity.User;
+import com.example.lifolio.entity.*;
 import com.example.lifolio.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,6 +29,8 @@ public class MyService {
     private final SubCategoryRepository subCategoryRepository;
 
     private final CategoryRepository categoryRepository;
+
+    private final S3Service s3Service;
 
     public UserRes.GetMyRes getMyLifolio(Long userId) {
         User user=userRepository.getOne(userId);
@@ -270,5 +269,27 @@ public class MyService {
     }
 
 
+    public void setMyLifolio(Long userId,List<String> imgPaths, MyReq.PostMyLifolioReq postMyLifolioReq) {
+        MyFolio myFolio = MyFolio.builder()
+                .userId(userId)
+                .title(postMyLifolioReq.getTitle())
+                .start_date(postMyLifolioReq.getStart_date())
+                .content(postMyLifolioReq.getContent())
+                .star(postMyLifolioReq.getStar())
+                .date(postMyLifolioReq.getEnd_date())
+                .latitude(postMyLifolioReq.getLatitude())
+                .longitude(postMyLifolioReq.getLongitude())
+                .categoryId(postMyLifolioReq.getCategory_id())
+                .build();
 
+        myFolioRepository.save(myFolio);
+
+        List<String> imgList = new ArrayList<>();
+        for (String imgUrl : imgPaths) {
+            MyFolioImg img = new MyFolioImg(imgUrl, myFolio);
+            myFolioImgRepository.save(img);
+            imgList.add(img.getUrl());
+        }
+    }
 }
+
