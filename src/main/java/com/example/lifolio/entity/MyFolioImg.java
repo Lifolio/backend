@@ -29,4 +29,8 @@ public class MyFolioImg extends BaseEntity {
     @Column(name="url")
     private String url;
 
+    public MyFolioImg(String imgUrl, MyFolio myFolio) {
+        this.url = imgUrl;
+        this.folioId = myFolio.getId();
+    }
 }

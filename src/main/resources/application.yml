@@ -24,6 +24,8 @@ spring:
     host: localhost
     port: 6379
 
+
+
 jwt:
   header: Authorization
   #umc-3rd-team-project-lifolio-umc-3rd-team-project-lifolio-umc-3rd-team-project-lifolio-umc-3rd-team-project-lifolio
@@ -37,10 +39,15 @@ jwt:
 logging:
   level:
     study.cherry: DEBUG
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
 
 coolsms:
   key: NCSNMZXJWB2W7OSP
   secret: AQA4ROR9GMGDQGKN67CLPAWYKCKPY1SR
+
 
 fcm:
   key:
@@ -49,3 +56,17 @@ fcm:
 
   api:
     url: https://fcm.googleapis.com/v1/projects/lifolio-7b354/messages:send
+
+
+cloud:
+  aws:
+    s3:
+      bucket: lifolio-bucket
+    credentials:
+      access-key: AKIATSEM7EXIEK3F57UP
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
