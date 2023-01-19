@@ -13,6 +13,7 @@ import com.example.lifolio.repository.CategoryRepository;
 import com.example.lifolio.repository.SubCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.apache.velocity.tools.generic.ClassTool;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class CategoryService {
     public List<CategoryRes.Category> getCategoryList(Long userId) {
         List<Category> category = categoryRepository.findByUserId(userId);
 
-        List<CategoryRes.Category> categoryList=new ArrayList<>();
+        List<CategoryRes.Category> categoryList = new ArrayList<>();
 
         for (Category value : category) {
             List<CategoryRes.SubCategory> subCategoryArray = getSubCategoryList(value.getId());
@@ -42,8 +43,8 @@ public class CategoryService {
     }
 
     private List<CategoryRes.SubCategory> getSubCategoryList(Long id) {
-        List<CategoryRes.SubCategory> subCategoryArray=new ArrayList<>();
-        List<SubCategory> subCategoryList=subCategoryRepository.findByCategoryId(id);
+        List<CategoryRes.SubCategory> subCategoryArray = new ArrayList<>();
+        List<SubCategory> subCategoryList = subCategoryRepository.findByCategoryId(id);
         for (SubCategory category : subCategoryList) {
             if (category.getCategoryId().equals(id)) {
                 CategoryRes.SubCategory subCategory = new CategoryRes.SubCategory(category.getId(), category.getTitle());
@@ -60,14 +61,49 @@ public class CategoryService {
     }
 
     public void setSubCategoryList(Long id, CategoryReq.UpdateCategoryReq updateCategoryReq) {
-        SubCategory subcategory = subCategoryRepository.getOne(id);
-        subcategory.updateSubCategory(updateCategoryReq.getCategoryId(), updateCategoryReq.getTitle());
-        subCategoryRepository.save(subcategory);
+        SubCategory subCategory = subCategoryRepository.getOne(id);
+        subCategory.updateSubCategory(updateCategoryReq.getCategoryId(), updateCategoryReq.getTitle());
+        subCategoryRepository.save(subCategory);
     }
 
-    private Category findCategory(Long categoryId) {
-        return categoryRepository.findById(categoryId).orElseThrow(IllegalArgumentException::new);
+    private SubCategory findCategory(Long categoryId) {
+        return subCategoryRepository.findById(categoryId).orElseThrow(IllegalArgumentException::new);
     }
+
+
+    public void deleteSubCategoryList(Long id) {
+        SubCategory subcategory = subCategoryRepository.getOne(id);
+        subCategoryRepository.deleteById(subcategory.getId());
+    }
+
+    public void deleteCategoryList(Long id) {
+        Category category = categoryRepository.getOne(id);
+        List<SubCategory> subCategoryList = subCategoryRepository.findByCategoryId(id);
+        for (SubCategory subCategory : subCategoryList) {
+            if (subCategory.getCategoryId().equals(id)) {
+                deleteSubCategoryList(subCategory.getCategoryId());
+            }
+        }
+            categoryRepository.deleteById(category.getId());
+    }
+
+
+
+/*
+    public Long deleteCategory(Long categoryId) {
+        Category category = findCategory(categoryId);
+
+        if (category.getSubCategory().size() == 0) { //소분류이면
+            categoryRepository.deleteById(category.getId());
+        } else { //소분류 아니면
+            Category parentCategory = findCategory(category.getParentCategory().getId());
+            parentCategory.getSubCategory().remove(category);
+            categoryRepository.deleteById(category.getId());
+        }
+
+        return category.getId();
+    }
+ */
 
     /*
     public Long createCategory(CategoryDTO categoryDTO) {
@@ -97,25 +133,6 @@ public class CategoryService {
        return categoryRepository.save(category).getId();
     }
 
-    public Map<String, CategoryDTO> readCategory(Long categoryId) {
-
-        Category category = findCategory(categoryId);
-        CategoryDTO categoryDTO = new CategoryDTO(category);
-
-        Map <String, CategoryDTO> data = new HashMap<>();
-        data.put(categoryDTO.getTitle(), categoryDTO);
-
-        return data;
-    }
-
-    public Long updateCategory(Long categoryId, CategoryDTO categoryDTO) {
-        Category category = findCategory(categoryId);
-        category.setTitle(categoryDTO.getTitle());
-        category.setColorId(categoryDTO.getColorId());
-
-        return category.getId();
-    }
-
     public Long deleteCategory(Long categoryId) {
         Category category = findCategory(categoryId);
 
@@ -131,5 +148,5 @@ public class CategoryService {
     }
 
  */
-}
 
+}
