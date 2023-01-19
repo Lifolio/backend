@@ -27,3 +27,4 @@ public class BaseEntity {
     private LocalDateTime updatedAt;
 }
 // test
+// test2
