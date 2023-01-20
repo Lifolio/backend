@@ -44,3 +44,5 @@ deploy:
     acl: private
     local_dir: deploy
     wait-until-deployed: true
+    on:
+      all branches: true
