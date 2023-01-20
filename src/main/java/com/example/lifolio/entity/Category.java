@@ -37,7 +37,7 @@ public class Category implements Serializable {
  private String branch;
 
  @Column(name = "level")
- private Integer level;
+ private String level;
 
 
  public void updateCategory(Long userId, Long colorId, String title) {

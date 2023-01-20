@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class CategoryDTO {
     private Long categoryId;
-    private String branch;
     private Long userId;
     private Long colorId;
     private String title;
+    private String branch;
+    private String level;
     private String parentCategoryName;
-    private Integer level;
     private Map<String, CategoryDTO> children;
 
 /*
@@ -44,10 +44,10 @@ public class CategoryDTO {
 
     public Category toEntity() {
         return Category.builder()
-                .branch(branch)
                 .userId(userId)
                 .colorId(colorId)
                 .title(title)
+                .branch(branch)
                 .level(level)
                 .build();
     }
