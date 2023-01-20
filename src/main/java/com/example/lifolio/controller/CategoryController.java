@@ -108,9 +108,18 @@ public class CategoryController {
 //        if(userService.findNowLoginUser().getId() != userId){
 //            return new BaseResponse<>(INVALID_USER_JWT);
 //        }
-        categoryService.addSubCategoryList(addSubCategoryReq, categoryToSubReq);
-        return new BaseResponse<>("추가 성공.");
+//        categoryService.addSubCategoryList(addSubCategoryReq, categoryToSubReq);
+//        return new BaseResponse<>("추가 성공.");
+
+        try {
+            Long jwt = jwtProvider.getUserIdx();
+            categoryService.addSubCategoryList(addSubCategoryReq, categoryToSubReq);
+            return new BaseResponse<>("추가 성공.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
     } //소분류 카테고리 추가
+
 
 
 

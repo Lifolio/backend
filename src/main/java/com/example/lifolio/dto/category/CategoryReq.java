@@ -34,7 +34,6 @@ public class CategoryReq {
     @Getter
     public static class CategoryToSubReq {
         private Long id;
-        private Long colorId;
         private String title;
     }
 }
