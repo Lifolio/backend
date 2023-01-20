@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -52,6 +53,11 @@ public class User extends BaseEntity {
     @Column(name="social")
     private String social;
 
+    @Column(name="fcm_token")
+    private String fcmToken;
+
+    @Column(name="login_date")
+    private LocalDateTime loginDate;
 
 
 
