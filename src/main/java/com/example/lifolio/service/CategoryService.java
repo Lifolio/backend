@@ -1,31 +1,27 @@
 package com.example.lifolio.service;
 
 import com.example.lifolio.converter.CategoryConvertor;
-import com.example.lifolio.dto.category.CategoryDTO;
 import com.example.lifolio.dto.category.CategoryReq;
-import com.example.lifolio.dto.category.CategoryReq.UpdateCategoryReq;
 import com.example.lifolio.dto.category.CategoryRes;
-import com.example.lifolio.dto.home.HomeReq;
 import com.example.lifolio.entity.Category;
-import com.example.lifolio.entity.CustomLifolio;
+import com.example.lifolio.entity.Color;
 import com.example.lifolio.entity.SubCategory;
 import com.example.lifolio.repository.CategoryRepository;
+import com.example.lifolio.repository.ColorRepository;
 import com.example.lifolio.repository.SubCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.velocity.tools.generic.ClassTool;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final SubCategoryRepository subCategoryRepository;
+    private final ColorRepository colorRepository;
 
 
     public List<CategoryRes.Category> getCategoryList(Long userId) {
@@ -35,7 +31,8 @@ public class CategoryService {
 
         for (Category value : category) {
             List<CategoryRes.SubCategory> subCategoryArray = getSubCategoryList(value.getId());
-            CategoryRes.Category categoryInfo = CategoryConvertor.CategoryListBuilder(value.getId(), value.getTitle(), subCategoryArray);
+            Optional<Color> color =  colorRepository.findById(value.getColorId());
+            CategoryRes.Category categoryInfo = CategoryConvertor.CategoryListBuilder(value.getId(), value.getTitle(), color.get().getColorName(),subCategoryArray);
             categoryList.add(categoryInfo);
         }
 
@@ -133,6 +130,25 @@ public class CategoryService {
        return categoryRepository.save(category).getId();
     }
 
+    public Map<String, CategoryDTO> readCategory(Long categoryId) {
+
+        Category category = findCategory(categoryId);
+        CategoryDTO categoryDTO = new CategoryDTO(category);
+
+        Map <String, CategoryDTO> data = new HashMap<>();
+        data.put(categoryDTO.getTitle(), categoryDTO);
+
+        return data;
+    }
+
+    public Long updateCategory(Long categoryId, CategoryDTO categoryDTO) {
+        Category category = findCategory(categoryId);
+        category.setTitle(categoryDTO.getTitle());
+        category.setColorId(categoryDTO.getColorId());
+
+        return category.getId();
+    }
+
     public Long deleteCategory(Long categoryId) {
         Category category = findCategory(categoryId);
 
@@ -148,5 +164,5 @@ public class CategoryService {
     }
 
  */
-
 }
+
