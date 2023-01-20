@@ -13,6 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name="SubCategory")
 public class SubCategory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

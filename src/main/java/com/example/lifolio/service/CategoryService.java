@@ -3,9 +3,11 @@ package com.example.lifolio.service;
 import com.example.lifolio.converter.CategoryConvertor;
 import com.example.lifolio.dto.category.CategoryReq;
 import com.example.lifolio.dto.category.CategoryRes;
+import com.example.lifolio.dto.category.SubCategoryReq;
 import com.example.lifolio.entity.Category;
 import com.example.lifolio.entity.Color;
 import com.example.lifolio.entity.SubCategory;
+import com.example.lifolio.entity.User;
 import com.example.lifolio.repository.CategoryRepository;
 import com.example.lifolio.repository.ColorRepository;
 import com.example.lifolio.repository.SubCategoryRepository;
@@ -22,6 +24,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final SubCategoryRepository subCategoryRepository;
     private final ColorRepository colorRepository;
+    private final UserService userService;
 
 
     public List<CategoryRes.Category> getCategoryList(Long userId) {
@@ -57,9 +60,9 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
-    public void setSubCategoryList(Long id, CategoryReq.UpdateCategoryReq updateCategoryReq) {
+    public void setSubCategoryList(Long id, SubCategoryReq.UpdateSubCategoryReq updateSubCategoryReq) {
         SubCategory subCategory = subCategoryRepository.getOne(id);
-        subCategory.updateSubCategory(updateCategoryReq.getCategoryId(), updateCategoryReq.getTitle());
+        subCategory.updateSubCategory(updateSubCategoryReq.getCategoryId(), updateSubCategoryReq.getTitle());
         subCategoryRepository.save(subCategory);
     }
 
@@ -69,8 +72,11 @@ public class CategoryService {
 
 
     public void deleteSubCategoryList(Long id) {
+        //1. 서브카테고리에서 대분류 카테고리로 옮기는거
         SubCategory subcategory = subCategoryRepository.getOne(id);
         subCategoryRepository.deleteById(subcategory.getId());
+
+        //2. 서브카테고리 내용 수정하는거
     }
 
     public void deleteCategoryList(Long id) {
@@ -82,6 +88,38 @@ public class CategoryService {
             }
         }
             categoryRepository.deleteById(category.getId());
+    }
+
+    public void addCategoryList(CategoryReq.AddCategoryReq addCategoryReq, SubCategoryReq.AddSubCategoryReq addSubCategoryReq) {
+        User user = userService.findNowLoginUser();
+
+        Category saveCategory = Category.builder()
+                .userId(user.getId())
+                .colorId(addCategoryReq.getColorId())
+                .title(addCategoryReq.getTitle())
+                .branch(addCategoryReq.getBranch())
+                .level(addCategoryReq.getLevel())
+                .build();
+
+        SubCategory saveSubCategory = SubCategory.builder()
+                .categoryId(addSubCategoryReq.getCategoryId())
+                .title(addSubCategoryReq.getTitle())
+                .build();
+
+        categoryRepository.save(saveCategory);
+        subCategoryRepository.save(saveSubCategory);
+    }
+
+
+    public void addSubCategoryList(SubCategoryReq.AddSubCategoryReq addSubCategoryReq, CategoryReq.CategoryToSubReq categoryToSubReq) {
+        User user = userService.findNowLoginUser();
+
+        SubCategory saveSubCategory = SubCategory.builder()
+                .categoryId(categoryToSubReq.getId())
+                .title(addSubCategoryReq.getTitle())
+                .build();
+
+        subCategoryRepository.save(saveSubCategory);
     }
 
 
