@@ -24,6 +24,7 @@ public class CategoryRes {
     public static class Category{
         private Long categoryId;
         private String categoryName;
+        private String categoryColor;
         private List<SubCategory> subCategoryList;
 
     }
