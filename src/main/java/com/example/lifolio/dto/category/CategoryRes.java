@@ -13,7 +13,6 @@ public class CategoryRes {
         private String category;
     }
 
-
     @Getter
     @Setter
     @AllArgsConstructor
@@ -32,6 +31,15 @@ public class CategoryRes {
     @Builder
     public static class SubCategory {
         private Long subCategoryId;
+        private String categoryName;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class CategoryIdTitle{
+        private Long categoryId;
         private String categoryName;
     }
 

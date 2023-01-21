@@ -18,8 +18,10 @@ import static com.example.lifolio.base.BaseResponseStatus.*;
 @RequestMapping("/planning")
 public class PlannigController {
     private final TokenProvider tokenProvider;
-
     private final PlanningService planningService;
+
+
+//    @GetMapping("/{userId}")
 
     @PostMapping("/goalOfYear/{userId}")
     public BaseResponse<String> setGoalOfYear(@RequestBody PlanningReq.PostGoalOfYearReq postGoalOfYearReq){
