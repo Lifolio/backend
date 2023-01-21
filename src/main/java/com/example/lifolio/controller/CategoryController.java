@@ -40,6 +40,16 @@ public class CategoryController {
     }
 
     @ResponseBody
+    @GetMapping("/{userId}")
+    public BaseResponse<List<CategoryRes.CategoryIdTitle>> getCategoryTitleList(@PathVariable("userId") Long userId) {
+            if(userService.findNowLoginUser().getId() != userId){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            List<CategoryRes.CategoryIdTitle> categoryTitleList = categoryService.getCategoryIdTitleList(userId);
+            return new BaseResponse<>(categoryTitleList);
+    }
+
+    @ResponseBody
     @PatchMapping("/{id}")
     public BaseResponse<String> updateCategoryList(@PathVariable("id") Long id, @RequestBody CategoryReq.UpdateCategoryReq updateCategoryReq) {
         try {
@@ -62,7 +72,7 @@ public class CategoryController {
             return new BaseResponse<>(e.getStatus());
         }
     } //소분류 카테고리 수정
-    //uri에 userId 넣어서 입력받게 바꿔보기 커스텀라이폴리오 참고해서
+    //uri에 userId 넣어서 입력받게 바꿔보기
 
     @ResponseBody
     @DeleteMapping("/{id}")
@@ -103,22 +113,14 @@ public class CategoryController {
 
     @ResponseBody
     @PostMapping("/sub/{userId}")
-    public BaseResponse<String> addSubCategoryList(@PathVariable("userId") Long userId, @RequestBody SubCategoryReq.AddSubCategoryReq addSubCategoryReq, @RequestBody CategoryReq.CategoryToSubReq categoryToSubReq) {
-
-//        if(userService.findNowLoginUser().getId() != userId){
-//            return new BaseResponse<>(INVALID_USER_JWT);
-//        }
-//        categoryService.addSubCategoryList(addSubCategoryReq, categoryToSubReq);
-//        return new BaseResponse<>("추가 성공.");
-
-        try {
-            Long jwt = jwtProvider.getUserIdx();
-            categoryService.addSubCategoryList(addSubCategoryReq, categoryToSubReq);
-            return new BaseResponse<>("추가 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
+    public BaseResponse<String> addSubCategoryList(@PathVariable("userId") Long userId, @RequestBody SubCategoryReq.AddSubCategoryReq addSubCategoryReq) {
+        if(userService.findNowLoginUser().getId() != userId){
+            return new BaseResponse<>(INVALID_USER_JWT);
         }
+        categoryService.addSubCategoryList(addSubCategoryReq);
+        return new BaseResponse<>("추가 성공.");
     } //소분류 카테고리 추가
+
 
 
 

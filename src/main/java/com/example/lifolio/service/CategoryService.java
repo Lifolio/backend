@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.velocity.tools.generic.ClassTool;
 import org.springframework.stereotype.Service;
+import retrofit2.http.Path;
 
 import java.util.*;
 
@@ -29,9 +30,7 @@ public class CategoryService {
 
     public List<CategoryRes.Category> getCategoryList(Long userId) {
         List<Category> category = categoryRepository.findByUserId(userId);
-
         List<CategoryRes.Category> categoryList = new ArrayList<>();
-
         for (Category value : category) {
             List<CategoryRes.SubCategory> subCategoryArray = getSubCategoryList(value.getId());
             Optional<Color> color =  colorRepository.findById(value.getColorId());
@@ -54,6 +53,16 @@ public class CategoryService {
         return subCategoryArray;
     }
 
+    public List<CategoryRes.CategoryIdTitle> getCategoryIdTitleList(Long userId) {
+        List<Category> category = categoryRepository.findByUserId(userId);
+        List<CategoryRes.CategoryIdTitle> categoryIdTitleList = new ArrayList<>();
+        for(Category value : category) {
+            CategoryRes.CategoryIdTitle categoryInfo = CategoryConvertor.CategoryIdTitleBuilder(value.getId(), value.getTitle());
+            categoryIdTitleList.add(categoryInfo);
+        }
+        return categoryIdTitleList;
+    }
+
     public void setCategoryList(Long id, CategoryReq.UpdateCategoryReq updateCategoryReq) {
         Category category = categoryRepository.getOne(id);
         category.updateCategory(updateCategoryReq.getUserId(), updateCategoryReq.getColorId(), updateCategoryReq.getTitle());
@@ -62,21 +71,16 @@ public class CategoryService {
 
     public void setSubCategoryList(Long id, SubCategoryReq.UpdateSubCategoryReq updateSubCategoryReq) {
         SubCategory subCategory = subCategoryRepository.getOne(id);
+        //1. 서브카테고리에서 대분류 카테고리로 옮기는거 - colorId는 재입력받아야하는데 가능..?
+
+
+        //2. 서브카테고리 내용 수정하는거
         subCategory.updateSubCategory(updateSubCategoryReq.getCategoryId(), updateSubCategoryReq.getTitle());
         subCategoryRepository.save(subCategory);
     }
 
     private SubCategory findCategory(Long categoryId) {
         return subCategoryRepository.findById(categoryId).orElseThrow(IllegalArgumentException::new);
-    }
-
-
-    public void deleteSubCategoryList(Long id) {
-        //1. 서브카테고리에서 대분류 카테고리로 옮기는거
-        SubCategory subcategory = subCategoryRepository.getOne(id);
-        subCategoryRepository.deleteById(subcategory.getId());
-
-        //2. 서브카테고리 내용 수정하는거
     }
 
     public void deleteCategoryList(Long id) {
@@ -86,9 +90,15 @@ public class CategoryService {
             if (subCategory.getCategoryId().equals(id)) {
                 deleteSubCategoryList(subCategory.getCategoryId());
             }
-        }
-            categoryRepository.deleteById(category.getId());
+        } //대분류 삭제하면 관련된것도 삭제하고싶은데 안되는데 이유를모르겠음,,
+        categoryRepository.deleteById(category.getId());
     }
+
+    public void deleteSubCategoryList(Long id) {
+        SubCategory subcategory = subCategoryRepository.getOne(id);
+        subCategoryRepository.deleteById(subcategory.getId());
+    }
+
 
     public void addCategoryList(CategoryReq.AddCategoryReq addCategoryReq) {
         User user = userService.findNowLoginUser();
@@ -111,11 +121,11 @@ public class CategoryService {
     }
 
 
-    public void addSubCategoryList(SubCategoryReq.AddSubCategoryReq addSubCategoryReq, CategoryReq.CategoryToSubReq categoryToSubReq) {
+    public void addSubCategoryList(SubCategoryReq.AddSubCategoryReq addSubCategoryReq) {
         User user = userService.findNowLoginUser();
 
         SubCategory saveSubCategory = SubCategory.builder()
-                .categoryId(categoryToSubReq.getId())
+                .categoryId(addSubCategoryReq.getCategoryId())
                 .title(addSubCategoryReq.getTitle())
                 .build();
 
