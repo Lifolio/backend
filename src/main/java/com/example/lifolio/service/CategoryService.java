@@ -90,7 +90,7 @@ public class CategoryService {
             categoryRepository.deleteById(category.getId());
     }
 
-    public void addCategoryList(CategoryReq.AddCategoryReq addCategoryReq, SubCategoryReq.AddSubCategoryReq addSubCategoryReq) {
+    public void addCategoryList(CategoryReq.AddCategoryReq addCategoryReq) {
         User user = userService.findNowLoginUser();
 
         Category saveCategory = Category.builder()
@@ -101,13 +101,13 @@ public class CategoryService {
                 .level(addCategoryReq.getLevel())
                 .build();
 
-        SubCategory saveSubCategory = SubCategory.builder()
-                .categoryId(addSubCategoryReq.getCategoryId())
-                .title(addSubCategoryReq.getTitle())
-                .build();
+//        SubCategory saveSubCategory = SubCategory.builder()
+//                .categoryId(addSubCategoryReq.getCategoryId())
+//                .title(addSubCategoryReq.getTitle())
+//                .build();
 
         categoryRepository.save(saveCategory);
-        subCategoryRepository.save(saveSubCategory);
+//        subCategoryRepository.save(saveSubCategory);
     }
 
 
