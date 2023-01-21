@@ -96,11 +96,11 @@ public class CategoryService {
     public void deleteCategoryList(Long id) {
         Category category = categoryRepository.getOne(id);
         List<SubCategory> subCategoryList = subCategoryRepository.findByCategoryId(id);
-        for (SubCategory subCategory : subCategoryList) {
-            if (subCategory.getCategoryId().equals(id)) {
-                deleteSubCategoryList(subCategory.getCategoryId());
+        for (SubCategory value : subCategoryList) {
+            if (value.getCategoryId().equals(id)) {
+                deleteSubCategoryList(value.getId());
             }
-        } //대분류 삭제하면 관련된것도 삭제하고싶은데 안되는데 이유를모르겠음,,
+        }
         categoryRepository.deleteById(category.getId());
     }
 
