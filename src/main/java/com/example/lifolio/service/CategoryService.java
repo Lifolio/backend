@@ -77,11 +77,17 @@ public class CategoryService {
         subCategoryRepository.save(subCategory);
     } //소분류 카테고리 내용 수정
 
-    public void setSubCategoryToCategoryList(Long id, Long colorId, SubCategoryReq.UpdateSubCategoryReq updateSubCategoryReq) {
+    public void setSubCategoryToCategoryList(Long id, SubCategoryReq.MoveSubCategoryReq moveSubCategoryReq) {
         User user = userService.findNowLoginUser();
         SubCategory subCategory = subCategoryRepository.getOne(id);
-
-    }
+        Category saveCategory = Category.builder()
+                .userId(user.getId())
+                .colorId(moveSubCategoryReq.getColorId())
+                .title(moveSubCategoryReq.getTitle())
+                .build();
+        categoryRepository.save(saveCategory);
+        subCategoryRepository.deleteById(subCategory.getId());
+    } //소분류 카테고리->대분류 카테고리로 이동
 
     private SubCategory findCategory(Long categoryId) {
         return subCategoryRepository.findById(categoryId).orElseThrow(IllegalArgumentException::new);
@@ -111,17 +117,9 @@ public class CategoryService {
                 .userId(user.getId())
                 .colorId(addCategoryReq.getColorId())
                 .title(addCategoryReq.getTitle())
-//                .branch(addCategoryReq.getBranch())
-//                .level(addCategoryReq.getLevel())
                 .build();
 
-//        SubCategory saveSubCategory = SubCategory.builder()
-//                .categoryId(addSubCategoryReq.getCategoryId())
-//                .title(addSubCategoryReq.getTitle())
-//                .build();
-
         categoryRepository.save(saveCategory);
-//        subCategoryRepository.save(saveSubCategory);
     }
 
 

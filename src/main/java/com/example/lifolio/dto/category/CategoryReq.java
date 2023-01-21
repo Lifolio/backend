@@ -23,8 +23,6 @@ public class CategoryReq {
     public static class AddCategoryReq {
         private Long colorId;
         private String title;
-//        private String branch;
-//        private String level;
     }
 
     @Builder
@@ -36,4 +34,5 @@ public class CategoryReq {
         private Long id;
         private String title;
     }
+
 }

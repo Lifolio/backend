@@ -70,6 +70,16 @@ public class CategoryController {
     } //소분류 카테고리 수정
 
     @ResponseBody
+    @PatchMapping("/sub/move/{userId}/{id}")
+    public BaseResponse<String> updateSubCategoryToCategoryList(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody SubCategoryReq.MoveSubCategoryReq moveSubCategoryReq) {
+        if(userService.findNowLoginUser().getId() != userId){
+            return new BaseResponse<>(INVALID_USER_JWT);
+        }
+        categoryService.setSubCategoryToCategoryList(id, moveSubCategoryReq);
+        return new BaseResponse<>("수정 성공.");
+    } //소분류 카테고리->대분류 카테고리로 이동
+
+    @ResponseBody
     @DeleteMapping("/{id}")
     public BaseResponse<String> deleteCategoryList(@PathVariable("id") Long id) {
         try {
