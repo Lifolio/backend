@@ -64,20 +64,18 @@ public class CategoryService {
     }
 
     public void setCategoryList(Long id, CategoryReq.UpdateCategoryReq updateCategoryReq) {
+        User user = userService.findNowLoginUser();
         Category category = categoryRepository.getOne(id);
-        category.updateCategory(updateCategoryReq.getUserId(), updateCategoryReq.getColorId(), updateCategoryReq.getTitle());
+        category.updateCategory(user.getId(), updateCategoryReq.getColorId(), updateCategoryReq.getTitle());
         categoryRepository.save(category);
     }
 
     public void setSubCategoryList(Long id, SubCategoryReq.UpdateSubCategoryReq updateSubCategoryReq) {
+        User user = userService.findNowLoginUser();
         SubCategory subCategory = subCategoryRepository.getOne(id);
-        //1. 서브카테고리에서 대분류 카테고리로 옮기는거 - colorId는 재입력받아야하는데 가능..?
-
-
-        //2. 서브카테고리 내용 수정하는거
         subCategory.updateSubCategory(updateSubCategoryReq.getCategoryId(), updateSubCategoryReq.getTitle());
         subCategoryRepository.save(subCategory);
-    }
+    } //서브카테고리 내용 수정
 
     private SubCategory findCategory(Long categoryId) {
         return subCategoryRepository.findById(categoryId).orElseThrow(IllegalArgumentException::new);
