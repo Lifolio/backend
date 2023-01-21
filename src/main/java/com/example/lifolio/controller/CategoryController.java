@@ -50,29 +50,24 @@ public class CategoryController {
     }
 
     @ResponseBody
-    @PatchMapping("/{id}")
-    public BaseResponse<String> updateCategoryList(@PathVariable("id") Long id, @RequestBody CategoryReq.UpdateCategoryReq updateCategoryReq) {
-        try {
-            Long userId = jwtProvider.getUserIdx();
-            categoryService.setCategoryList(id, updateCategoryReq);
-            return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
+    @PatchMapping("/{userId}/{id}")
+    public BaseResponse<String> updateCategoryList(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody CategoryReq.UpdateCategoryReq updateCategoryReq) {
+        if(userService.findNowLoginUser().getId() != userId){
+            return new BaseResponse<>(INVALID_USER_JWT);
         }
+        categoryService.setCategoryList(id, updateCategoryReq);
+        return new BaseResponse<>("수정 성공.");
     } //대분류 카테고리 수정
 
     @ResponseBody
-    @PatchMapping("/sub/{id}")
-    public BaseResponse<String> updateSubCategoryList(@PathVariable("id") Long id, @RequestBody SubCategoryReq.UpdateSubCategoryReq updateSubCategoryReq) {
-        try {
-            Long userId = jwtProvider.getUserIdx();
-            categoryService.setSubCategoryList(id, updateSubCategoryReq);
-            return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
+    @PatchMapping("/sub/{userId}/{id}")
+    public BaseResponse<String> updateSubCategoryList(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody SubCategoryReq.UpdateSubCategoryReq updateSubCategoryReq) {
+        if(userService.findNowLoginUser().getId() != userId){
+            return new BaseResponse<>(INVALID_USER_JWT);
         }
+        categoryService.setSubCategoryList(id, updateSubCategoryReq);
+        return new BaseResponse<>("수정 성공.");
     } //소분류 카테고리 수정
-    //uri에 userId 넣어서 입력받게 바꿔보기
 
     @ResponseBody
     @DeleteMapping("/{id}")
