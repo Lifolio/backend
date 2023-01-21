@@ -75,7 +75,13 @@ public class CategoryService {
         SubCategory subCategory = subCategoryRepository.getOne(id);
         subCategory.updateSubCategory(updateSubCategoryReq.getCategoryId(), updateSubCategoryReq.getTitle());
         subCategoryRepository.save(subCategory);
-    } //서브카테고리 내용 수정
+    } //소분류 카테고리 내용 수정
+
+    public void setSubCategoryToCategoryList(Long id, Long colorId, SubCategoryReq.UpdateSubCategoryReq updateSubCategoryReq) {
+        User user = userService.findNowLoginUser();
+        SubCategory subCategory = subCategoryRepository.getOne(id);
+
+    }
 
     private SubCategory findCategory(Long categoryId) {
         return subCategoryRepository.findById(categoryId).orElseThrow(IllegalArgumentException::new);
@@ -105,8 +111,8 @@ public class CategoryService {
                 .userId(user.getId())
                 .colorId(addCategoryReq.getColorId())
                 .title(addCategoryReq.getTitle())
-                .branch(addCategoryReq.getBranch())
-                .level(addCategoryReq.getLevel())
+//                .branch(addCategoryReq.getBranch())
+//                .level(addCategoryReq.getLevel())
                 .build();
 
 //        SubCategory saveSubCategory = SubCategory.builder()
@@ -121,6 +127,7 @@ public class CategoryService {
 
     public void addSubCategoryList(SubCategoryReq.AddSubCategoryReq addSubCategoryReq) {
         User user = userService.findNowLoginUser();
+        List<CategoryRes.CategoryIdTitle> categoryIdTitleList = new ArrayList<>();
 
         SubCategory saveSubCategory = SubCategory.builder()
                 .categoryId(addSubCategoryReq.getCategoryId())

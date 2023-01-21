@@ -33,11 +33,11 @@ public class Category implements Serializable {
  @Column(name = "title")
  private String title;
 
- @Column(name = "branch")
- private String branch;
-
- @Column(name = "level")
- private String level;
+// @Column(name = "branch")
+// private String branch;
+//
+// @Column(name = "level")
+// private String level;
 
 
  public void updateCategory(Long userId, Long colorId, String title) {
