@@ -16,8 +16,6 @@ public class CategoryDTO {
     private Long userId;
     private Long colorId;
     private String title;
-    private String branch;
-    private String level;
     private String parentCategoryName;
     private Map<String, CategoryDTO> children;
 
@@ -47,8 +45,6 @@ public class CategoryDTO {
                 .userId(userId)
                 .colorId(colorId)
                 .title(title)
-                .branch(branch)
-                .level(level)
                 .build();
     }
 
