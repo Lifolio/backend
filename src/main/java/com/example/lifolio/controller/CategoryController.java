@@ -39,6 +39,27 @@ public class CategoryController {
         }
     }
 
+    @GetMapping("/{categoryId}")
+    public BaseResponse<CategoryRes.CategoryUpdateView> getCategoryUpdateView(@PathVariable("categoryId") Long categoryId){
+        try {
+            CategoryRes.CategoryUpdateView categoryUpdateView = categoryService.getCategoryUpdateView(categoryId);
+            return new BaseResponse<>(categoryUpdateView);
+        }catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @GetMapping("/sub/{categoryId}")
+    public BaseResponse<CategoryRes.SubCategoryUpdateView> getSubCategoryUpdateView(@PathVariable("categoryId") Long categoryId){
+        try {
+            CategoryRes.SubCategoryUpdateView subCategoryUpdateView = categoryService.getSubCategoryUpdateView(categoryId);
+            return new BaseResponse<>(subCategoryUpdateView);
+        }catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+
     @ResponseBody
     @GetMapping("/{userId}")
     public BaseResponse<List<CategoryRes.CategoryIdTitle>> getCategoryTitleList(@PathVariable("userId") Long userId) {
