@@ -39,7 +39,7 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/{categoryId}")
+    @GetMapping("/view/{categoryId}")
     public BaseResponse<CategoryRes.CategoryUpdateView> getCategoryUpdateView(@PathVariable("categoryId") Long categoryId){
         try {
             CategoryRes.CategoryUpdateView categoryUpdateView = categoryService.getCategoryUpdateView(categoryId);
@@ -49,7 +49,7 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/sub/{categoryId}")
+    @GetMapping("/view/sub/{categoryId}")
     public BaseResponse<CategoryRes.SubCategoryUpdateView> getSubCategoryUpdateView(@PathVariable("categoryId") Long categoryId){
         try {
             CategoryRes.SubCategoryUpdateView subCategoryUpdateView = categoryService.getSubCategoryUpdateView(categoryId);
