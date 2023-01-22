@@ -1,5 +1,6 @@
 package com.example.lifolio.service;
 
+import com.example.lifolio.base.BaseException;
 import com.example.lifolio.converter.CategoryConvertor;
 import com.example.lifolio.dto.category.CategoryReq;
 import com.example.lifolio.dto.category.CategoryRes;
@@ -12,12 +13,12 @@ import com.example.lifolio.repository.CategoryRepository;
 import com.example.lifolio.repository.ColorRepository;
 import com.example.lifolio.repository.SubCategoryRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.apache.velocity.tools.generic.ClassTool;
 import org.springframework.stereotype.Service;
-import retrofit2.http.Path;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.example.lifolio.base.BaseResponseStatus.NOT_EXIST_CATEGORY;
 
 @Service
 @RequiredArgsConstructor
@@ -133,6 +134,44 @@ public class CategoryService {
                 .build();
 
         subCategoryRepository.save(saveSubCategory);
+    }
+
+    public CategoryRes.CategoryUpdateView getCategoryUpdateView(Long categoryId) throws BaseException {
+        Optional<Category> category=categoryRepository.findById(categoryId);
+        if (!category.isPresent()) {
+            throw new BaseException(NOT_EXIST_CATEGORY);
+        }
+        Optional<Color> color = colorRepository.findById(category.get().getColorId());
+        List<String> subcategory=getSubCategoryListByCategoryId(categoryId);
+        return CategoryConvertor.CategoryUpdateView(category,color,subcategory);
+    }
+
+
+
+
+    public List<String> getSubCategoryListByCategoryId(Long categoryId) {
+        List<SubCategoryRepository.CategoryList> categoryListResult=subCategoryRepository.getSubCategoryList(categoryId);
+        List<CategoryRes.CategoryList> categoryList=new ArrayList<>();
+        categoryListResult.forEach(
+                result -> {
+                    categoryList.add(new CategoryRes.CategoryList(
+                            result.getCategory()
+                    ));
+                }
+        );
+        List<String> category=categoryList.stream().map(e-> e.getCategory()).collect(Collectors.toList());
+        return category;
+    }
+
+    public CategoryRes.SubCategoryUpdateView getSubCategoryUpdateView(Long categoryId) throws BaseException {
+        Optional<SubCategory> subCategory=subCategoryRepository.findById(categoryId);
+        if(!subCategory.isPresent()){
+            throw new BaseException(NOT_EXIST_CATEGORY);
+        }
+        Optional<Category> category= categoryRepository.findById(subCategory.get().getCategoryId());
+
+        CategoryRes.SubCategoryUpdateView subCategoryUpdateView=CategoryConvertor.SubCategoryUpdateView(subCategory.get(),category.get());
+        return subCategoryUpdateView;
     }
 
 

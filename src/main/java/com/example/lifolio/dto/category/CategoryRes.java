@@ -43,5 +43,25 @@ public class CategoryRes {
         private String categoryName;
     }
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class CategoryUpdateView {
+        private Long categoryId;
+        private String categoryName;
+        private String colorName;
+        private List<String> subCategoryList;
+    }
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class SubCategoryUpdateView {
+        private Long categoryId;
+        private String categoryName;
+        private Long subCategoryId;
+        private String subCategoryName;
+    }
 }
