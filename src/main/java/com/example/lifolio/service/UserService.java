@@ -228,4 +228,12 @@ public class UserService {
         Alarm alarm=UserConverter.postAlarm(userId);
         alarmRepository.save(alarm);
     }
+
+    public void updateFcmToken(Long userId, String token) {
+        Optional<User> user = userRepository.findById(userId);
+
+        user.get().updateToken(token);
+
+        userRepository.save(user.get());
+    }
 }
