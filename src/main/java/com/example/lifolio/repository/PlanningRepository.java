@@ -13,14 +13,14 @@ import java.util.List;
 
 @Repository
 public interface PlanningRepository extends JpaRepository<Planning, Long> {
-    List<Planning> findTop3ByUserIdAndStartDateBetweenOrderByStartDateAsc(Long userId, LocalDateTime startDate, LocalDateTime finishDate);
+    List<Planning> findTop3ByUserIdAndDateBetweenOrderByDateAsc(Long userId, LocalDateTime startDate, LocalDateTime finishDate);
 
     @Query(value = "select U.id'userId',U.nickname,fcm_token'fcmToken' \n" +
             "from User U\n" +
             "         join Planning P on U.id = P.user_id\n" +
             "         join Alarm A on P.user_id = A.user_id\n" +
             "where todo_alarm = 1\n" +
-            "and DATE(finish_date) = DATE(now()) group by U.id;\n",nativeQuery = true)
+            "and DATE(date) = DATE(now()) group by U.id;\n",nativeQuery = true)
     List<UserIdList> getUserIdList();
 
 
@@ -29,7 +29,7 @@ public interface PlanningRepository extends JpaRepository<Planning, Long> {
             "         join Planning P on U.id = P.user_id\n" +
             "         join Alarm A on P.user_id = A.user_id\n" +
             "where todo_alarm = 1\n" +
-            "and DATE(finish_date) = DATE(now()) and P.user_id = :userId",nativeQuery = true)
+            "and DATE(date) = DATE(now()) and P.user_id = :userId",nativeQuery = true)
     List<TodoList> getTodoList(@Param("userId") Long userId);
 
 

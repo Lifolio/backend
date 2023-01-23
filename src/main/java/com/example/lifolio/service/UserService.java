@@ -236,4 +236,13 @@ public class UserService {
 
         userRepository.save(user.get());
     }
+
+    @Transactional(rollbackFor=SQLException.class)
+    public void deleteFcmToken(Long userId){
+        Optional<User> user = userRepository.findById(userId);
+
+        user.get().updateToken(null);
+
+        userRepository.save(user.get());
+    }
 }

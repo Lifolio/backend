@@ -178,6 +178,7 @@ public class UserController {
             String accessToken = jwtProvider.getJwt();
             //jwt 에서 로그아웃 처리 & 오류처리 &
             jwtProvider.logOut(userId,accessToken);
+            userService.deleteFcmToken(userId);
             String result="로그아웃 성공";
             return new BaseResponse<>(result);
 
@@ -189,7 +190,7 @@ public class UserController {
 
 
     @ResponseBody
-    @GetMapping("/fcm")
+    @PostMapping("/fcm")
     public BaseResponse<String> updateFcmToken(@RequestParam("token") String token){
         try {
 

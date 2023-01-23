@@ -197,6 +197,7 @@ public class TokenProvider implements InitializingBean {
         //Redis 에 저장된 refreshToken 삭제
         redisService.deleteValues(String.valueOf(userId));
     }
+
     public Date getExpiredTime(String token){
         //받은 토큰의 유효 시간을 받아오기
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getExpiration();
