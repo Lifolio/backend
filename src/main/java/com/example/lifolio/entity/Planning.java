@@ -5,6 +5,7 @@ import com.example.lifolio.dto.planning.PlanningReq;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -30,11 +31,9 @@ public class Planning extends BaseEntity {
     @Column(name="title")
     private String title;
 
-    @Column(name="start_date")
-    private LocalDateTime startDate;
-
-    @Column(name="finish_date")
-    private LocalDateTime finishDate;
+    @CreatedDate
+    @Column(name= "date")
+    private LocalDateTime date;
 
     @Column(name = "success")
     private int success;
@@ -44,8 +43,6 @@ public class Planning extends BaseEntity {
     }
     public void updateInfo(PlanningReq.PostPlanningReq postPlanningReq){
         this.title=postPlanningReq.getTitle();
-        this.startDate=postPlanningReq.getStartTime();
-        this.finishDate=postPlanningReq.getFinishTime();
 
     }
 }

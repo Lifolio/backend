@@ -7,8 +7,10 @@ import com.example.lifolio.repository.PlanningRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -36,8 +38,8 @@ public class NotificationService {
 
 
     }
-
-    private void notificationUser(AlarmRes.PlanningUserList planningUser) throws IOException {
+    @Transactional(rollbackFor= SQLException.class)
+    public void notificationUser(AlarmRes.PlanningUserList planningUser) throws IOException {
         System.out.println(planningUser.getUserId());
         List<PlanningRepository.TodoList> todoListResult=planningRepository.getTodoList(planningUser.getUserId());
         List<AlarmRes.PlanningRes> todoSuccess =new ArrayList<>();
@@ -61,7 +63,9 @@ public class NotificationService {
 
     }
 
-    private List<AlarmRes.PlanningUserList> getUserList() {
+
+    @Transactional(rollbackFor= SQLException.class)
+    public List<AlarmRes.PlanningUserList> getUserList() {
 
         List<PlanningRepository.UserIdList> userIdListResult=planningRepository.getUserIdList();
         List<AlarmRes.PlanningUserList> planningUserList=new ArrayList<>();

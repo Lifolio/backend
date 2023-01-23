@@ -12,15 +12,13 @@ public class PlanningConvertor {
         return Planning.builder().
                 userId(userId)
                 .title(postPlanningReq.getTitle())
-                .startDate(postPlanningReq.getStartTime())
-                .finishDate(postPlanningReq.getFinishTime())
                 .build();
     }
 
     public static List<PlanningRes.GetPlanning> getTodoList(List<Planning> planning) {
         List<PlanningRes.GetPlanning> todoList=new ArrayList<>();
         for (Planning result : planning) {
-            PlanningRes.GetPlanning todo = new PlanningRes.GetPlanning(result.getId(),result.getTitle(),result.getSuccess(),result.getStartDate());
+            PlanningRes.GetPlanning todo = new PlanningRes.GetPlanning(result.getId(),result.getTitle(),result.getSuccess(),result.getDate());
             todoList.add(todo);
         }
         return todoList;
