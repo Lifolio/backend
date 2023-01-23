@@ -188,6 +188,26 @@ public class UserController {
     }
 
 
+    @ResponseBody
+    @GetMapping("/fcm")
+    public BaseResponse<String> updateFcmToken(@RequestParam("token") String token){
+        try {
+
+            //탈취된 토큰인지 검증
+            Long userId = jwtProvider.getUserIdx();
+
+            userService.updateFcmToken(userId,token);
+            //헤더에서 토큰 가져오기
+            //jwt 에서 로그아웃 처리 & 오류처리 &
+            String result="fcm 토큰 저장 성공";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException e) {
+            return new BaseResponse<>((e.getStatus()));
+        }
+
+    }
+
 
 
 

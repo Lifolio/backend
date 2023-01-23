@@ -44,6 +44,8 @@ public class User extends BaseEntity {
     @Column(name = "nickname", length = 50)
     private String nickname;
 
+
+
     @Column(name = "activated")
     private boolean activated;
 
@@ -61,13 +63,14 @@ public class User extends BaseEntity {
 
 
 
-
-
-
     @ManyToMany
     @JoinTable(
             name = "user_authority",
             joinColumns = {@JoinColumn(name = "id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
     private Set<Authority> authorities;
+
+    public void updateToken(String fcmToken) {
+        this.fcmToken=fcmToken;
+    }
 }
