@@ -5,6 +5,7 @@ import com.example.lifolio.base.BaseResponse;
 import com.example.lifolio.dto.alarm.RequestDTO;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.FirebaseCloudMessageService;
+import com.example.lifolio.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,8 +22,9 @@ public class TestController {
 
     private final TokenProvider jwtProvider;
     private final FirebaseCloudMessageService firebaseCloudMessageService;
+    private final NotificationService notificationService;
 
-    @GetMapping("")
+    @GetMapping("/user")
     public BaseResponse<String> test() {
         try {
             Long userId = jwtProvider.getUserIdx();
@@ -33,8 +35,10 @@ public class TestController {
         }
     }
 
-    @GetMapping("test")
-    public BaseResponse<String> testTest() throws BaseException {
+    @GetMapping("")
+    public BaseResponse<String> testTest() throws BaseException, IOException {
+        notificationService.scheduledTodoAlarm();
+
         return new BaseResponse<>("테스트");
     }
 

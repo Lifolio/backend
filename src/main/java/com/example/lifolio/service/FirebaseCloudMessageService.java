@@ -21,6 +21,7 @@ public class FirebaseCloudMessageService {
 
     @Value("${fcm.key.path}")
     private String FCM_ACCESS_KEY;
+
     @Value("${fcm.api.url}")
     private String API_URL;
 
@@ -66,7 +67,7 @@ public class FirebaseCloudMessageService {
 
         GoogleCredentials googleCredentials = GoogleCredentials
                 .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
-                .createScoped(List.of(FIREBASE_SCOPE));
+                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
 
         googleCredentials.refreshIfExpired();
         return googleCredentials.getAccessToken().getTokenValue();
