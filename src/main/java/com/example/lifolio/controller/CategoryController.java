@@ -81,7 +81,7 @@ public class CategoryController {
     } //대분류 카테고리 내용 수정
 
     @ResponseBody
-    @PatchMapping("/subTo/{userId}/{id}")
+    @PatchMapping("/list/{userId}/{id}")
     public BaseResponse<String> updateCategorySubCategoryList(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody CategoryReq.UpdateCategoryAddSubCategoryReq updateCategoryAddSubCategoryReq) {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
@@ -159,7 +159,7 @@ public class CategoryController {
     } //소분류 카테고리 추가
 
     @ResponseBody
-    @PostMapping("/subTo/{userId}")
+    @PostMapping("/list/{userId}")
     public BaseResponse<String> addCategorySubCategoryList(@PathVariable("userId") Long userId, @RequestBody CategoryReq.AddCategorySubCategoryReq addCategorySubCategoryReq) {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
