@@ -5,8 +5,12 @@ import com.example.lifolio.converter.TimeConvertor;
 import com.example.lifolio.dto.planning.PlanningReq;
 import com.example.lifolio.dto.planning.PlanningRes;
 import com.example.lifolio.entity.Planning;
+import com.example.lifolio.entity.PlanningMonth;
+import com.example.lifolio.entity.PlanningWeek;
 import com.example.lifolio.entity.PlanningYear;
+import com.example.lifolio.repository.PlanningMonthRepository;
 import com.example.lifolio.repository.PlanningRepository;
+import com.example.lifolio.repository.PlanningWeekRepository;
 import com.example.lifolio.repository.PlanningYearRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,8 @@ public class PlanningService {
 
     private final PlanningYearRepository planningYearRepository;
     private final PlanningRepository planningRepository;
+    private final PlanningWeekRepository planningWeekRepository;
+    private final PlanningMonthRepository planningMonthRepository;
 
     public void setGoalOfYear(Long userId , PlanningReq.PostGoalOfYearReq postGoalOfYearReq) {
         PlanningYear toSavePlanningYear = PlanningYear.builder()
@@ -109,8 +115,8 @@ public class PlanningService {
         planningRepository.deleteById(planningId);
     }
 
-    public List<PlanningRes.GetPlanning> getTodoList(Long userId) {
-        PlanningRes.TimeRes timeRes=TimeConvertor.getToday();
+    public List<PlanningRes.GetPlanning> getTodoList(String date, Long userId) {
+        PlanningRes.TimeRes timeRes=TimeConvertor.getToday(date);
 
         List<Planning> planning=planningRepository.findTop3ByUserIdAndDateBetweenOrderByDateAsc(userId,timeRes.getStartTime(),timeRes.getFinishTime());
 
@@ -120,29 +126,29 @@ public class PlanningService {
         return PlanningConvertor.getTodoList(planning);
     }
 
-    public List<PlanningRes.GetPlanning> getTodoListThisWeek(Long userId) {
+    public List<PlanningRes.GetPlanning> getTodoListThisWeek(String date, Long userId) {
 
-        PlanningRes.TimeRes timeRes=TimeConvertor.getThisWeek();
+        PlanningRes.TimeRes timeRes=TimeConvertor.getThisWeek(date);
 
 
-        List<Planning> planning=planningRepository.findTop3ByUserIdAndDateBetweenOrderByDateAsc(userId,timeRes.getStartTime(),timeRes.getFinishTime());
+        List<PlanningWeek> planningWeek=planningWeekRepository.findTop3ByUserIdAndDateBetweenOrderByDateAsc(userId,timeRes.getStartTime(),timeRes.getFinishTime());
 
-        if(planning.isEmpty())
+        if(planningWeek.isEmpty())
             return null;
 
-        return PlanningConvertor.getTodoList(planning);
+        return PlanningConvertor.getTodoListWeek(planningWeek);
     }
 
-    public List<PlanningRes.GetPlanning> getTodoListThisMonth(Long userId) {
-        PlanningRes.TimeRes timeRes=TimeConvertor.getThisMonth();
+    public List<PlanningRes.GetPlanning> getTodoListThisMonth(String date, Long userId) {
+        PlanningRes.TimeRes timeRes=TimeConvertor.getThisMonth(date);
 
 
-        List<Planning> planning=planningRepository.findTop3ByUserIdAndDateBetweenOrderByDateAsc(userId,timeRes.getStartTime(),timeRes.getFinishTime());
+        List<PlanningMonth> planningMonth=planningMonthRepository.findTop3ByUserIdAndDateBetweenOrderByDateAsc(userId,timeRes.getStartTime(),timeRes.getFinishTime());
 
-        if(planning.isEmpty())
+        if(planningMonth.isEmpty())
             return null;
 
-        return PlanningConvertor.getTodoList(planning);
+        return PlanningConvertor.getTodoListMonth(planningMonth);
     }
 
 
@@ -152,5 +158,80 @@ public class PlanningService {
         planning.get().updateInfo(postPlanningReq);
 
         planningRepository.save(planning.get());
+    }
+
+    public void setTodoWeek(Long userId, PlanningReq.PostPlanningReq postPlanningReq) {
+        PlanningWeek planning = PlanningConvertor.setTodoWeek(userId,postPlanningReq);
+        planningWeekRepository.save(planning);
+    }
+
+    public void setTodoMonth(Long userId, PlanningReq.PostPlanningReq postPlanningReq) {
+        PlanningMonth planning = PlanningConvertor.setTodoMonth(userId,postPlanningReq);
+        planningMonthRepository.save(planning);
+    }
+
+    public boolean existsPlanningWeek(Long planningId) {
+        return planningWeekRepository.existsById(planningId);
+    }
+    public boolean existsPlanningMonth(Long planningId) {
+        return planningMonthRepository.existsById(planningId);
+    }
+
+    public int getPlanningWeekSuccess(Long planningId) {
+        Optional<PlanningWeek> planning=planningWeekRepository.findById(planningId);
+        return planning.get().getSuccess();
+    }
+
+    public int getPlanningMonthSuccess(Long planningId) {
+        Optional<PlanningMonth> planning=planningMonthRepository.findById(planningId);
+        return planning.get().getSuccess();
+    }
+
+    public void checkWeekSuccess(Long planningId) {
+        Optional<PlanningWeek> planning=planningWeekRepository.findById(planningId);
+        planning.get().updateSuccess(1);
+        planningWeekRepository.save(planning.get());
+    }
+
+    public void unCheckWeekSuccess(Long planningId) {
+        Optional<PlanningWeek> planning=planningWeekRepository.findById(planningId);
+        planning.get().updateSuccess(1);
+        planningWeekRepository.save(planning.get());
+    }
+
+    public void checkMonthSuccess(Long planningId) {
+        Optional<PlanningMonth> planning=planningMonthRepository.findById(planningId);
+        planning.get().updateSuccess(1);
+        planningMonthRepository.save(planning.get());
+    }
+
+    public void unCheckMonthSuccess(Long planningId) {
+        Optional<PlanningMonth> planning=planningMonthRepository.findById(planningId);
+        planning.get().updateSuccess(1);
+        planningMonthRepository.save(planning.get());
+    }
+
+    public void deletePlanningWeek(Long planningId) {
+        planningWeekRepository.deleteById(planningId);
+    }
+
+    public void deletePlanningMonth(Long planningId) {
+        planningWeekRepository.deleteById(planningId);
+    }
+
+    public void patchPlanWeek(Long userId, PlanningReq.PostPlanningInfoReq postPlanningReq, Long planningId) {
+        Optional<PlanningWeek> planning =planningWeekRepository.findById(planningId);
+
+        planning.get().updateInfo(postPlanningReq);
+
+        planningWeekRepository.save(planning.get());
+    }
+
+    public void patchPlanMonth(Long userId, PlanningReq.PostPlanningInfoReq postPlanningReq, Long planningId) {
+        Optional<PlanningMonth> planning =planningMonthRepository.findById(planningId);
+
+        planning.get().updateInfo(postPlanningReq);
+
+        planningMonthRepository.save(planning.get());
     }
 }

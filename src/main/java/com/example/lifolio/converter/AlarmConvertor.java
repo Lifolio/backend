@@ -9,9 +9,18 @@ import java.util.List;
 public class AlarmConvertor {
     public static RequestDTO RequestDto(AlarmRes.PlanningUserList planningUser, List<Integer> todoPlanning) {
         int success= Collections.frequency(todoPlanning,1);
-        return RequestDTO.builder().
-                title(planningUser.getNickname()+"님 오늘의 TODO⏰ 상태!").
-                body("오늘의 계획 "+todoPlanning.size()+"개 중 "+success+"개 완료했어요!").
-                targetToken(planningUser.getFcmToken()).build();
+        int total=todoPlanning.size();
+        if(success==total){
+            return RequestDTO.builder().
+                    title("🌈"+planningUser.getNickname()+"님 오늘의 TODO⏰ 상태!🌈").
+                    body("오늘의 계획 "+todoPlanning.size()+"개 모두 완료 했어요 고생 했어요").
+                    targetToken(planningUser.getFcmToken()).build();
+        }
+        else {
+            return RequestDTO.builder().
+                    title("🌈"+planningUser.getNickname() + "님 오늘의 TODO⏰ 상태!🌈").
+                    body("오늘의 계획 " + todoPlanning.size() + "개 중 " + success + "개 완료 했어요!").
+                    targetToken(planningUser.getFcmToken()).build();
+        }
     }
 }
