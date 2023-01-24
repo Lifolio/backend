@@ -37,7 +37,9 @@ public class TestController {
 
     @GetMapping("")
     public BaseResponse<String> testTest() throws BaseException, IOException {
+        notificationService.scheduledTodoWeekAlarm();
         notificationService.scheduledTodoAlarm();
+        notificationService.scheduledTodoMonthAlarm();
 
         return new BaseResponse<>("테스트");
     }
