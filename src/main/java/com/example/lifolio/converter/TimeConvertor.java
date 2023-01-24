@@ -11,12 +11,11 @@ import java.util.Locale;
 
 public class TimeConvertor {
 
-    public static PlanningRes.TimeRes getThisWeek() {
+    public static PlanningRes.TimeRes getThisWeek(String date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         Calendar calender=Calendar.getInstance();
 
-        String date=sdf.format(calender.getTime());
 
         Date date2 = new Date();
 
@@ -40,12 +39,9 @@ public class TimeConvertor {
         return PlanningRes.TimeRes.builder().startTime(startDate).finishTime(finishDate).build();
     }
 
-    public static PlanningRes.TimeRes getToday() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    public static PlanningRes.TimeRes getToday(String date) {
 
-        Calendar calender=Calendar.getInstance();
 
-        String date=sdf.format(calender.getTime());
 
 
         LocalDateTime startDate= LocalDateTime.parse(date+"T00:00:00");
@@ -55,13 +51,11 @@ public class TimeConvertor {
 
     }
 
-    public static PlanningRes.TimeRes getThisMonth() {
+    public static PlanningRes.TimeRes getThisMonth(String date) {
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         Calendar calender=Calendar.getInstance();
 
-        String date=sdf.format(calender.getTime());
 
         String year=date.substring(0,4);
 

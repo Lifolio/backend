@@ -80,6 +80,7 @@ public enum     BaseResponseStatus {
     NOT_POST_DATE(false,2042,"날짜를 입력해주세요"),
 
     NOT_EXIST_CATEGORY(false,2043,"존재하지 않는 카테고리입니다."),
+    NOT_EXIST_DATE(false,2044,"날짜를 입력해주세요"),
 
 
 

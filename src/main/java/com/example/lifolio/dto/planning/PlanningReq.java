@@ -43,6 +43,17 @@ public class PlanningReq {
     @Setter
     @Getter
     public static class PostPlanningReq {
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+        private LocalDate date;
+        private String title;
+    }
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Setter
+    @Getter
+    public static class PostPlanningInfoReq {
         private String title;
     }
 }
