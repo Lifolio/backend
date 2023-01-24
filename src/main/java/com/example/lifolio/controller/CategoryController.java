@@ -147,37 +147,15 @@ public class CategoryController {
         return new BaseResponse<>("추가 성공.");
     } //소분류 카테고리 추가
 
-
-
-
-
-    /*
     @ResponseBody
-    @PostMapping("/categories")
-    public Long createCategory(CategoryDTO categoryDTO) {
-        return categoryService.createCategory(categoryDTO);
-    }
-
-    @ResponseBody
-    @GetMapping("/categories/{branch}")
-    public Map<String, CategoryDTO> readCategory(@PathVariable("categoryId") Long id) {
-        return categoryService.readCategory(id);
-    }
-
-    @ResponseBody
-    @PatchMapping("/categories/{id}")
-    public Long updateCategory (@PathVariable("categoryId") Long id,
-                                CategoryDTO categoryDTO) {
-        return categoryService.updateCategory(id, categoryDTO);
-    }
-
-    @ResponseBody
-    @DeleteMapping("/categories/{id}")
-    public Long deleteCategory (@PathVariable("categoryId") Long id) {
-        return categoryService.deleteCategory(id);
-    }
-
-     */
+    @PostMapping("/subTo/{userId}")
+    public BaseResponse<String> addCategorySubCategoryList(@PathVariable("userId") Long userId, @RequestBody CategoryReq.AddCategorySubCategoryReq addCategorySubCategoryReq) {
+        if(userService.findNowLoginUser().getId() != userId){
+            return new BaseResponse<>(INVALID_USER_JWT);
+        }
+        categoryService.addCategorySubCategoryList(addCategorySubCategoryReq);
+        return new BaseResponse<>("추가 성공.");
+    } //대분류+소분류 카테고리 추가
 
 
 }

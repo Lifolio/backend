@@ -30,6 +30,18 @@ public class CategoryReq {
     @AllArgsConstructor
     @Setter
     @Getter
+    public static class AddCategorySubCategoryReq {
+        private Long colorId;
+        private Long categoryId;
+        private String title;
+        private String Subtitle;
+    }
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Setter
+    @Getter
     public static class CategoryToSubReq {
         private Long id;
         private String title;
