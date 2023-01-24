@@ -182,7 +182,7 @@ public class UserRes {
         List<MyFolioImgList> myFolioImgList;
 
         LocalDate startDate; //시작일
-        Date endDate; //종료일
+        LocalDate endDate; //종료일
 
         String content;
 
