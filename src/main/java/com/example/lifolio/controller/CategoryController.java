@@ -78,7 +78,18 @@ public class CategoryController {
         }
         categoryService.setCategoryList(id, updateCategoryReq);
         return new BaseResponse<>("수정 성공.");
-    } //대분류 카테고리 수정
+    } //대분류 카테고리 내용 수정
+
+    @ResponseBody
+    @PatchMapping("/subTo/{userId}/{id}")
+    public BaseResponse<String> updateCategoryAddSubCategoryList(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody CategoryReq.UpdateCategoryAddSubCategoryReq updateCategoryAddSubCategoryReq) {
+        if(userService.findNowLoginUser().getId() != userId){
+            return new BaseResponse<>(INVALID_USER_JWT);
+        }
+        categoryService.setCategoryAddSubCategoryList(id, updateCategoryAddSubCategoryReq);
+        return new BaseResponse<>("수정 성공.");
+    } //대분류 카테고리 내용 수정+소분류 카테고리 추가
+
 
     @ResponseBody
     @PatchMapping("/sub/{userId}/{id}")
