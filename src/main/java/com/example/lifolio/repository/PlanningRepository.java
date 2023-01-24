@@ -31,8 +31,6 @@ public interface PlanningRepository extends JpaRepository<Planning, Long> {
             "where todo_alarm = 1\n" +
             "and DATE(date) = DATE(now()) and P.user_id = :userId",nativeQuery = true)
     List<TodoList> getTodoList(@Param("userId") Long userId);
-
-
     interface UserIdList {
         Long getUserId();
         String getNickname();
