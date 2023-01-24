@@ -133,15 +133,7 @@ public class UserService {
 
     }
 
-    @Transactional(readOnly = true)
-    public UserReq.SignupUserReq getUserWithAuthorities(String username) {
-        return UserReq.SignupUserReq.from(userRepository.findOneWithAuthoritiesByUsername(username).orElse(null));
-    }
 
-    @Transactional(readOnly = true)
-    public UserReq.SignupUserReq getMyUserWithAuthorities() {
-        return UserReq.SignupUserReq.from(SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername).orElse(null));
-    }
 
 
     public boolean checkNickName(String nickName) {
