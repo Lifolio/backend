@@ -20,6 +20,10 @@ public interface SubCategoryRepository extends JpaRepository<SubCategory, Long> 
     @Query(value="select SC.title'category' from SubCategory SC join Category C on SC.category_id = C.id where category_id=:categoryId ",nativeQuery = true)
     List<CategoryList> getSubCategoryList(@Param("categoryId") Long categoryId);
 
+    @Query(value="INSERT INTO Category(category_id, title) VALUES (categoryId=:categoryId, Subtitle:=Subtitle)",nativeQuery = true)
+    List<SubCategory> setSubCategory(@Param("categoryId") Long categoryId);
+
+
     List<SubCategory> findByCategoryId(Long categoryId);
 
     Optional<SubCategory> findById(Long id);

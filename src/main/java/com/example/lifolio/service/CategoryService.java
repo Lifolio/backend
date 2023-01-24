@@ -85,6 +85,10 @@ public class CategoryService {
         subCategoryRepository.save(saveSubCategory);
     }
 
+    public void setCategory2List(Long id, CategoryReq.UpdateCategoryAddSubCategoryReq updateCategoryAddSubCategoryReq) {
+
+    }
+
     public void setSubCategoryList(Long id, SubCategoryReq.UpdateSubCategoryReq updateSubCategoryReq) {
         User user = userService.findNowLoginUser();
         SubCategory subCategory = subCategoryRepository.getOne(id);
@@ -161,7 +165,7 @@ public class CategoryService {
         categoryRepository.save(saveCategory);
 
         SubCategory saveSubCategory = SubCategory.builder()
-            .categoryId(addCategorySubCategoryReq.getCategoryId())
+            .categoryId(saveCategory.getId())
             .title(addCategorySubCategoryReq.getSubtitle())
             .build();
 
