@@ -20,6 +20,18 @@ public class CategoryReq {
     @AllArgsConstructor
     @Setter
     @Getter
+    public static class UpdateCategoryAddSubCategoryReq {
+        private Long userId;
+        private Long colorId;
+        private String title;
+        private String Subtitle;
+    }
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Setter
+    @Getter
     public static class AddCategoryReq {
         private Long colorId;
         private String title;

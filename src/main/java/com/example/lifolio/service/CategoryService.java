@@ -71,12 +71,26 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
+    public void setCategoryAddSubCategoryList(Long id, CategoryReq.UpdateCategoryAddSubCategoryReq updateCategoryAddSubCategoryReq) {
+        User user = userService.findNowLoginUser();
+        Category category = categoryRepository.getOne(id);
+        category.updateCategory(user.getId(), updateCategoryAddSubCategoryReq.getColorId(), updateCategoryAddSubCategoryReq.getTitle());
+        categoryRepository.save(category);
+
+        SubCategory saveSubCategory = SubCategory.builder()
+                .categoryId(id)
+                .title(updateCategoryAddSubCategoryReq.getSubtitle())
+                .build();
+
+        subCategoryRepository.save(saveSubCategory);
+    }
+
     public void setSubCategoryList(Long id, SubCategoryReq.UpdateSubCategoryReq updateSubCategoryReq) {
         User user = userService.findNowLoginUser();
         SubCategory subCategory = subCategoryRepository.getOne(id);
         subCategory.updateSubCategory(updateSubCategoryReq.getCategoryId(), updateSubCategoryReq.getTitle());
         subCategoryRepository.save(subCategory);
-    } //소분류 카테고리 내용 수정
+    }
 
     public void setSubCategoryToCategoryList(Long id, SubCategoryReq.MoveSubCategoryReq moveSubCategoryReq) {
         User user = userService.findNowLoginUser();
@@ -88,7 +102,7 @@ public class CategoryService {
                 .build();
         categoryRepository.save(saveCategory);
         subCategoryRepository.deleteById(subCategory.getId());
-    } //소분류 카테고리->대분류 카테고리로 이동
+    }
 
     private SubCategory findCategory(Long categoryId) {
         return subCategoryRepository.findById(categoryId).orElseThrow(IllegalArgumentException::new);
@@ -163,8 +177,6 @@ public class CategoryService {
         List<String> subcategory=getSubCategoryListByCategoryId(categoryId);
         return CategoryConvertor.CategoryUpdateView(category,color,subcategory);
     }
-
-
 
 
     public List<String> getSubCategoryListByCategoryId(Long categoryId) {
