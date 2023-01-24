@@ -77,12 +77,14 @@ public class CategoryService {
         category.updateCategory(user.getId(), updateCategoryAddSubCategoryReq.getColorId(), updateCategoryAddSubCategoryReq.getTitle());
         categoryRepository.save(category);
 
-        SubCategory saveSubCategory = SubCategory.builder()
-                .categoryId(id)
-                .title(updateCategoryAddSubCategoryReq.getSubtitle())
-                .build();
-
-        subCategoryRepository.save(saveSubCategory);
+        for(String Subtitle : updateCategoryAddSubCategoryReq.getSubtitle()) {
+            SubCategory saveSubCategory = SubCategory.builder()
+                    .categoryId(id)
+                    .title(Subtitle)
+                    .build();
+//            saveSubCategory.updateSubCategory(id, Subtitle);
+            subCategoryRepository.save(saveSubCategory);
+        }
     }
 
 

@@ -26,7 +26,7 @@ public class CategoryReq {
         private Long userId;
         private Long colorId;
         private String title;
-        private String Subtitle;
+        private List<String> Subtitle;
     }
 
     @Builder
