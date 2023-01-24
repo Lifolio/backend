@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface PlanningRepository extends JpaRepository<Planning, Long> {
-    List<Planning> findTop3ByUserIdAndDateBetweenOrderByDateAsc(Long userId, LocalDateTime startDate, LocalDateTime finishDate);
+    List<Planning> findByUserIdAndDateBetweenOrderByDateAsc(Long userId, LocalDateTime startDate, LocalDateTime finishDate);
 
     @Query(value = "select U.id'userId',U.nickname,fcm_token'fcmToken' \n" +
             "from User U\n" +
