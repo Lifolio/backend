@@ -8,6 +8,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PlanningWeekRepository extends JpaRepository<PlanningWeek, Long> {
-    List<PlanningWeek> findTop3ByUserIdAndDateBetweenOrderByDateAsc(Long userId, LocalDateTime startDate, LocalDateTime finishDate);
+    List<PlanningWeek> findByUserIdAndDateBetweenOrderByDateAsc(Long userId, LocalDateTime startDate, LocalDateTime finishDate);
 
 }

@@ -118,7 +118,7 @@ public class PlanningService {
     public List<PlanningRes.GetPlanning> getTodoList(String date, Long userId) {
         PlanningRes.TimeRes timeRes=TimeConvertor.getToday(date);
 
-        List<Planning> planning=planningRepository.findTop3ByUserIdAndDateBetweenOrderByDateAsc(userId,timeRes.getStartTime(),timeRes.getFinishTime());
+        List<Planning> planning=planningRepository.findByUserIdAndDateBetweenOrderByDateAsc(userId,timeRes.getStartTime(),timeRes.getFinishTime());
 
         if(planning.isEmpty())
             return null;
@@ -131,7 +131,7 @@ public class PlanningService {
         PlanningRes.TimeRes timeRes=TimeConvertor.getThisWeek(date);
 
 
-        List<PlanningWeek> planningWeek=planningWeekRepository.findTop3ByUserIdAndDateBetweenOrderByDateAsc(userId,timeRes.getStartTime(),timeRes.getFinishTime());
+        List<PlanningWeek> planningWeek=planningWeekRepository.findByUserIdAndDateBetweenOrderByDateAsc(userId,timeRes.getStartTime(),timeRes.getFinishTime());
 
         if(planningWeek.isEmpty())
             return null;
@@ -143,7 +143,7 @@ public class PlanningService {
         PlanningRes.TimeRes timeRes=TimeConvertor.getThisMonth(date);
 
 
-        List<PlanningMonth> planningMonth=planningMonthRepository.findTop3ByUserIdAndDateBetweenOrderByDateAsc(userId,timeRes.getStartTime(),timeRes.getFinishTime());
+        List<PlanningMonth> planningMonth=planningMonthRepository.findByUserIdAndDateBetweenOrderByDateAsc(userId,timeRes.getStartTime(),timeRes.getFinishTime());
 
         if(planningMonth.isEmpty())
             return null;
