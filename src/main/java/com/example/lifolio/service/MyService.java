@@ -222,7 +222,7 @@ public class MyService {
 
         if(!myFolioRepository.existsMyFolioById(folioId)) return null;
 
-        MyFolio myFolio = myFolioRepository.getOne(folioId);
+        MyFolio myFolio = myFolioRepository.findById(folioId).get();
 
         Long subCategoryId = myFolio.getCategoryId(); //마이폴리오에 저장된 카테고리id는 서브카테고리id
         Long categoryId = subCategoryRepository.findById(subCategoryId).get().getCategoryId();
@@ -239,7 +239,7 @@ public class MyService {
                 getMyLifolioDetailImg(folioId),
 
                 myFolio.getStartDate(),
-                myFolio.getDate(),
+                new java.sql.Date(myFolio.getDate().getTime()).toLocalDate(),
 
                 myFolio.getContent(),
 
