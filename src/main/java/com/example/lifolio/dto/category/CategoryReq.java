@@ -44,7 +44,7 @@ public class CategoryReq {
     @Getter
     public static class AddCategorySubCategoryReq {
         private Long colorId;
-        private Long categoryId;
+//        private Long categoryId;
         private String title;
         private String Subtitle;
     }
