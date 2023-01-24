@@ -145,7 +145,7 @@ public class MyController {
     @ApiOperation(value = "MyFolio 세부 내용 보기", notes = "MyFolio 세부 내용 보기")
     @GetMapping("/myfolio/{folioId}") //#2-1 4번은 /profile/detail
     public BaseResponse<UserRes.GetMyFolioDetailRes> getMyFolioDetailRes(@PathVariable Long folioId){
-        Long userId= userService.findNowLoginUser().getId();
+        //Long userId= userService.findNowLoginUser().getId();
         UserRes.GetMyFolioDetailRes getMyFolioDetailRes = myService.getMyLifolioDetail(folioId);
 
         if(getMyFolioDetailRes == null){

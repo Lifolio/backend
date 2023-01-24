@@ -35,7 +35,7 @@ public class MyFolio extends BaseEntity {
     private Long userId;
 
     @Column(name="category_id")
-    private Long categoryId;
+    private Long categoryId; //서브카테고리id
 
     @Column(name ="title")
     private String title;
@@ -50,7 +50,7 @@ public class MyFolio extends BaseEntity {
     private Integer star;
 
     @Column(name="start_date")
-    private LocalDate start_date;
+    private LocalDate startDate;
 
     @Column(name="date")
     private Date date;
@@ -63,6 +63,9 @@ public class MyFolio extends BaseEntity {
 
     @Column(name="longitude")
     private java.math.BigDecimal longitude;
+
+    @Column(name = "address")
+    private String address;
 
 
 }
