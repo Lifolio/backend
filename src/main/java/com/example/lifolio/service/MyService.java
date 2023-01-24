@@ -224,13 +224,29 @@ public class MyService {
 
         MyFolio myFolio = myFolioRepository.getOne(folioId);
 
+        Long subCategoryId = myFolio.getCategoryId(); //마이폴리오에 저장된 카테고리id는 서브카테고리id
+        Long categoryId = subCategoryRepository.findById(subCategoryId).get().getCategoryId();
+
+
         UserRes.GetMyFolioDetailRes getMyFolioDetailRes = new UserRes.GetMyFolioDetailRes(
                 myFolio.getTitle(),
+                myFolio.getStar(),
+
+                categoryRepository.findById(categoryId).get().getTitle(),
+                subCategoryRepository.findById(subCategoryId).get().getTitle(),
+
+
                 getMyLifolioDetailImg(folioId),
-                categoryRepository.findById(myFolio.getCategoryId()).get().getTitle(),
+
+                myFolio.getStartDate(),
+                myFolio.getDate(),
+
                 myFolio.getContent(),
+
+                myFolio.getAddress(),
                 myFolio.getLatitude(),
                 myFolio.getLongitude(),
+
                 getMyFolioWithList(folioId)
         );
 
@@ -273,7 +289,7 @@ public class MyService {
         MyFolio myFolio = MyFolio.builder()
                 .userId(userId)
                 .title(postMyLifolioReq.getTitle())
-                .start_date(postMyLifolioReq.getStart_date())
+                .startDate(postMyLifolioReq.getStart_date())
                 .content(postMyLifolioReq.getContent())
                 .star(postMyLifolioReq.getStar())
                 .date(postMyLifolioReq.getEnd_date())

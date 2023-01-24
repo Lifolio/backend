@@ -1,9 +1,7 @@
 package com.example.lifolio.dto.user;
 
-import com.example.lifolio.entity.Category;
 import lombok.*;
 
-import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
@@ -176,13 +174,23 @@ public class UserRes {
     @Builder
     public static class GetMyFolioDetailRes{  //MyFolio 한 개 기록의 세부 내용 전부 보기
         String myFolioTitle;
-        List<MyFolioImgList> myFolioImgList;
+        int star; //중요도
+
         String category; //대분류
+        String subCategory; //소분류
+
+        List<MyFolioImgList> myFolioImgList;
+
+        LocalDate startDate; //시작일
+        Date endDate; //종료일
+
         String content;
+
+        String address; //주소
         BigDecimal latitude; //위도
         BigDecimal longitude; //경도
-        List<MyFolioWithList> myFolioWithList;
 
+        List<MyFolioWithList> myFolioWithList;
     }
 
 
