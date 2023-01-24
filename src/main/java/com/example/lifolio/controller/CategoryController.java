@@ -82,7 +82,7 @@ public class CategoryController {
 
     @ResponseBody
     @PatchMapping("/subTo/{userId}/{id}")
-    public BaseResponse<String> updateCategoryAddSubCategoryList(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody CategoryReq.UpdateCategoryAddSubCategoryReq updateCategoryAddSubCategoryReq) {
+    public BaseResponse<String> updateCategorySubCategoryList(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody CategoryReq.UpdateCategoryAddSubCategoryReq updateCategoryAddSubCategoryReq) {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
         }

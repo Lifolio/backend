@@ -3,6 +3,8 @@ package com.example.lifolio.dto.category;
 
 import lombok.*;
 
+import java.util.List;
+
 public class CategoryReq {
     @Builder
     @NoArgsConstructor
@@ -46,7 +48,7 @@ public class CategoryReq {
         private Long colorId;
 //        private Long categoryId;
         private String title;
-        private String Subtitle;
+        private List<String> Subtitle;
     }
 
     @Builder

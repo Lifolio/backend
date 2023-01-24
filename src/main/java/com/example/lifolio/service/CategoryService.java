@@ -85,9 +85,6 @@ public class CategoryService {
         subCategoryRepository.save(saveSubCategory);
     }
 
-    public void setCategory2List(Long id, CategoryReq.UpdateCategoryAddSubCategoryReq updateCategoryAddSubCategoryReq) {
-
-    }
 
     public void setSubCategoryList(Long id, SubCategoryReq.UpdateSubCategoryReq updateSubCategoryReq) {
         User user = userService.findNowLoginUser();
@@ -164,12 +161,14 @@ public class CategoryService {
 
         categoryRepository.save(saveCategory);
 
-        SubCategory saveSubCategory = SubCategory.builder()
-            .categoryId(saveCategory.getId())
-            .title(addCategorySubCategoryReq.getSubtitle())
-            .build();
+        for(String Subtitle : addCategorySubCategoryReq.getSubtitle()) {
+            SubCategory saveSubCategory = SubCategory.builder()
+                    .categoryId(saveCategory.getId())
+                    .title(Subtitle)
+                    .build();
+            subCategoryRepository.save(saveSubCategory);
+        }
 
-        subCategoryRepository.save(saveSubCategory);
 }
 
     public CategoryRes.CategoryUpdateView getCategoryUpdateView(Long categoryId) throws BaseException {
