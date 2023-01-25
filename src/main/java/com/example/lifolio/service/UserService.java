@@ -29,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.example.lifolio.base.BaseResponseStatus.NOT_CORRECT_USER;
 
@@ -159,6 +161,36 @@ public class UserService {
 
     }
 
+
+    //전화번호 양식 체크
+    public boolean validationPhoneNumber(String number){
+        Pattern pattern = Pattern.compile("\\d{11}");
+        Matcher matcher = pattern.matcher(number);
+        if (matcher.matches()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //비밀번호 양식 체크
+    public boolean validationPassword(String password){
+
+        // 비밀번호 포맷 확인(영문, 특수문자, 숫자 포함 8자 이상)
+        Pattern pattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,20}$");
+        Matcher matcher = pattern.matcher(password);
+//
+//        if(!passMatcher1.find()){
+//            return "비밀번호는 영문과 특수문자 숫자를 포함하며 8자 이상이어야 합니다.";
+//        }
+//        Pattern pattern = Pattern.compile("\\d{11}");
+//        Matcher matcher = pattern.matcher(number);
+        if (matcher.find()) {
+            return true; //양식대로 작성
+        } else {
+            return false; //x
+        }
+    }
 
     public int phoneNumberCheck(String to) throws CoolsmsException {
 

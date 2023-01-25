@@ -72,6 +72,10 @@ public enum     BaseResponseStatus {
 
     NOT_POST_CONTENT(false,2033,"내용을 입력해주세요."),
 
+    NOT_CORRECT_PHONE_NUMBER_FORM(false, 2034, "전화번호를 하이픈(-) 없이 입력해주세요"),
+
+    NOT_CORRECT_PASSWORD_FORM(false, 2035, "비밀번호는 영문과 특수문자 숫자를 포함하며 8자 이상이어야 합니다."),
+
     //Planning
 
     NOT_POST_TITLE(false,2040,"제목을 입력해주세요"),
