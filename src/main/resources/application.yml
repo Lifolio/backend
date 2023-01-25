@@ -1,0 +1,72 @@
+server:
+  port: 9000
+
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+      show-sql: true # DDL ??
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://lifolio.c4gqu0n0yzjg.ap-northeast-2.rds.amazonaws.com:3306/lifolio_schema
+    username: admin
+    password: lifolio1226
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  redis:
+    host: localhost
+    port: 6379
+
+
+
+jwt:
+  header: Authorization
+  #umc-3rd-team-project-lifolio-umc-3rd-team-project-lifolio-umc-3rd-team-project-lifolio-umc-3rd-team-project-lifolio
+  secret: dW1jLTNyZC10ZWFtLXByb2plY3QtbGlmb2xpby11bWMtM3JkLXRlYW0tcHJvamVjdC1saWZvbGlvLXVtYy0zcmQtdGVhbS1wcm9qZWN0LWxpZm9saW8tdW1jLTNyZC10ZWFtLXByb2plY3QtbGlmb2xpbwo=
+  token-validity-in-seconds: 86400
+  refresh: da21rklmlk2wVMSDKVLSBsd214124LKASFFnfsajfnk512rlpf2klfkasfoapokfjoifhbggSJKDfojoi1u248975102ijflkwnjasfsaklnfalknkgwqrwsjfcnalskfobiSIJODBNLMSDBNVMSLKVDkKFFLAM
+  access-token-seconds: 31536000
+  refresh-token-seconds: 31536000
+
+
+logging:
+  level:
+    study.cherry: DEBUG
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
+
+coolsms:
+  key: NCSNMZXJWB2W7OSP
+  secret: AQA4ROR9GMGDQGKN67CLPAWYKCKPY1SR
+
+
+fcm:
+  key:
+    path: lifolioAccessKey.json
+    scope: https://www.googleeapis.com/auth/cloud-platform
+
+  api:
+    url: https://fcm.googleapis.com/v1/projects/lifolio-7b354/messages:send
+
+
+cloud:
+  aws:
+    s3:
+      bucket: lifolio-bucket
+    credentials:
+      access-key: AKIATSEM7EXIEK3F57UP
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
