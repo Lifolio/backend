@@ -49,12 +49,19 @@ public class UserController {
     @PostMapping("/signup")
     public BaseResponse<UserRes.TokenRes> signup(@Valid @RequestBody UserReq.SignupUserReq signupUserReq) throws BaseException {
         try {
-            if (userService.checkUserId(signupUserReq.getUsername())) {
+            if (userService.checkUserId(signupUserReq.getUsername())) { //아이디 중복 여부
                 return new BaseResponse<>(USERS_EXISTS_ID);
             }
-            if (userService.checkNickName(signupUserReq.getNickname())) {
+            if(!userService.validationPassword(signupUserReq.getPassword())){ //비밀번호 양식 체크
+                return new BaseResponse<>(NOT_CORRECT_PASSWORD_FORM);
+            }
+            if (userService.checkNickName(signupUserReq.getNickname())) { //닉네임 중복 여부
                 return new BaseResponse<>(USERS_EXISTS_NICKNAME);
             }
+            if(!userService.validationPhoneNumber(signupUserReq.getPhone())){ //전화번호 양식 체크
+                return new BaseResponse<>(NOT_CORRECT_PHONE_NUMBER_FORM);
+            }
+
             return new BaseResponse<>(userService.signup(signupUserReq));
         }catch(BaseException e){
             return new BaseResponse<>(e.getStatus());
