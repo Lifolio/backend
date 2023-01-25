@@ -32,8 +32,7 @@ public interface PlanningWeekRepository extends JpaRepository<PlanningWeek, Long
             "         join Alarm A on P.user_id = A.user_id\n" +
             "where todo_alarm = 1\n" +
             "and date BETWEEN :startTime AND :finishTime and P.user_id = :userId",nativeQuery = true)
-    List<TodoList> getTodoList(@Param("startTime") LocalDateTime startTime, @Param("finishTime")LocalDateTime finishTime,Long userId);
-
+    List<TodoList> getTodoList(@Param("startTime") LocalDateTime startTime, @Param("finishTime")LocalDateTime finishTime,@Param("userId") Long userId);
     interface TodoList {
         int getSuccess();
     }
