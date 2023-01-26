@@ -37,6 +37,9 @@ public class MyFolio extends BaseEntity {
     @Column(name="category_id")
     private Long categoryId; //서브카테고리id
 
+    @Column(name="goalofyear_id")
+    private Long goalofyearId;
+
     @Column(name ="title")
     private String title;
 

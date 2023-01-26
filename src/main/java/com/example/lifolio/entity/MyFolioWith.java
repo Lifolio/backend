@@ -26,9 +26,11 @@ public class MyFolioWith extends BaseEntity {
     @Column(name="folio_Id")
     private Long folioId;
 
-    @Column(name="user_Id")
-    private Long userId;
+    @Column(name="user_name")
+    private String userName;
 
-
-
+    public MyFolioWith(String userName, MyFolio myFolio) {
+        this.userName = userName;
+        this.folioId = myFolio.getId();
+    }
 }
