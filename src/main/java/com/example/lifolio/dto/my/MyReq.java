@@ -18,13 +18,20 @@ public class MyReq {
         private List<String> categoryList;
     }
 
+//    @NoArgsConstructor
+//    @AllArgsConstructor
+//    @Setter
+//    @Getter
+//    public static class Shared_names{
+//        private List<String> name;
+//    }
+
     @NoArgsConstructor
     @AllArgsConstructor
     @Setter
     @Getter
     public static class PostMyLifolioReq {
         private String title;
-
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
         private LocalDate start_date;
 
@@ -32,7 +39,10 @@ public class MyReq {
         private Date end_date;
 
         private List<String> img;
+        private List<String> name;
         private Long category_id;
+
+        private Long goalofyear_id;
 
         private String content;
 
