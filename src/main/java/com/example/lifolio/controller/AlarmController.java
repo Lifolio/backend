@@ -1,14 +1,14 @@
 package com.example.lifolio.controller;
 
 
-import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
 import com.example.lifolio.dto.alarm.AlarmReq;
-import com.example.lifolio.dto.home.HomeReq;
 import com.example.lifolio.dto.user.UserRes;
+import com.example.lifolio.entity.User;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.AlarmService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import static com.example.lifolio.base.BaseResponseStatus.INVALID_USER_JWT;
@@ -22,156 +22,105 @@ public class AlarmController {
 
     @ResponseBody
     @GetMapping("")
-    public BaseResponse<UserRes.AlarmList> getAlarmList(){
-        try {
-            Long userId=tokenProvider.getUserIdx();
+    public BaseResponse<UserRes.AlarmList> getAlarmList(@AuthenticationPrincipal User user){
+            Long userId=user.getId();
             UserRes.AlarmList alarmList = alarmService.getAlarmList(userId);
             return new BaseResponse<>(alarmList);
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
     @ResponseBody
-    @PatchMapping("/allAlarm/{userId}")
-    public BaseResponse<String> updateAllAlarm(@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
-        try {
-            Long userId=tokenProvider.getUserIdx();
+    @PatchMapping("/allAlarm")
+    public BaseResponse<String> updateAllAlarm(@AuthenticationPrincipal User user,@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
+            Long userId=user.getId();
+            System.out.println(userId);
             alarmService.setAllAlarm(userId,allAlarmUpdateReq);
             return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
     @ResponseBody
-    @PatchMapping("/myAllAlarm/{userId}")
-    public BaseResponse<String> updateMyAllAlarm(@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
-        try {
-            Long userId=tokenProvider.getUserIdx();
+    @PatchMapping("/myAllAlarm")
+    public BaseResponse<String> updateMyAllAlarm(@AuthenticationPrincipal User user,@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
+            Long userId=user.getId();
             alarmService.setMyAllAlarm(userId,allAlarmUpdateReq);
             return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
     @ResponseBody
-    @PatchMapping("/weekAlarm/{userId}")
-    public BaseResponse<String> updateWeekAlarm(@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
-        try {
-            Long userId=tokenProvider.getUserIdx();
+    @PatchMapping("/weekAlarm")
+    public BaseResponse<String> updateWeekAlarm(@AuthenticationPrincipal User user,@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
+            Long userId=user.getId();
             alarmService.setWeekAlarm(userId,allAlarmUpdateReq);
             return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
     @ResponseBody
-    @PatchMapping("/badgeAlarm/{userId}")
-    public BaseResponse<String> updateBadgeAlarm(@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
-        try {
-            Long userId=tokenProvider.getUserIdx();
+    @PatchMapping("/badgeAlarm")
+    public BaseResponse<String> updateBadgeAlarm(@AuthenticationPrincipal User user,@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
+            Long userId=user.getId();
             alarmService.setBadgeAlarm(userId,allAlarmUpdateReq);
             return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
     @ResponseBody
-    @PatchMapping("/plannigAllAlarm/{userId}")
-    public BaseResponse<String> updatePlanningAllAlarm(@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
-        try {
-            Long userId=tokenProvider.getUserIdx();
+    @PatchMapping("/plannigAllAlarm")
+    public BaseResponse<String> updatePlanningAllAlarm(@AuthenticationPrincipal User user,@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
+            Long userId=user.getId();
             alarmService.setPlanningAllAlarm(userId,allAlarmUpdateReq);
             return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
     @ResponseBody
-    @PatchMapping("/todoAlarm/{userId}")
-    public BaseResponse<String> updateTodoAlarm(@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
-        try {
-            Long userId=tokenProvider.getUserIdx();
+    @PatchMapping("/todoAlarm")
+    public BaseResponse<String> updateTodoAlarm(@AuthenticationPrincipal User user,@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
+            Long userId=user.getId();
             alarmService.setTodoAlarm(userId,allAlarmUpdateReq);
             return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
     @ResponseBody
-    @PatchMapping("/goalAlarm/{userId}")
-    public BaseResponse<String> updateGoalAlarm(@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
-        try {
-            Long userId=tokenProvider.getUserIdx();
+    @PatchMapping("/goalAlarm")
+    public BaseResponse<String> updateGoalAlarm(@AuthenticationPrincipal User user,@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
+            Long userId=user.getId();
             alarmService.setGoalAlarm(userId,allAlarmUpdateReq);
             return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
     @ResponseBody
-    @PatchMapping("/socialAllAlarm/{userId}")
-    public BaseResponse<String> updateSocialAllAlarm(@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
-        try {
-            Long userId=tokenProvider.getUserIdx();
+    @PatchMapping("/socialAllAlarm")
+    public BaseResponse<String> updateSocialAllAlarm(@AuthenticationPrincipal User user,@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
+            Long userId=user.getId();
             alarmService.setSocialAllAlarm(userId,allAlarmUpdateReq);
             return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
     @ResponseBody
-    @PatchMapping("/uploadAlarm/{userId}")
-    public BaseResponse<String> updateUploadAlarm(@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
-        try {
-            Long userId=tokenProvider.getUserIdx();
+    @PatchMapping("/uploadAlarm")
+    public BaseResponse<String> updateUploadAlarm(@AuthenticationPrincipal User user,@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
+            Long userId=user.getId();
             alarmService.setUploadAlarm(userId,allAlarmUpdateReq);
             return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
     @ResponseBody
-    @PatchMapping("/interestAlarm/{userId}")
-    public BaseResponse<String> updateInterestAlarm(@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
-        try {
-            Long userId=tokenProvider.getUserIdx();
+    @PatchMapping("/interestAlarm")
+    public BaseResponse<String> updateInterestAlarm(@AuthenticationPrincipal User user,@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
+            Long userId=user.getId();
             alarmService.setInterestAlarm(userId,allAlarmUpdateReq);
             return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
     @ResponseBody
-    @PatchMapping("/likeAlarm/{userId}")
-    public BaseResponse<String> updateLikeAlarm(@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
-        try {
-            Long userId=tokenProvider.getUserIdx();
+    @PatchMapping("/likeAlarm")
+    public BaseResponse<String> updateLikeAlarm(@AuthenticationPrincipal User user,@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
+            Long userId=user.getId();
             alarmService.setLikeAlarm(userId,allAlarmUpdateReq);
             return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
     @ResponseBody
-    @PatchMapping("/marketingAlarm/{userId}")
-    public BaseResponse<String> updateMarketingAlarm(@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
-        try {
-            Long userId=tokenProvider.getUserIdx();
+    @PatchMapping("/marketingAlarm")
+    public BaseResponse<String> updateMarketingAlarm(@AuthenticationPrincipal User user,@RequestBody AlarmReq.AllAlarmUpdateReq allAlarmUpdateReq){
+            Long userId=user.getId();
             alarmService.setMarketingAlarm(userId,allAlarmUpdateReq);
             return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 }
