@@ -22,6 +22,7 @@ public class PlanOfYearController {
 
     private final TokenProvider tokenProvider;
 
+    /*
 
     @PostMapping("/{userId}")
     public BaseResponse<String> setPlanOfYear(@RequestBody PlanOfYearReq.PostPlanOfYearReq postPlanOfYearReq) {
@@ -34,11 +35,15 @@ public class PlanOfYearController {
     }
 
 
+
+
     @ResponseBody
     @PatchMapping("/updatePlanOfYear/{userId}/{PlanOfYearId}")
     public BaseResponse<String> updatePlanOfYear(@PathVariable("PlanOfYearId") Long PlanOfYearId) {
 
     }
+
+     */
 
     @ResponseBody
     @DeleteMapping("/{userId}/{PlanOfYearId}")

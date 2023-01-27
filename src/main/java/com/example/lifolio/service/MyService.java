@@ -100,18 +100,16 @@ public class MyService {
 
     public List<UserRes.DailyCalender> getDailyCalender(Long userId, String date) throws ParseException {
         //String str = "2019-09-02 08:10:55";
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date _date = format.parse(date);
 
 
 
-        List<MyFolio> myFolioList = myFolioRepository.findAllByUserIdAndDate(userId,_date);
+        List<MyFolio> myFolioList = myFolioRepository.findAllByUserIdAndEndDate(userId, LocalDate.parse(date));
         List<UserRes.DailyCalender> dailyCalenderList = new ArrayList<>();
 
 
         for(MyFolio myFolio : myFolioList){
             UserRes.DailyCalender dailyCalender = new UserRes.DailyCalender(
-                    myFolio.getDate(),
+                    myFolio.getEndDate(),
                     categoryRepository.findById(myFolio.getCategoryId()).get().getTitle(),
                     myFolio.getTitle(),
                     myFolio.getStar()
@@ -239,7 +237,7 @@ public class MyService {
                 getMyLifolioDetailImg(folioId),
 
                 myFolio.getStartDate(),
-                new java.sql.Date(myFolio.getDate().getTime()).toLocalDate(),
+                myFolio.getEndDate(),
 
                 myFolio.getContent(),
 
@@ -292,7 +290,7 @@ public class MyService {
                 .startDate(postMyLifolioReq.getStart_date())
                 .content(postMyLifolioReq.getContent())
                 .star(postMyLifolioReq.getStar())
-                .date(postMyLifolioReq.getEnd_date())
+                .endDate(postMyLifolioReq.getEnd_date())
                 .latitude(postMyLifolioReq.getLatitude())
                 .longitude(postMyLifolioReq.getLongitude())
                 .categoryId(postMyLifolioReq.getCategory_id())

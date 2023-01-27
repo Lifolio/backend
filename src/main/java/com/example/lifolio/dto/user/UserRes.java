@@ -161,7 +161,7 @@ public class UserRes {
     @AllArgsConstructor
     @Builder
     public static class DailyCalender{
-        private Date date; //2023년 1월 1일
+        private LocalDate date; //2023년 1월 1일
         private String category;
         private String title;
         private Integer star;
