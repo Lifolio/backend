@@ -151,6 +151,7 @@ public class UserService {
     @SneakyThrows
     public UserRes.PasswordRes setNewPassword(UserReq.PasswordReq passwordReq){ //새 비밀번호로 바꾸기
         User user = userRepository.findByUsernameEquals(passwordReq.getUsername());
+        //User user = findNowLoginUser();
         if(user != null){
             user.setPassword(passwordEncoder.encode(passwordReq.getNewPassword()));
             userRepository.save(user);
@@ -160,6 +161,7 @@ public class UserService {
         }
 
     }
+
 
 
     //전화번호 양식 체크
