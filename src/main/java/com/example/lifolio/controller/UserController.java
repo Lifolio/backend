@@ -3,6 +3,7 @@ package com.example.lifolio.controller;
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
 import com.example.lifolio.dto.user.*;
+import com.example.lifolio.entity.User;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.RedisService;
 import com.example.lifolio.service.UserService;
@@ -70,7 +71,8 @@ public class UserController {
 
     @ApiOperation(value = "새로운 비밀번호 설정", notes = "새로운 비밀번호 설정")
     @PatchMapping("/password")
-    public BaseResponse<UserRes.PasswordRes> setNewPassword(UserReq.PasswordReq passwordReq){
+    public BaseResponse<UserRes.PasswordRes> setNewPassword(@RequestBody UserReq.PasswordReq passwordReq){
+
         //이름, 아이디
         UserRes.PasswordRes passwordRes = userService.setNewPassword(passwordReq);
         if(passwordRes != null){
@@ -78,7 +80,9 @@ public class UserController {
         } else {
             return new BaseResponse<>(NOT_EXIST_USER);
         }
+
     }
+
 
 
 //    @GetMapping("/user")
