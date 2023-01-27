@@ -55,8 +55,8 @@ public class MyFolio extends BaseEntity {
     @Column(name="start_date")
     private LocalDate startDate;
 
-    @Column(name="date")
-    private Date date;
+    @Column(name="end_date")
+    private LocalDate endDate;
 
     @Column(name="status")
     private Integer status;

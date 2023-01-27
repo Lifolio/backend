@@ -22,23 +22,28 @@ public class PlanOfYearController {
 
     private final TokenProvider tokenProvider;
 
+    /*
 
-//    @PostMapping("/{userId}")
-//    public BaseResponse<String> setPlanOfYear(@RequestBody PlanOfYearReq.PostPlanOfYearReq postPlanOfYearReq) {
-//
-//    }
-//
-//    @GetMapping("/{userId}")
-//    public BaseResponse<List<PlanOfYearRes.GetPlanOfYearRes>> getPlanOfYear() {
-//
-//    }
-//
-//
-//    @ResponseBody
-//    @PatchMapping("/updatePlanOfYear/{userId}/{PlanOfYearId}")
-//    public BaseResponse<String> updatePlanOfYear(@PathVariable("PlanOfYearId") Long PlanOfYearId) {
-//
-//    }
+    @PostMapping("/{userId}")
+    public BaseResponse<String> setPlanOfYear(@RequestBody PlanOfYearReq.PostPlanOfYearReq postPlanOfYearReq) {
+
+    }
+
+    @GetMapping("/{userId}")
+    public BaseResponse<List<PlanOfYearRes.GetPlanOfYearRes>> getPlanOfYear() {
+
+    }
+
+
+
+
+    @ResponseBody
+    @PatchMapping("/updatePlanOfYear/{userId}/{PlanOfYearId}")
+    public BaseResponse<String> updatePlanOfYear(@PathVariable("PlanOfYearId") Long PlanOfYearId) {
+
+    }
+
+     */
 
     @ResponseBody
     @DeleteMapping("/{userId}/{PlanOfYearId}")
