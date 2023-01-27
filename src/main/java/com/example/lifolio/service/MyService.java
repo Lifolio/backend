@@ -274,7 +274,7 @@ public class MyService {
 
         for(MyFolioWith with : withs){
             UserRes.MyFolioWithList person = new UserRes.MyFolioWithList(
-                    userRepository.findById(with.getUserId()).get().getName()
+                    with.getUserName()
             );
             myFolioWithList.add(person);
         }
@@ -283,7 +283,7 @@ public class MyService {
     }
 
 
-    public void setMyLifolio(Long userId,List<String> imgPaths, MyReq.PostMyLifolioReq postMyLifolioReq) {
+    public void setMyLifolio(Long userId, List<String> imgPaths, MyReq.PostMyLifolioReq postMyLifolioReq) {
         MyFolio myFolio = MyFolio.builder()
                 .userId(userId)
                 .title(postMyLifolioReq.getTitle())
@@ -294,6 +294,7 @@ public class MyService {
                 .latitude(postMyLifolioReq.getLatitude())
                 .longitude(postMyLifolioReq.getLongitude())
                 .categoryId(postMyLifolioReq.getCategory_id())
+                .goalofyearId(postMyLifolioReq.getGoalofyear_id())
                 .build();
 
         myFolioRepository.save(myFolio);
@@ -303,6 +304,13 @@ public class MyService {
             MyFolioImg img = new MyFolioImg(imgUrl, myFolio);
             myFolioImgRepository.save(img);
             imgList.add(img.getUrl());
+        }
+
+        List<String> Shared_name_List = new ArrayList<>();
+        for(String Shared_name : postMyLifolioReq.getName()){
+            MyFolioWith name = new MyFolioWith(Shared_name,myFolio);
+            myFolioWithRepository.save(name);
+            Shared_name_List.add(name.getUserName());
         }
     }
 }
