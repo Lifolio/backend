@@ -11,6 +11,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +29,8 @@ import java.sql.SQLException;
 public class AuthService {
 
     private final UserRepository userRepository;
-    private final TokenProvider tokenProvider;
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
     @Value("${jwt.refresh-token-seconds}")
     private long refreshTime;
     private final RedisService redisService;
@@ -118,32 +123,31 @@ public class AuthService {
             JsonElement element = parser.parse(result);
 
             Long id = element.getAsJsonObject().get("id").getAsLong();
-            boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
-            String email = "";
-
-            if (hasEmail) {
-                email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
-            }
 
 
             String name=element.getAsJsonObject().get("properties").getAsJsonObject().get("nickname").getAsString();
 
             if(!userRepository.existsByUsernameAndSocial(String.valueOf(id),socialReq.getSocial())){
-                User user=UserConverter.postUser(String.valueOf(id),socialReq.getSocial(),name);
+                User user=UserConverter.postUser(String.valueOf(id),socialReq.getSocial(),name, passwordEncoder.encode("kakao"));
 
                 Long userId=userRepository.save(user).getId();
 
                 UserRes.GenerateToken generateToken=userService.createToken(userId);
                 userService.postAlarmUser(userId);
                 redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(), (System.currentTimeMillis()+ refreshTime*1000));
+
+
                 return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
             }
 
             br.close();
+
             User user=userRepository.findByUsernameAndSocial(String.valueOf(id),socialReq.getSocial());
             Long userId=user.getId();
 
+
             UserRes.GenerateToken generateToken=userService.createToken(userId);
+
 
             redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(), (System.currentTimeMillis()+ refreshTime*1000));
             return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
@@ -261,7 +265,7 @@ public class AuthService {
 
 
             if(!userRepository.existsByUsernameAndSocial(String.valueOf(id),socialReq.getSocial())){
-                User user=UserConverter.postUser(String.valueOf(id),socialReq.getSocial(),name);
+                User user=UserConverter.postUser(String.valueOf(id),socialReq.getSocial(),name,passwordEncoder.encode("naver"));
                 Long userId=userRepository.save(user).getId();
                 UserRes.GenerateToken generateToken=userService.createToken(userId);
                 userService.postAlarmUser(userId);
