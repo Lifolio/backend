@@ -39,6 +39,7 @@ public class CategoryController {
         }
     }
 
+
     @GetMapping("/view/{categoryId}")
     public BaseResponse<CategoryRes.CategoryUpdateView> getCategoryUpdateView(@PathVariable("categoryId") Long categoryId){
         try {

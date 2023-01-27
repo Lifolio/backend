@@ -4,10 +4,7 @@ import com.example.lifolio.converter.PlanningConvertor;
 import com.example.lifolio.converter.TimeConvertor;
 import com.example.lifolio.dto.planning.PlanningReq;
 import com.example.lifolio.dto.planning.PlanningRes;
-import com.example.lifolio.entity.Planning;
-import com.example.lifolio.entity.PlanningMonth;
-import com.example.lifolio.entity.PlanningWeek;
-import com.example.lifolio.entity.PlanningYear;
+import com.example.lifolio.entity.*;
 import com.example.lifolio.repository.PlanningMonthRepository;
 import com.example.lifolio.repository.PlanningRepository;
 import com.example.lifolio.repository.PlanningWeekRepository;
@@ -49,6 +46,29 @@ public class PlanningService {
         return getGoalOfYearResList;
     }
 
+    public int getGoalOfYearAchievement(Long userId) {
+
+        int allGoal = 0;
+        int successGoal = 0;
+
+        List<PlanningRes.GetSuccessGoalOfYearRes> SuccessGoalOfYearArray = new ArrayList<>();
+        List<PlanningYear> PlanningYearList = planningYearRepository.findAllByUserIdOrderByDateAsc(userId);
+        allGoal = PlanningYearList.size();
+
+        for(PlanningYear planningYear: PlanningYearList){
+            if (planningYear.getSuccess() == 1) {
+                PlanningRes.GetSuccessGoalOfYearRes SuccessGoalOfYear = new PlanningRes.GetSuccessGoalOfYearRes(planningYear.getSuccess());
+                SuccessGoalOfYearArray.add(SuccessGoalOfYear);
+                successGoal = SuccessGoalOfYearArray.size();
+            }
+        }
+
+        if(successGoal!=0) {
+            return allGoal/successGoal;
+        } else return 0;
+
+    }
+
     public void updateGoalOfYear(Long userId, Long planningYearId, PlanningReq.UpdateGoalOfYearReq updateGoalOfYearReq) {
         PlanningYear planningYear = planningYearRepository.getOne(planningYearId);
         planningYear.updateGoalOfYear(updateGoalOfYearReq.getDate(),updateGoalOfYearReq.getTitle());
@@ -83,6 +103,8 @@ public class PlanningService {
         Optional<Planning> planning=planningRepository.findById(planningId);
         return planning.get().getSuccess();
     }
+
+
 
     public void checkSuccessByYear(Long planningYearId) {
         Optional<PlanningYear> planningYear =planningYearRepository.findById(planningYearId);

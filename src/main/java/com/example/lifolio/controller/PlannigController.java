@@ -2,10 +2,12 @@ package com.example.lifolio.controller;
 
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
+import com.example.lifolio.dto.category.CategoryRes;
 import com.example.lifolio.dto.planning.PlanningReq;
 import com.example.lifolio.dto.planning.PlanningRes;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.PlanningService;
+import com.example.lifolio.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,7 @@ import static com.example.lifolio.base.BaseResponseStatus.*;
 public class PlannigController {
     private final TokenProvider tokenProvider;
     private final PlanningService planningService;
+    private final UserService userService;
 
 
 //    @GetMapping("/{userId}")
@@ -50,6 +53,21 @@ public class PlannigController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+
+    @GetMapping("/goalOfYearAchievement/{userId}")
+    public BaseResponse<String> getGoalOfYearAchievement(){
+        try {
+            Long userId=tokenProvider.getUserIdx();
+            int getGoalOfYearAchievement = planningService.getGoalOfYearAchievement(userId);
+            if(getGoalOfYearAchievement==0){
+                return new BaseResponse<>(0 + "%");
+            } else return new BaseResponse<>(getGoalOfYearAchievement + "%");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
 
     @ResponseBody
     @PatchMapping("/goalOfYear/{userId}/{planningYearId}")
