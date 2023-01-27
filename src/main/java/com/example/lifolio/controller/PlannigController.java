@@ -286,6 +286,9 @@ public class PlannigController {
     public BaseResponse<String> patchPlan(@PathVariable("planningId") Long planningId, @RequestBody PlanningReq.PostPlanningReq postPlanningReq){
         try{
             Long userId=tokenProvider.getUserIdx();
+            if(!planningService.existsPlanning(planningId)){
+                return new BaseResponse<>(NOT_EXIST_PLANNING);
+            }
             planningService.patchPlan(userId,postPlanningReq,planningId);
             return new BaseResponse<>("수정 성공");
         } catch (BaseException e) {
@@ -297,6 +300,9 @@ public class PlannigController {
     public BaseResponse<String> patchPlanWeek(@PathVariable("planningId") Long planningId, @RequestBody PlanningReq.PostPlanningInfoReq postPlanningReq){
         try{
             Long userId=tokenProvider.getUserIdx();
+            if(!planningService.existsPlanning(planningId)){
+                return new BaseResponse<>(NOT_EXIST_PLANNING);
+            }
             planningService.patchPlanWeek(userId,postPlanningReq,planningId);
             return new BaseResponse<>("수정 성공");
         } catch (BaseException e) {
@@ -308,6 +314,9 @@ public class PlannigController {
     public BaseResponse<String> patchPlanMonth(@PathVariable("planningId") Long planningId, @RequestBody PlanningReq.PostPlanningInfoReq postPlanningReq){
         try{
             Long userId=tokenProvider.getUserIdx();
+            if(!planningService.existsPlanning(planningId)){
+                return new BaseResponse<>(NOT_EXIST_PLANNING);
+            }
             planningService.patchPlanMonth(userId,postPlanningReq,planningId);
             return new BaseResponse<>("수정 성공");
         } catch (BaseException e) {

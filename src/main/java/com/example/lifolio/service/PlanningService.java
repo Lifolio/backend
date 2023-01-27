@@ -216,7 +216,7 @@ public class PlanningService {
     }
 
     public void deletePlanningMonth(Long planningId) {
-        planningWeekRepository.deleteById(planningId);
+        planningMonthRepository.deleteById(planningId);
     }
 
     public void patchPlanWeek(Long userId, PlanningReq.PostPlanningInfoReq postPlanningReq, Long planningId) {
