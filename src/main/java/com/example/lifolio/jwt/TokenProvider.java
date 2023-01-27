@@ -111,7 +111,7 @@ public class TokenProvider implements InitializingBean {
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(userName);
 
-        return new UsernamePasswordAuthenticationToken(userDetails,"",userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(users.get(),"",userDetails.getAuthorities());
     }
 
 
@@ -156,37 +156,6 @@ public class TokenProvider implements InitializingBean {
     public String getJwt(){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         return request.getHeader(AUTHORIZATION_HEADER);
-    }
-    /*
-    JWT에서 userId 추출
-    @return int
-    @throws BaseException
-     */
-    public Long getUserIdx() throws BaseException{
-        //1. JWT 추출
-        String accessToken = getJwt();
-
-        // 2. JWT parsing
-        Jws<Claims> claims;
-            claims = Jwts.parser()
-                    .setSigningKey(secret)
-                    .parseClaimsJws(accessToken);
-
-        String expiredAt= redisService.getValues(accessToken);
-
-
-        // 3. userId 추출
-        Long userId = claims.getBody().get("userId",Long.class);
-
-        if(expiredAt==null){
-            return userId;
-        }
-        if(expiredAt.equals(String.valueOf(userId))){
-            throw new BaseException(HIJACK_ACCESS_TOKEN);
-        }
-        // 3. userId 추출
-        return userId;
-
     }
 
 

@@ -6,10 +6,12 @@ import com.example.lifolio.dto.category.CategoryDTO;
 import com.example.lifolio.dto.category.CategoryReq;
 import com.example.lifolio.dto.category.CategoryRes;
 import com.example.lifolio.dto.category.SubCategoryReq;
+import com.example.lifolio.entity.User;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.CategoryService;
 import com.example.lifolio.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,25 +24,21 @@ import static com.example.lifolio.base.BaseResponseStatus.INVALID_USER_JWT;
 @RequestMapping("/category")
 public class CategoryController {
     private final CategoryService categoryService;
-    private final TokenProvider jwtProvider;
+    private final TokenProvider tokenProvider;
     private final UserService userService;
 
 
     @ResponseBody
     @GetMapping("")
-    public BaseResponse<List<CategoryRes.Category>> getCategoryList() {
-        try {
-            Long userId = jwtProvider.getUserIdx();
+    public BaseResponse<List<CategoryRes.Category>> getCategoryList(@AuthenticationPrincipal User user) {
+            Long userId = user.getId();
             List<CategoryRes.Category> categoryList = categoryService.getCategoryList(userId);
             return new BaseResponse<>(categoryList);
 
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
     @GetMapping("/view/{categoryId}")
-    public BaseResponse<CategoryRes.CategoryUpdateView> getCategoryUpdateView(@PathVariable("categoryId") Long categoryId){
+    public BaseResponse<CategoryRes.CategoryUpdateView> getCategoryUpdateView(@AuthenticationPrincipal User user,@PathVariable("categoryId") Long categoryId){
         try {
             CategoryRes.CategoryUpdateView categoryUpdateView = categoryService.getCategoryUpdateView(categoryId);
             return new BaseResponse<>(categoryUpdateView);
@@ -50,7 +48,7 @@ public class CategoryController {
     }
 
     @GetMapping("/view/sub/{categoryId}")
-    public BaseResponse<CategoryRes.SubCategoryUpdateView> getSubCategoryUpdateView(@PathVariable("categoryId") Long categoryId){
+    public BaseResponse<CategoryRes.SubCategoryUpdateView> getSubCategoryUpdateView(@AuthenticationPrincipal User user,@PathVariable("categoryId") Long categoryId){
         try {
             CategoryRes.SubCategoryUpdateView subCategoryUpdateView = categoryService.getSubCategoryUpdateView(categoryId);
             return new BaseResponse<>(subCategoryUpdateView);
@@ -62,17 +60,17 @@ public class CategoryController {
 
     @ResponseBody
     @GetMapping("/{userId}")
-    public BaseResponse<List<CategoryRes.CategoryIdTitle>> getCategoryTitleList(@PathVariable("userId") Long userId) {
+    public BaseResponse<List<CategoryRes.CategoryIdTitle>> getCategoryTitleList(@AuthenticationPrincipal User user,@PathVariable("userId") Long userId) {
             if(userService.findNowLoginUser().getId() != userId){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            List<CategoryRes.CategoryIdTitle> categoryTitleList = categoryService.getCategoryIdTitleList(userId);
+            List<CategoryRes.CategoryIdTitle> categoryTitleList = categoryService.getCategoryIdTitleList(user.getId());
             return new BaseResponse<>(categoryTitleList);
     }
 
     @ResponseBody
     @PatchMapping("/{userId}/{id}")
-    public BaseResponse<String> updateCategoryList(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody CategoryReq.UpdateCategoryReq updateCategoryReq) {
+    public BaseResponse<String> updateCategoryList(@AuthenticationPrincipal User user,@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody CategoryReq.UpdateCategoryReq updateCategoryReq) {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
         }
@@ -82,7 +80,7 @@ public class CategoryController {
 
     @ResponseBody
     @PatchMapping("/list/{userId}/{id}")
-    public BaseResponse<String> updateCategorySubCategoryList(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody CategoryReq.UpdateCategoryAddSubCategoryReq updateCategoryAddSubCategoryReq) {
+    public BaseResponse<String> updateCategorySubCategoryList(@AuthenticationPrincipal User user,@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody CategoryReq.UpdateCategoryAddSubCategoryReq updateCategoryAddSubCategoryReq) {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
         }
@@ -93,7 +91,7 @@ public class CategoryController {
 
     @ResponseBody
     @PatchMapping("/sub/{userId}/{id}")
-    public BaseResponse<String> updateSubCategoryList(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody SubCategoryReq.UpdateSubCategoryReq updateSubCategoryReq) {
+    public BaseResponse<String> updateSubCategoryList(@AuthenticationPrincipal User user,@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody SubCategoryReq.UpdateSubCategoryReq updateSubCategoryReq) {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
         }
@@ -103,7 +101,7 @@ public class CategoryController {
 
     @ResponseBody
     @PatchMapping("/sub/move/{userId}/{id}")
-    public BaseResponse<String> updateSubCategoryToCategoryList(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody SubCategoryReq.MoveSubCategoryReq moveSubCategoryReq) {
+    public BaseResponse<String> updateSubCategoryToCategoryList(@AuthenticationPrincipal User user,@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody SubCategoryReq.MoveSubCategoryReq moveSubCategoryReq) {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
         }
@@ -113,32 +111,24 @@ public class CategoryController {
 
     @ResponseBody
     @DeleteMapping("/{id}")
-    public BaseResponse<String> deleteCategoryList(@PathVariable("id") Long id) {
-        try {
-            Long userId = jwtProvider.getUserIdx();
+    public BaseResponse<String> deleteCategoryList(@AuthenticationPrincipal User user,@PathVariable("id") Long id) {
+            Long userId = user.getId();
             categoryService.deleteCategoryList(id);
             return new BaseResponse<>("삭제 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     } //대분류 카테고리(관련된 소분류 카테고리도 함께) 삭제
 
     @ResponseBody
     @DeleteMapping("/sub/{id}")
-    public BaseResponse<String> deleteSubCategoryList(@PathVariable("id") Long id) {
-        try {
-            Long userId = jwtProvider.getUserIdx();
+    public BaseResponse<String> deleteSubCategoryList(@AuthenticationPrincipal User user,@PathVariable("id") Long id) {
+            Long userId = user.getId();
             categoryService.deleteSubCategoryList(id);
             return new BaseResponse<>("삭제 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     } //소분류 카테고리 삭제
 
 
     @ResponseBody
     @PostMapping("/{userId}")
-    public BaseResponse<String> addCategoryList(@PathVariable("userId") Long userId, @RequestBody CategoryReq.AddCategoryReq addCategoryReq) {
+    public BaseResponse<String> addCategoryList(@AuthenticationPrincipal User user, @PathVariable("userId") Long userId, @RequestBody CategoryReq.AddCategoryReq addCategoryReq) {
 
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
@@ -150,7 +140,7 @@ public class CategoryController {
 
     @ResponseBody
     @PostMapping("/sub/{userId}")
-    public BaseResponse<String> addSubCategoryList(@PathVariable("userId") Long userId, @RequestBody SubCategoryReq.AddSubCategoryReq addSubCategoryReq) {
+    public BaseResponse<String> addSubCategoryList(@AuthenticationPrincipal User user, @PathVariable("userId") Long userId, @RequestBody SubCategoryReq.AddSubCategoryReq addSubCategoryReq) {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
         }
@@ -160,7 +150,7 @@ public class CategoryController {
 
     @ResponseBody
     @PostMapping("/list/{userId}")
-    public BaseResponse<String> addCategorySubCategoryList(@PathVariable("userId") Long userId, @RequestBody CategoryReq.AddCategorySubCategoryReq addCategorySubCategoryReq) {
+    public BaseResponse<String> addCategorySubCategoryList(@AuthenticationPrincipal User user, @PathVariable("userId") Long userId, @RequestBody CategoryReq.AddCategorySubCategoryReq addCategorySubCategoryReq) {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
         }

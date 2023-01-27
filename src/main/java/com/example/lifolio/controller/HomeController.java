@@ -3,11 +3,13 @@ package com.example.lifolio.controller;
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
 import com.example.lifolio.dto.home.*;
+import com.example.lifolio.entity.User;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.HomeService;
 import com.example.lifolio.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,73 +23,57 @@ public class HomeController {
 
     private final UserService userService;
     private final HomeService homeService;
-    private final TokenProvider jwtProvider;
+    private final TokenProvider tokenProvider;
 
     @ResponseBody
     @GetMapping("/{userId}")
-    public BaseResponse<HomeRes.GetHomeRes> home(@PathVariable("userId") Long userId){
-        try {
-            Long idByJwt= jwtProvider.getUserIdx();
-            if(userId!=idByJwt){
+    public BaseResponse<HomeRes.GetHomeRes> home(@AuthenticationPrincipal User user, @PathVariable("userId") Long userId){
+            Long userIdx= user.getId();
+            if(userId!=userIdx){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            HomeRes.GetHomeRes getHomeRes = homeService.getHomeRes(userId);
+            HomeRes.GetHomeRes getHomeRes = homeService.getHomeRes(userIdx);
             return new BaseResponse<>(getHomeRes);
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
     @ResponseBody
     @GetMapping("/graph/{userId}/{customId}")
-    public BaseResponse<List<HomeRes.GetGraphRes>> getGraphCustomFolio(@PathVariable("userId") Long userId, @PathVariable("customId")Long customId){
-        try {
-            Long idByJwt= jwtProvider.getUserIdx();
+    public BaseResponse<List<HomeRes.GetGraphRes>> getGraphCustomFolio(@AuthenticationPrincipal User user,@PathVariable("userId") Long userId, @PathVariable("customId")Long customId){
+            Long idByJwt= user.getId();
             if(userId!=idByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             List<HomeRes.GetGraphRes> graphInfo = homeService.getGraphLifolio(userId,customId);
             return new BaseResponse<>(graphInfo);
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
     @ResponseBody
     @GetMapping("/custom/{userId}/{customId}")
-    public BaseResponse<List<HomeRes.GetCustomRes>> getCustomFolio(@PathVariable("userId") Long userId, @PathVariable("customId")Long customId){
-        try {
-            Long idByJwt= jwtProvider.getUserIdx();
+    public BaseResponse<List<HomeRes.GetCustomRes>> getCustomFolio(@AuthenticationPrincipal User user,@PathVariable("userId") Long userId, @PathVariable("customId")Long customId){
+            Long idByJwt= user.getId();
             if(userId!=idByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             List<HomeRes.GetCustomRes> customInfo = homeService.getCustomLifolio(userId,customId);
             return new BaseResponse<>(customInfo);
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
     @ResponseBody
     @PatchMapping("/custom/{userId}/{customId}")
-    public BaseResponse<String> updateCustomFolio(@PathVariable("userId") Long userId, @PathVariable("customId") Long customId,@RequestBody HomeReq.CustomUpdateReq customUpdateReq){
-        try {
-            Long idByJwt= jwtProvider.getUserIdx();
+    public BaseResponse<String> updateCustomFolio(@AuthenticationPrincipal User user,@PathVariable("userId") Long userId, @PathVariable("customId") Long customId,@RequestBody HomeReq.CustomUpdateReq customUpdateReq){
+            Long idByJwt= user.getId();
             if(userId!=idByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             homeService.setCustomLifolio(userId,customId,customUpdateReq);
             return new BaseResponse<>("수정 성공.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
 
 
     @ApiOperation(value = "올해의 나 추가", notes = "올해의 나 추가")
     @PostMapping("/goal/{userId}")
-    public BaseResponse<HomeRes.PostGoalRes> setGoalOfYear(@PathVariable("userId") Long userId, @RequestBody HomeReq.PostGoalReq postGoalReq){
+    public BaseResponse<HomeRes.PostGoalRes> setGoalOfYear(@AuthenticationPrincipal User user,@PathVariable("userId") Long userId, @RequestBody HomeReq.PostGoalReq postGoalReq){
 
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
@@ -98,7 +84,7 @@ public class HomeController {
 
     @ApiOperation(value = "올해의 나 전부 조회(userId=유저인덱스)", notes = "올해의 나 전부 조회")
     @GetMapping("/goal/{userId}")
-    public BaseResponse<List<HomeRes.GetGoalRes>> setGoalOfYear(@PathVariable("userId") Long userId){
+    public BaseResponse<List<HomeRes.GetGoalRes>> setGoalOfYear(@AuthenticationPrincipal User user,@PathVariable("userId") Long userId){
         List<HomeRes.GetGoalRes> getGoalResList = homeService.getGoalsByUserId(userId);
 
         if(userService.findNowLoginUser().getId() != userId){
@@ -114,7 +100,7 @@ public class HomeController {
 
     @ResponseBody
     @GetMapping("/badge/{userId}")
-    public BaseResponse<List<HomeRes.GetBadgeRes>> getBadge(@PathVariable("userId") Long userId){
+    public BaseResponse<List<HomeRes.GetBadgeRes>> getBadge(@AuthenticationPrincipal User user,@PathVariable("userId") Long userId){
         List<HomeRes.GetBadgeRes> getBadgeResList = homeService.getBadgeByUserId(userId);
 
         if(userService.findNowLoginUser().getId() != userId){

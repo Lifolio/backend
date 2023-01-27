@@ -13,6 +13,7 @@ public class MyReq {
     @Setter
     @AllArgsConstructor
     @Builder
+    @NoArgsConstructor
     public static class FilterCategory{
         private int order;
         private List<String> categoryList;
