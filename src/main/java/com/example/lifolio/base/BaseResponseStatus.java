@@ -83,15 +83,18 @@ public enum     BaseResponseStatus {
 
     NOT_POST_DATE(false,2042,"날짜를 입력해주세요"),
 
-    NOT_EXIST_CATEGORY(false,2043,"존재하지 않는 카테고리입니다."),
     NOT_EXIST_DATE(false,2044,"날짜를 입력해주세요"),
     DONT_POST_CUSTOMLIFOLIO(false,2045,"커스텀 라이폴리오는 4개 까지 생성 가능합니다"),
 
 
+    //Category
 
+    NOT_POST_COLOR(false, 2050, "색상을 입력해주세요."),
+    NOT_POST_SUBTITLE(false, 2051, "소분류 제목을 입력해주세요."),
+    NOT_POST_CATEGORY(false, 2052, "대분류 카테고리를 입력해주세요."),
 
-
-
+    NOT_EXIST_CATEGORY(false, 2053, "존재하지 않는 대분류 카테고리입니다."),
+    NOT_EXIST_SUBCATEGORY(false, 2054, "존재하지 않는 소분류 카테고리입니다."),
 
 
 
