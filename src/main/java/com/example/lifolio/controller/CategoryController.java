@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.lifolio.base.BaseResponseStatus.INVALID_USER_JWT;
+import static com.example.lifolio.base.BaseResponseStatus.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -77,6 +77,12 @@ public class CategoryController {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
         }
+        if(updateCategoryReq.getColorId()==null){
+            return new BaseResponse<>(NOT_POST_COLOR);
+        }
+        if(updateCategoryReq.getTitle()==null){
+            return new BaseResponse<>(NOT_POST_TITLE);
+        }
         categoryService.setCategoryList(id, updateCategoryReq);
         return new BaseResponse<>("수정 성공.");
     } //대분류 카테고리 내용 수정
@@ -86,6 +92,15 @@ public class CategoryController {
     public BaseResponse<String> updateCategorySubCategoryList(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody CategoryReq.UpdateCategoryAddSubCategoryReq updateCategoryAddSubCategoryReq) {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
+        }
+        if(updateCategoryAddSubCategoryReq.getColorId()==null){
+            return new BaseResponse<>(NOT_POST_COLOR);
+        }
+        if(updateCategoryAddSubCategoryReq.getTitle()==null){
+            return new BaseResponse<>(NOT_POST_TITLE);
+        }
+        if(updateCategoryAddSubCategoryReq.getSubtitle()==null){
+            return new BaseResponse<>(NOT_POST_SUBTITLE);
         }
         categoryService.setCategoryAddSubCategoryList(id, updateCategoryAddSubCategoryReq);
         return new BaseResponse<>("수정 성공.");
@@ -98,6 +113,12 @@ public class CategoryController {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
         }
+        if(updateSubCategoryReq.getCategoryId()==null){
+            return new BaseResponse<>(NOT_POST_CATEGORY);
+        }
+        if(updateSubCategoryReq.getTitle()==null){
+            return new BaseResponse<>(NOT_POST_TITLE);
+        }
         categoryService.setSubCategoryList(id, updateSubCategoryReq);
         return new BaseResponse<>("수정 성공.");
     } //소분류 카테고리 수정
@@ -107,6 +128,12 @@ public class CategoryController {
     public BaseResponse<String> updateSubCategoryToCategoryList(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody SubCategoryReq.MoveSubCategoryReq moveSubCategoryReq) {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
+        }
+        if(moveSubCategoryReq.getColorId()==null){
+            return new BaseResponse<>(NOT_POST_COLOR);
+        }
+        if(moveSubCategoryReq.getTitle()==null){
+            return new BaseResponse<>(NOT_POST_TITLE);
         }
         categoryService.setSubCategoryToCategoryList(id, moveSubCategoryReq);
         return new BaseResponse<>("수정 성공.");
@@ -144,6 +171,12 @@ public class CategoryController {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
         }
+        if(addCategoryReq.getColorId()==null){
+            return new BaseResponse<>(NOT_POST_COLOR);
+        }
+        if(addCategoryReq.getTitle()==null){
+            return new BaseResponse<>(NOT_POST_TITLE);
+        }
         categoryService.addCategoryList(addCategoryReq);
         return new BaseResponse<>("추가 성공.");
     } //대분류 카테고리 추가
@@ -155,6 +188,12 @@ public class CategoryController {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
         }
+        if(addSubCategoryReq.getCategoryId()==null){
+            return new BaseResponse<>(NOT_POST_CATEGORY);
+        }
+        if(addSubCategoryReq.getTitle()==null){
+            return new BaseResponse<>(NOT_POST_TITLE);
+        }
         categoryService.addSubCategoryList(addSubCategoryReq);
         return new BaseResponse<>("추가 성공.");
     } //소분류 카테고리 추가
@@ -164,6 +203,15 @@ public class CategoryController {
     public BaseResponse<String> addCategorySubCategoryList(@PathVariable("userId") Long userId, @RequestBody CategoryReq.AddCategorySubCategoryReq addCategorySubCategoryReq) {
         if(userService.findNowLoginUser().getId() != userId){
             return new BaseResponse<>(INVALID_USER_JWT);
+        }
+        if(addCategorySubCategoryReq.getColorId()==null){
+            return new BaseResponse<>(NOT_POST_COLOR);
+        }
+        if(addCategorySubCategoryReq.getTitle()==null){
+            return new BaseResponse<>(NOT_POST_TITLE);
+        }
+        if(addCategorySubCategoryReq.getSubtitle()==null){
+            return new BaseResponse<>(NOT_POST_SUBTITLE);
         }
         categoryService.addCategorySubCategoryList(addCategorySubCategoryReq);
         return new BaseResponse<>("추가 성공.");
