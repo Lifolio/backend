@@ -13,6 +13,7 @@ public class MyReq {
     @Setter
     @AllArgsConstructor
     @Builder
+    @NoArgsConstructor
     public static class FilterCategory{
         private int order;
         private List<String> categoryList;
@@ -36,7 +37,7 @@ public class MyReq {
         private LocalDate start_date;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-        private Date end_date;
+        private LocalDate end_date;
 
         private List<String> img;
         private List<String> name;

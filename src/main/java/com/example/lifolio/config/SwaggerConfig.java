@@ -1,6 +1,7 @@
 package com.example.lifolio.config;
 
 
+import com.example.lifolio.entity.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +32,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
                 .securityContexts(Arrays.asList(securityContext())) // 추가
                 .securitySchemes(Arrays.asList(apiKey())) // 추가
+                .ignoredParameterTypes(User.class)
                 .select()
                 .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
                 .paths(PathSelectors.any())

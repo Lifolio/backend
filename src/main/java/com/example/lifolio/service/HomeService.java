@@ -1,5 +1,6 @@
 package com.example.lifolio.service;
 
+import com.example.lifolio.converter.CustomLifolioConvertor;
 import com.example.lifolio.dto.home.*;
 import com.example.lifolio.entity.*;
 import com.example.lifolio.entity.CustomLifolio;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,20 +33,21 @@ public class HomeService {
 
         //올해 기준 홈
         int year = now.getYear();
+
         CustomLifolioColor customLifolioColor = customLifolioColorRepository.findByUserId(userId);
-        GoalOfYear goalOfYear = goalOfYearRepository.findByUserIdAndYear(userId, year);
+        Optional<GoalOfYear> goalOfYear = goalOfYearRepository.findTop1ByUserIdAndYearOrderByCreatedAtDesc(userId, year);
 
         HomeRes.TopInfo topInfo = new HomeRes.TopInfo();
 
         //TopInfo null 값 예외처리
-        if (customLifolioColor == null && goalOfYear == null) {
+        if (customLifolioColor == null && !goalOfYear.isPresent()) {
             topInfo = new HomeRes.TopInfo(1, "목표 없음");
         } else if (customLifolioColor == null) {
-            topInfo = new HomeRes.TopInfo(1, goalOfYear.getGoal());
-        } else if (goalOfYear == null) {
+            topInfo = new HomeRes.TopInfo(1, goalOfYear.get().getGoal());
+        } else if (!goalOfYear.isPresent()) {
             topInfo = new HomeRes.TopInfo(customLifolioColor.getColorStatus(), "목표 없음");
         } else {
-            topInfo = new HomeRes.TopInfo(customLifolioColor.getColorStatus(), goalOfYear.getGoal());
+            topInfo = new HomeRes.TopInfo(customLifolioColor.getColorStatus(), goalOfYear.get().getGoal());
         }
 
         //MainLifolio 조회
@@ -172,5 +175,14 @@ public class HomeService {
                 }
         );
         return getBadgeResList;
+    }
+
+    public void postCustomFolio(Long userId, HomeReq.CustomUpdateReq customUpdateReq) {
+        CustomLifolio customLifolio= CustomLifolioConvertor.PostCustomLifolio(userId,customUpdateReq);
+        customLifolioRepository.save(customLifolio);
+    }
+
+    public int countCustomLifolio(Long userId) {
+        return customLifolioRepository.countByUserId(userId);
     }
 }

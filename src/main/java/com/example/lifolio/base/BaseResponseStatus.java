@@ -28,7 +28,7 @@ public enum     BaseResponseStatus {
     INVALID_ACCESS_TOKEN(false, 2005, "유효하지 않은 ccess Token 입니다."),
 
     INVALID_USER_JWT(false,403,"권한이 없는 유저의 접근입니다."),
-    INVALID_REFRESH_TOKEN(false,406 ,"리프레쉬 토큰이 만료되었습니다 다시 로그인해주세요."),
+    INVALID_REFRESH_TOKEN(false,406 ,"리프레쉬 토큰이 만료되었습니다 다시 로그인해주세요." ),
     HIJACK_ACCESS_TOKEN(false,407,"탈취된(로그아웃 된) 토큰입니다 다시 로그인해주세요."),
 
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 입력해주세요."),
@@ -63,36 +63,30 @@ public enum     BaseResponseStatus {
 
     ALREADY_DELETED_USER(false, 2028, "이미 탈퇴된 유저입니다."),
     NOT_CORRECT_USER(false,2029,"회원 정보에 일치하는 아이디가 없습니다."),
-    NOT_EXIST_KAKAO(false,2030,"회원정보에 존재하는 카카오가 존재하지 않습니다. 회원가입 해주세요."),
+    NOT_EXIST_KAKAO(false,2030,"회원정보에 존재하는 카카오가 존재하지 않습니다. 회원가입 해주세요"),
 
-    EMPTY_GOAL_OF_YEAR(false, 2031, "'올해의 나'가 비어있습니다. 목표를 설정해주세요."),
-    EMPTY_MYFOLIO_AT_THAT_DATE(false, 2032, "해당 날짜의 MyFolio가 존재하지 않습니다."),
+    EMPTY_GOAL_OF_YEAR(false, 2031, "'올해의 나'가 비어있습니다. 목표를 설정해주세요"),
+    EMPTY_MYFOLIO_AT_THAT_DATE(false, 2032, "해당 날짜의 MyFolio가 존재하지 않습니다"),
 
-    NOT_EXIST_MYFOLIO_ID(false, 2032, "존재하지 않는 MyFolio입니다."),
+    NOT_EXIST_MYFOLIO_ID(false, 2032, "존재하지 않는 MyFolio입니다"),
 
     NOT_POST_CONTENT(false,2033,"내용을 입력해주세요."),
 
-    NOT_CORRECT_PHONE_NUMBER_FORM(false, 2034, "전화번호를 하이픈(-) 없이 입력해주세요."),
+    NOT_CORRECT_PHONE_NUMBER_FORM(false, 2034, "전화번호를 하이픈(-) 없이 입력해주세요"),
 
     NOT_CORRECT_PASSWORD_FORM(false, 2035, "비밀번호는 영문과 특수문자 숫자를 포함하며 8자 이상이어야 합니다."),
 
     //Planning
 
-    NOT_POST_TITLE(false,2040,"제목을 입력해주세요."),
+    NOT_POST_TITLE(false,2040,"제목을 입력해주세요"),
     NOT_EXIST_PLANNING(false,2041,"존재 하지 않는 계획입니다."),
 
-    NOT_POST_DATE(false,2042,"날짜를 입력해주세요."),
+    NOT_POST_DATE(false,2042,"날짜를 입력해주세요"),
 
-    NOT_EXIST_DATE(false,2044,"날짜를 입력해주세요."),
+    NOT_EXIST_CATEGORY(false,2043,"존재하지 않는 카테고리입니다."),
+    NOT_EXIST_DATE(false,2044,"날짜를 입력해주세요"),
+    DONT_POST_CUSTOMLIFOLIO(false,2045,"커스텀 라이폴리오는 4개 까지 생성 가능합니다"),
 
-    //Category
-
-    NOT_POST_COLOR(false, 2050, "색상을 입력해주세요."),
-    NOT_POST_SUBTITLE(false, 2051, "소분류 제목을 입력해주세요."),
-    NOT_POST_CATEGORY(false, 2052, "대분류 카테고리를 입력해주세요."),
-
-    NOT_EXIST_CATEGORY(false, 2053, "존재하지 않는 대분류 카테고리입니다."),
-    NOT_EXIST_SUBCATEGORY(false, 2054, "존재하지 않는 소분류 카테고리입니다."),
 
 
 
