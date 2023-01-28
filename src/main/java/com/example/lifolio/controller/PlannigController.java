@@ -49,16 +49,12 @@ public class PlannigController {
 
 
     @GetMapping("/goalOfYearAchievement/{userId}")
-    public BaseResponse<String> getGoalOfYearAchievement(){
-        try {
-            Long userId=tokenProvider.getUserIdx();
+    public BaseResponse<String> getGoalOfYearAchievement(@AuthenticationPrincipal User user){
+            Long userId=user.getId();
             int getGoalOfYearAchievement = planningService.getGoalOfYearAchievement(userId);
             if(getGoalOfYearAchievement==0){
                 return new BaseResponse<>(0 + "%");
             } else return new BaseResponse<>(getGoalOfYearAchievement + "%");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
     }
 
 

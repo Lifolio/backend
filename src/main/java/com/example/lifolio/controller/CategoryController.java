@@ -149,17 +149,25 @@ public class CategoryController {
     @ResponseBody
     @DeleteMapping("/{id}")
     public BaseResponse<String> deleteCategoryList(@AuthenticationPrincipal User user,@PathVariable("id") Long id) {
+        try {
             Long userId = user.getId();
             categoryService.deleteCategoryList(id);
             return new BaseResponse<>("삭제 성공.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
     } //대분류 카테고리(관련된 소분류 카테고리도 함께) 삭제
 
     @ResponseBody
     @DeleteMapping("/sub/{id}")
     public BaseResponse<String> deleteSubCategoryList(@AuthenticationPrincipal User user,@PathVariable("id") Long id) {
+        try {
             Long userId = user.getId();
             categoryService.deleteSubCategoryList(id);
             return new BaseResponse<>("삭제 성공.");
+        } catch (BaseException e) {
+        return new BaseResponse<>(e.getStatus());
+    }
     } //소분류 카테고리 삭제
 
 
