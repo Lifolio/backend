@@ -194,8 +194,7 @@ public class CategoryService {
                     ));
                 }
         );
-        List<String> category=categoryList.stream().map(e-> e.getCategory()).collect(Collectors.toList());
-        return category;
+        return categoryList.stream().map(e-> e.getCategory()).collect(Collectors.toList());
     }
 
     public CategoryRes.SubCategoryUpdateView getSubCategoryUpdateView(Long categoryId) throws BaseException {
@@ -205,11 +204,24 @@ public class CategoryService {
         }
         Optional<Category> category= categoryRepository.findById(subCategory.get().getCategoryId());
 
-        CategoryRes.SubCategoryUpdateView subCategoryUpdateView=CategoryConvertor.SubCategoryUpdateView(subCategory.get(),category.get());
-        return subCategoryUpdateView;
+        return CategoryConvertor.SubCategoryUpdateView(subCategory.get(),category.get());
     }
 
 
+    public List<CategoryRes.CategoryIdTitle> getSubCategoryIdTitleList(Long userId) {
+        List<SubCategoryRepository.SubCategoryList> subCategoryResult=subCategoryRepository.getSubCategoryIdTitleList(userId);
+        List<CategoryRes.CategoryIdTitle> categoryIdTitle=new ArrayList<>();
 
+        subCategoryResult.forEach(
+                result->{
+                    categoryIdTitle.add(new CategoryRes.CategoryIdTitle(
+                            result.getCategoryId(),
+                            result.getCategory()
+                            )
+                    );
+                }
+        );
+        return categoryIdTitle;
+    }
 }
 

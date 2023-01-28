@@ -19,7 +19,6 @@ import static com.example.lifolio.base.BaseResponseStatus.*;
 @RestController
 @RequestMapping("/planning")
 public class PlannigController {
-    private final TokenProvider tokenProvider;
     private final PlanningService planningService;
 
 

@@ -58,6 +58,7 @@ public class CategoryController {
     }
 
 
+    //전체 카테고리 리스트 조회
     @ResponseBody
     @GetMapping("/{userId}")
     public BaseResponse<List<CategoryRes.CategoryIdTitle>> getCategoryTitleList(@AuthenticationPrincipal User user,@PathVariable("userId") Long userId) {
@@ -66,6 +67,14 @@ public class CategoryController {
             }
             List<CategoryRes.CategoryIdTitle> categoryTitleList = categoryService.getCategoryIdTitleList(user.getId());
             return new BaseResponse<>(categoryTitleList);
+    }
+
+    //sub 카테고리 리스트 조회
+    @ResponseBody
+    @GetMapping("/sub")
+    public BaseResponse<List<CategoryRes.CategoryIdTitle>> getSubCategoryTitleList(@AuthenticationPrincipal User user) {
+        List<CategoryRes.CategoryIdTitle> categoryTitleList = categoryService.getSubCategoryIdTitleList(user.getId());
+        return new BaseResponse<>(categoryTitleList);
     }
 
     @ResponseBody
