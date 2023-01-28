@@ -85,6 +85,7 @@ public enum     BaseResponseStatus {
 
     NOT_EXIST_CATEGORY(false,2043,"존재하지 않는 카테고리입니다."),
     NOT_EXIST_DATE(false,2044,"날짜를 입력해주세요"),
+    DONT_POST_CUSTOMLIFOLIO(false,2045,"커스텀 라이폴리오는 4개 까지 생성 가능합니다"),
 
 
 

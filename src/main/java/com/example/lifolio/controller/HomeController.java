@@ -23,7 +23,6 @@ public class HomeController {
 
     private final UserService userService;
     private final HomeService homeService;
-    private final TokenProvider tokenProvider;
 
     @ResponseBody
     @GetMapping("/{userId}")
@@ -45,6 +44,17 @@ public class HomeController {
             }
             List<HomeRes.GetGraphRes> graphInfo = homeService.getGraphLifolio(userId,customId);
             return new BaseResponse<>(graphInfo);
+    }
+
+    @ResponseBody
+    @PostMapping("/custom")
+    public BaseResponse<String> postCustomFolio(@AuthenticationPrincipal User user,@RequestBody HomeReq.CustomUpdateReq customUpdateReq){
+        if(homeService.countCustomLifolio(user.getId())>3){
+            return new BaseResponse<>(DONT_POST_CUSTOMLIFOLIO);
+        }
+        Long userId=user.getId();
+        homeService.postCustomFolio(userId,customUpdateReq);
+        return new BaseResponse<>("생성 성공");
     }
 
     @ResponseBody
