@@ -24,7 +24,6 @@ public class PlanningRes {
     }
 
     @AllArgsConstructor
-
     @Setter
     @Getter
     @Builder

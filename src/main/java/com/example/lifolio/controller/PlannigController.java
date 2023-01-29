@@ -47,14 +47,27 @@ public class PlannigController {
             return new BaseResponse<>(getGoalOfYearResList);
     }
 
+    @GetMapping("/allGoalOfYear/{userId}")
+    public BaseResponse<Integer> getAllGoalofYear(@AuthenticationPrincipal User user){
+        Long userId=user.getId();
+        int getAllGoalofYear = planningService.getAllGoalofYear(userId);
+        return new BaseResponse<>(getAllGoalofYear);
+    }
+
+    @GetMapping("/successGoalOfYear/{userId}")
+    public BaseResponse<Integer> getSuccessGoalOfYear(@AuthenticationPrincipal User user){
+        Long userId=user.getId();
+        int getSuccessGoalOfYear = planningService.getSuccessGoalOfYear(userId);
+        return new BaseResponse<>(getSuccessGoalOfYear);
+    }
 
     @GetMapping("/goalOfYearAchievement/{userId}")
     public BaseResponse<String> getGoalOfYearAchievement(@AuthenticationPrincipal User user){
             Long userId=user.getId();
-            int getGoalOfYearAchievement = planningService.getGoalOfYearAchievement(userId);
+            float getGoalOfYearAchievement = planningService.getGoalOfYearAchievement(userId);
             if(getGoalOfYearAchievement==0){
                 return new BaseResponse<>(0 + "%");
-            } else return new BaseResponse<>(getGoalOfYearAchievement + "%");
+            } else return new BaseResponse<>((int)getGoalOfYearAchievement + "%");
     }
 
 
