@@ -2,11 +2,13 @@ package com.example.lifolio.controller;
 
 import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
+import com.example.lifolio.dto.category.CategoryRes;
 import com.example.lifolio.dto.planning.PlanningReq;
 import com.example.lifolio.dto.planning.PlanningRes;
 import com.example.lifolio.entity.User;
 import com.example.lifolio.jwt.TokenProvider;
 import com.example.lifolio.service.PlanningService;
+import com.example.lifolio.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,7 @@ import static com.example.lifolio.base.BaseResponseStatus.*;
 @RequestMapping("/planning")
 public class PlannigController {
     private final PlanningService planningService;
+    private final UserService userService;
 
 
 //    @GetMapping("/{userId}")
@@ -43,6 +46,17 @@ public class PlannigController {
             List<PlanningRes.GetGoalOfYearRes> getGoalOfYearResList = planningService.getGoalsByUserId(userId);
             return new BaseResponse<>(getGoalOfYearResList);
     }
+
+
+    @GetMapping("/goalOfYearAchievement/{userId}")
+    public BaseResponse<String> getGoalOfYearAchievement(@AuthenticationPrincipal User user){
+            Long userId=user.getId();
+            int getGoalOfYearAchievement = planningService.getGoalOfYearAchievement(userId);
+            if(getGoalOfYearAchievement==0){
+                return new BaseResponse<>(0 + "%");
+            } else return new BaseResponse<>(getGoalOfYearAchievement + "%");
+    }
+
 
     @ResponseBody
     @PatchMapping("/goalOfYear/{userId}/{planningYearId}")

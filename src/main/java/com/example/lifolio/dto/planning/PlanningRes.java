@@ -11,11 +11,16 @@ public class PlanningRes {
     @AllArgsConstructor
     @Setter
     @Getter
-
     public static class GetGoalOfYearRes{
         private int success;
         private String title;
+    }
 
+    @AllArgsConstructor
+    @Setter
+    @Getter
+    public static class GetSuccessGoalOfYearRes{
+        private int success;
     }
 
     @AllArgsConstructor
