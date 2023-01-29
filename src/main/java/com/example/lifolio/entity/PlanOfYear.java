@@ -1,6 +1,7 @@
 package com.example.lifolio.entity;
 
 import com.example.lifolio.base.BaseEntity;
+import com.example.lifolio.dto.planOfYear.PlanOfYearReq;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -33,4 +34,10 @@ public class PlanOfYear extends BaseEntity {
 
     @Column(name="plan_month")
     private String planMonth;
+
+    public void updatePlanOfYear(PlanOfYearReq.UpdatePlanOfYearReq updatePlanOfYearReq) {
+        this.title=updatePlanOfYearReq.getTitle();
+        this.planYear=updatePlanOfYearReq.getPlanYear();
+        this.planMonth=updatePlanOfYearReq.getPlanMonth();
+    }
 }

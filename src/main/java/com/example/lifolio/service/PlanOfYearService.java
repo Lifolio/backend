@@ -27,10 +27,13 @@ public class PlanOfYearService {
     }
 
 
-    public void updatePlanOfYear(Long userId, Long PlanOfYearId, PlanOfYearReq.UpdatePlanOfYearReq updatePlanOfYearReq) {
-        PlanOfYear planOfYear = planOfYearRepository.getOne(PlanOfYearId);
+    public void updatePlanOfYear(Long userId, Long planOfYearId, PlanOfYearReq.UpdatePlanOfYearReq updatePlanOfYearReq) {
+        Optional<PlanOfYear> planOfYear = planOfYearRepository.findById(planOfYearId);
 
-        planOfYearRepository.save(planOfYear);
+        planOfYear.get().updatePlanOfYear(updatePlanOfYearReq);
+
+
+        planOfYearRepository.save(planOfYear.get());
 
     }
 

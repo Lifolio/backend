@@ -36,11 +36,11 @@ public class AuthService {
     private final RedisService redisService;
 
     public String getKakaoAccessToken(String code) {
-        String access_Token="";
-        String refresh_Token ="";
+        String access_Token = "";
+        String refresh_Token = "";
         String reqURL = "https://kauth.kakao.com/oauth/token";
 
-        try{
+        try {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -83,14 +83,14 @@ public class AuthService {
 
             br.close();
             bw.close();
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return access_Token;
     }
 
-    @Transactional(rollbackFor=SQLException.class)
+    @Transactional(rollbackFor = SQLException.class)
     public UserRes.TokenRes logInKakaoUser(UserReq.SocialReq socialReq) throws BaseException {
 
         String reqURL = "https://kapi.kakao.com/v2/user/me";
@@ -125,35 +125,32 @@ public class AuthService {
             Long id = element.getAsJsonObject().get("id").getAsLong();
 
 
-            String name=element.getAsJsonObject().get("properties").getAsJsonObject().get("nickname").getAsString();
+            String name = element.getAsJsonObject().get("properties").getAsJsonObject().get("nickname").getAsString();
 
-            if(!userRepository.existsByUsernameAndSocial(String.valueOf(id),socialReq.getSocial())){
-                User user=UserConverter.postUser(String.valueOf(id),socialReq.getSocial(),name, passwordEncoder.encode("kakao"));
+            if (!userRepository.existsByUsernameAndSocial(String.valueOf(id), socialReq.getSocial())) {
+                User user = UserConverter.postUser(String.valueOf(id), socialReq.getSocial(), name, passwordEncoder.encode("kakao"));
 
-                Long userId=userRepository.save(user).getId();
+                Long userId = userRepository.save(user).getId();
 
-                UserRes.GenerateToken generateToken=userService.createToken(userId);
+                UserRes.GenerateToken generateToken = userService.createToken(userId);
                 userService.postAlarmUser(userId);
-                redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(), (System.currentTimeMillis()+ refreshTime*1000));
+                redisService.saveToken(String.valueOf(userId), generateToken.getRefreshToken(), (System.currentTimeMillis() + refreshTime * 1000));
 
 
-                return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
+                return new UserRes.TokenRes(userId, generateToken.getAccessToken(), generateToken.getRefreshToken(), user.getName());
             }
 
             br.close();
 
-            User user=userRepository.findByUsernameAndSocial(String.valueOf(id),socialReq.getSocial());
-            Long userId=user.getId();
+            User user = userRepository.findByUsernameAndSocial(String.valueOf(id), socialReq.getSocial());
+            Long userId = user.getId();
 
 
-            UserRes.GenerateToken generateToken=userService.createToken(userId);
+            UserRes.GenerateToken generateToken = userService.createToken(userId);
 
 
-            redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(), (System.currentTimeMillis()+ refreshTime*1000));
-            return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
-
-
-
+            redisService.saveToken(String.valueOf(userId), generateToken.getRefreshToken(), (System.currentTimeMillis() + refreshTime * 1000));
+            return new UserRes.TokenRes(userId, generateToken.getAccessToken(), generateToken.getRefreshToken(), user.getName());
 
 
         } catch (IOException e) {
@@ -163,11 +160,11 @@ public class AuthService {
     }
 
     public String getNaverAccessToken(String code) {
-        String access_Token="";
-        String refresh_Token ="";
+        String access_Token = "";
+        String refresh_Token = "";
         String reqURL = "https://nid.naver.com/oauth2.0/token";
 
-        try{
+        try {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -212,14 +209,14 @@ public class AuthService {
 
             br.close();
             bw.close();
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return access_Token;
     }
 
-    @Transactional(rollbackFor= SQLException.class)
+    @Transactional(rollbackFor = SQLException.class)
     public UserRes.TokenRes logInNaverUser(UserReq.SocialReq socialReq) throws BaseException {
 
         String reqURL = "https://openapi.naver.com/v1/nid/me";
@@ -253,7 +250,7 @@ public class AuthService {
             JsonElement element = parser.parse(result);
 
             String id = element.getAsJsonObject().get("response").getAsJsonObject().get("id").getAsString();
-            String name=element.getAsJsonObject().get("response").getAsJsonObject().get("name").getAsString();
+            String name = element.getAsJsonObject().get("response").getAsJsonObject().get("name").getAsString();
 //            boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
 //            String email = "";
 //
@@ -262,30 +259,27 @@ public class AuthService {
 //            }
 
 
-
-
-            if(!userRepository.existsByUsernameAndSocial(String.valueOf(id),socialReq.getSocial())){
-                User user=UserConverter.postUser(String.valueOf(id),socialReq.getSocial(),name,passwordEncoder.encode("naver"));
-                Long userId=userRepository.save(user).getId();
-                UserRes.GenerateToken generateToken=userService.createToken(userId);
+            if (!userRepository.existsByUsernameAndSocial(String.valueOf(id), socialReq.getSocial())) {
+                User user = UserConverter.postUser(String.valueOf(id), socialReq.getSocial(), name, passwordEncoder.encode("naver"));
+                Long userId = userRepository.save(user).getId();
+                UserRes.GenerateToken generateToken = userService.createToken(userId);
                 userService.postAlarmUser(userId);
-                redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(), (System.currentTimeMillis()+ refreshTime*1000));
+                redisService.saveToken(String.valueOf(userId), generateToken.getRefreshToken(), (System.currentTimeMillis() + refreshTime * 1000));
 
-                return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
+                return new UserRes.TokenRes(userId, generateToken.getAccessToken(), generateToken.getRefreshToken(), user.getName());
             }
 
             br.close();
-            User user=userRepository.findByUsernameAndSocial(String.valueOf(id),socialReq.getSocial());
-            Long userId=user.getId();
+            User user = userRepository.findByUsernameAndSocial(String.valueOf(id), socialReq.getSocial());
+            Long userId = user.getId();
 
-            UserRes.GenerateToken generateToken=userService.createToken(userId);
+            UserRes.GenerateToken generateToken = userService.createToken(userId);
 
-            redisService.saveToken(String.valueOf(userId),generateToken.getRefreshToken(), (System.currentTimeMillis()+ refreshTime*1000));
+            redisService.saveToken(String.valueOf(userId), generateToken.getRefreshToken(), (System.currentTimeMillis() + refreshTime * 1000));
 
-            return new UserRes.TokenRes(userId,generateToken.getAccessToken(),generateToken.getRefreshToken(),user.getName());
+            return new UserRes.TokenRes(userId, generateToken.getAccessToken(), generateToken.getRefreshToken(), user.getName());
 
 
-            
         } catch (IOException e) {
             e.printStackTrace();
         }
