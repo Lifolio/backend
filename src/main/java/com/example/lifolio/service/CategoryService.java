@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.example.lifolio.base.BaseResponseStatus.NOT_EXIST_CATEGORY;
+import static com.example.lifolio.base.BaseResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -111,20 +111,26 @@ public class CategoryService {
         return subCategoryRepository.findById(categoryId).orElseThrow(IllegalArgumentException::new);
     }
 
-    public void deleteCategoryList(Long id) {
-        Category category = categoryRepository.getOne(id);
+    public void deleteCategoryList(Long id) throws BaseException {
+        Optional<Category> category = categoryRepository.findById(id);
+        if(!category.isPresent()) {
+            throw new BaseException(NOT_EXIST_CATEGORY);
+        }
         List<SubCategory> subCategoryList = subCategoryRepository.findByCategoryId(id);
         for (SubCategory value : subCategoryList) {
             if (value.getCategoryId().equals(id)) {
                 deleteSubCategoryList(value.getId());
             }
         }
-        categoryRepository.deleteById(category.getId());
+        categoryRepository.deleteById(category.get().getId());
     }
 
-    public void deleteSubCategoryList(Long id) {
-        SubCategory subcategory = subCategoryRepository.getOne(id);
-        subCategoryRepository.deleteById(subcategory.getId());
+    public void deleteSubCategoryList(Long id) throws BaseException {
+        Optional<SubCategory> subcategory = subCategoryRepository.findById(id);
+        if(!subcategory.isPresent()) {
+            throw new BaseException(NOT_EXIST_SUBCATEGORY);
+        }
+        subCategoryRepository.deleteById(subcategory.get().getId());
     }
 
 
@@ -194,8 +200,7 @@ public class CategoryService {
                     ));
                 }
         );
-        List<String> category=categoryList.stream().map(e-> e.getCategory()).collect(Collectors.toList());
-        return category;
+        return categoryList.stream().map(e-> e.getCategory()).collect(Collectors.toList());
     }
 
     public CategoryRes.SubCategoryUpdateView getSubCategoryUpdateView(Long categoryId) throws BaseException {
@@ -205,11 +210,24 @@ public class CategoryService {
         }
         Optional<Category> category= categoryRepository.findById(subCategory.get().getCategoryId());
 
-        CategoryRes.SubCategoryUpdateView subCategoryUpdateView=CategoryConvertor.SubCategoryUpdateView(subCategory.get(),category.get());
-        return subCategoryUpdateView;
+        return CategoryConvertor.SubCategoryUpdateView(subCategory.get(),category.get());
     }
 
 
+    public List<CategoryRes.CategoryIdTitle> getSubCategoryIdTitleList(Long userId) {
+        List<SubCategoryRepository.SubCategoryList> subCategoryResult=subCategoryRepository.getSubCategoryIdTitleList(userId);
+        List<CategoryRes.CategoryIdTitle> categoryIdTitle=new ArrayList<>();
 
+        subCategoryResult.forEach(
+                result->{
+                    categoryIdTitle.add(new CategoryRes.CategoryIdTitle(
+                            result.getCategoryId(),
+                            result.getCategory()
+                            )
+                    );
+                }
+        );
+        return categoryIdTitle;
+    }
 }
 

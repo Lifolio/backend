@@ -11,6 +11,7 @@ public class UserReq {
     @Setter
     @AllArgsConstructor
     @Builder
+    @NoArgsConstructor
     public static class SocialReq{
         private String social;
         private String accessToken;
@@ -57,7 +58,7 @@ public class UserReq {
                     .name(user.getName())
                     .name(user.getPhone())
                     .authorityResSet(user.getAuthorities().stream()
-                            .map(authority -> UserRes.AuthorityRes.builder().authorityName(authority.getAuthorityName()).build())
+                            .map(authority -> UserRes.AuthorityRes.builder().authorityName(authority.getAuthority()).build())
                             .collect(Collectors.toSet()))
                     .build();
         }

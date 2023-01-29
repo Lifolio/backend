@@ -1,17 +1,12 @@
 package com.example.lifolio.controller;
 
-import com.example.lifolio.base.BaseException;
 import com.example.lifolio.base.BaseResponse;
-import com.example.lifolio.dto.planOfYear.PlanOfYearReq;
-import com.example.lifolio.dto.planOfYear.PlanOfYearRes;
-import com.example.lifolio.entity.PlanOfYear;
+import com.example.lifolio.entity.User;
 import com.example.lifolio.jwt.TokenProvider;
-import com.example.lifolio.repository.PlanOfYearRepository;
 import com.example.lifolio.service.PlanOfYearService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -47,14 +42,10 @@ public class PlanOfYearController {
 
     @ResponseBody
     @DeleteMapping("/{userId}/{PlanOfYearId}")
-    public BaseResponse<String> deletePlanOfYear (@PathVariable("PlanOfYearId") Long PlanOfYearId) {
-        try {
-            Long userId = tokenProvider.getUserIdx();
-            planOfYearService.deletePlanOfYear(PlanOfYearId);
-            return new BaseResponse<>("삭제 성공");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
+    public BaseResponse<String> deletePlanOfYear(@AuthenticationPrincipal User user, @PathVariable("PlanOfYearId") Long PlanOfYearId) {
+        Long userId = user.getId();
+        planOfYearService.deletePlanOfYear(PlanOfYearId);
+        return new BaseResponse<>("삭제 성공");
 
     }
 

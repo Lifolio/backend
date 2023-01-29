@@ -1,5 +1,6 @@
 package com.example.lifolio.service;
 
+import com.example.lifolio.converter.CustomLifolioConvertor;
 import com.example.lifolio.dto.home.*;
 import com.example.lifolio.entity.*;
 import com.example.lifolio.entity.CustomLifolio;
@@ -174,5 +175,14 @@ public class HomeService {
                 }
         );
         return getBadgeResList;
+    }
+
+    public void postCustomFolio(Long userId, HomeReq.CustomUpdateReq customUpdateReq) {
+        CustomLifolio customLifolio= CustomLifolioConvertor.PostCustomLifolio(userId,customUpdateReq);
+        customLifolioRepository.save(customLifolio);
+    }
+
+    public int countCustomLifolio(Long userId) {
+        return customLifolioRepository.countByUserId(userId);
     }
 }

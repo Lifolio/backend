@@ -14,14 +14,11 @@ import java.util.Optional;
 @Repository
 public interface SubCategoryRepository extends JpaRepository<SubCategory, Long> {
 
-    @Query(value="select SC.title'category' from SubCategory SC join Category C on SC.category_id = C.id where user_id=:userId ",nativeQuery = true)
+    @Query(value="select SC.title'category' from SubCategory SC join Category C on SC.category_id = C.id where user_id=:userId order by SC.title asc",nativeQuery = true)
     List<CategoryList> getCategoryList(@Param("userId") Long userId);
 
-    @Query(value="select SC.title'category' from SubCategory SC join Category C on SC.category_id = C.id where category_id=:categoryId ",nativeQuery = true)
+    @Query(value="select SC.title'category' from SubCategory SC join Category C on SC.category_id = C.id where category_id=:categoryId order by SC.title asc",nativeQuery = true)
     List<CategoryList> getSubCategoryList(@Param("categoryId") Long categoryId);
-
-    @Query(value="INSERT INTO Category(category_id, title) VALUES (categoryId=:categoryId, Subtitle:=Subtitle)",nativeQuery = true)
-    List<SubCategory> setSubCategory(@Param("categoryId") Long categoryId);
 
 
     List<SubCategory> findByCategoryId(Long categoryId);
@@ -29,6 +26,14 @@ public interface SubCategoryRepository extends JpaRepository<SubCategory, Long> 
     Optional<SubCategory> findById(Long id);
 
     interface CategoryList {
+        String getCategory();
+    }
+
+
+    @Query(value="select SC.id'categoryId',SC.title'category' from SubCategory SC join Category C on SC.category_id = C.id where user_id=:userId order by SC.title asc ",nativeQuery = true)
+    List<SubCategoryRepository.SubCategoryList> getSubCategoryIdTitleList(@Param("userId") Long userId);
+    interface SubCategoryList {
+        Long getCategoryId();
         String getCategory();
     }
 }
