@@ -46,10 +46,31 @@ public class PlanningService {
         return getGoalOfYearResList;
     }
 
-    public int getGoalOfYearAchievement(Long userId) {
-
+    public int getAllGoalofYear(Long userId) {
         int allGoal = 0;
+        List<PlanningYear> PlanningYearList = planningYearRepository.findAllByUserIdOrderByDateAsc(userId);
+        allGoal = PlanningYearList.size();
+        return allGoal;
+    }
+
+    public int getSuccessGoalOfYear(Long userId) {
         int successGoal = 0;
+        List<PlanningRes.GetSuccessGoalOfYearRes> SuccessGoalOfYearArray = new ArrayList<>();
+        List<PlanningYear> PlanningYearList = planningYearRepository.findAllByUserIdOrderByDateAsc(userId);
+        for(PlanningYear planningYear: PlanningYearList){
+            if (planningYear.getSuccess() == 1) {
+                PlanningRes.GetSuccessGoalOfYearRes SuccessGoalOfYear = new PlanningRes.GetSuccessGoalOfYearRes(planningYear.getSuccess());
+                SuccessGoalOfYearArray.add(SuccessGoalOfYear);
+                successGoal = SuccessGoalOfYearArray.size();
+            }
+        }
+        return successGoal;
+    }
+
+    public float getGoalOfYearAchievement(Long userId) {
+
+        float allGoal = 0;
+        float successGoal = 0;
 
         List<PlanningRes.GetSuccessGoalOfYearRes> SuccessGoalOfYearArray = new ArrayList<>();
         List<PlanningYear> PlanningYearList = planningYearRepository.findAllByUserIdOrderByDateAsc(userId);
@@ -63,8 +84,8 @@ public class PlanningService {
             }
         }
 
-        if(successGoal!=0) {
-            return allGoal/successGoal;
+        if(allGoal!=0) {
+            return (successGoal / allGoal) * 100;
         } else return 0;
 
     }
