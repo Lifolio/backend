@@ -74,6 +74,10 @@ public class UserController {
     @PatchMapping("/password")
     public BaseResponse<UserRes.PasswordRes> setNewPassword(@RequestBody UserReq.PasswordReq passwordReq){
 
+        if(!userService.validationPassword(passwordReq.getNewPassword())){ //비밀번호 양식 체크
+            return new BaseResponse<>(NOT_CORRECT_PASSWORD_FORM);
+        }
+
         //이름, 아이디
         UserRes.PasswordRes passwordRes = userService.setNewPassword(passwordReq);
         if(passwordRes != null){
@@ -84,19 +88,6 @@ public class UserController {
 
     }
 
-
-
-//    @GetMapping("/user")
-//    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-//    public BaseResponse<SignupUserReq> getMyUserInfo() {
-//        return new BaseResponse<>(userService.getMyUserWithAuthorities());
-//    }
-//
-//    @GetMapping("/user/{username}")
-//    @PreAuthorize("hasAnyRole('ADMIN')")
-//    public BaseResponse<SignupUserReq> getUserInfo(@PathVariable String username) {
-//        return new BaseResponse<>(userService.getUserWithAuthorities(username));
-//    }
 
 
     @GetMapping("/check/nickname")
